@@ -19,6 +19,10 @@ class LeapMotionContrListener extends Listener {
 	@Override
 	public void onConnect(Controller controller) {
 		System.out.println("Leap Connected");
+		
+		if (controller.config().setFloat("Gesture.Swipe.MinLength", 225.0f))
+			controller.config().save();
+		
 		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
 		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
 //		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
@@ -124,14 +128,29 @@ class LeapMotionContrListener extends Listener {
 				break;
 			case TYPE_SWIPE:
 				SwipeGesture swipe = new SwipeGesture(gesture);
-				
+
 				if (swipe.state() == State.STATE_STOP) {
-					board.clear();
-					
-					System.out.println("Leap Swipe id: " + swipe.id() + ", "
-							+ swipe.state() + ", position: " + swipe.position()
-							+ ", direction: " + swipe.direction() + ", speed: "
-							+ swipe.speed());
+					float roll = swipe.direction().roll();
+
+					if ((roll > 0)
+							&& (Math.abs(((Math.PI / 2.0f) - roll)) < 0.2618f)) {
+						board.changeScreenForth();
+
+						System.out.println("Leap Right Swipe id: " + swipe.id()
+								+ ", " + swipe.state() + ", position: "
+								+ swipe.position() + ", direction: "
+								+ swipe.direction() + ", speed: "
+								+ swipe.speed());
+					} else if ((roll < 0)
+							&& (Math.abs(((Math.PI / 2.0f) + roll)) < 0.2618f)) {
+						board.changeScreenBack();
+
+						System.out.println("Leap Back Swipe id: " + swipe.id()
+								+ ", " + swipe.state() + ", position: "
+								+ swipe.position() + ", direction: "
+								+ swipe.direction() + ", speed: "
+								+ swipe.speed());
+					}
 				}
 				
 				break;
