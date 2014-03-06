@@ -1,7 +1,13 @@
 package protoboard;
 
-import com.leapmotion.leap.*;
+import com.leapmotion.leap.CircleGesture;
+import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Gesture.State;
+import com.leapmotion.leap.GestureList;
+import com.leapmotion.leap.Listener;
+import com.leapmotion.leap.SwipeGesture;
 
 class LeapMotionContrListener extends Listener {
 	private ProtoBoard board;
@@ -12,8 +18,8 @@ class LeapMotionContrListener extends Listener {
 
 	@Override
 	public void onConnect(Controller controller) {
-		System.out.println("Connected");
-//		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
+		System.out.println("Leap Connected");
+		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
 		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
 //		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
 //		controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);
@@ -22,12 +28,12 @@ class LeapMotionContrListener extends Listener {
 	@Override
 	public void onDisconnect(Controller controller) {
 		// Note: not dispatched when running in a debugger.
-		System.out.println("Disconnected");
+		System.out.println("Leap Disconnected");
 	}
 
 	@Override
 	public void onExit(Controller controller) {
-		System.out.println("Exited");
+		System.out.println("Leap Exited");
 	}
 
 	@Override
@@ -110,19 +116,25 @@ class LeapMotionContrListener extends Listener {
 					else
 						board.changeDrawColorBack();
 						
-					System.out.println("Circle id: " + circle.id() + ", "
+					System.out.println("Leap Circle id: " + circle.id() + ", "
 							+ circle.state() + ", progress: " + circle.progress()
 							+ ", clockwise: " + clockwise);
 				}
 				
 				break;
-//			case TYPE_SWIPE:
-//				SwipeGesture swipe = new SwipeGesture(gesture);
-//				System.out.println("Swipe id: " + swipe.id() + ", "
-//						+ swipe.state() + ", position: " + swipe.position()
-//						+ ", direction: " + swipe.direction() + ", speed: "
-//						+ swipe.speed());
-//				break;
+			case TYPE_SWIPE:
+				SwipeGesture swipe = new SwipeGesture(gesture);
+				
+				if (swipe.state() == State.STATE_STOP) {
+					board.clear();
+					
+					System.out.println("Leap Swipe id: " + swipe.id() + ", "
+							+ swipe.state() + ", position: " + swipe.position()
+							+ ", direction: " + swipe.direction() + ", speed: "
+							+ swipe.speed());
+				}
+				
+				break;
 //			case TYPE_SCREEN_TAP:
 //				ScreenTapGesture screenTap = new ScreenTapGesture(gesture);
 //				System.out.println("Screen Tap id: " + screenTap.id() + ", "
@@ -149,6 +161,6 @@ class LeapMotionContrListener extends Listener {
 
 	@Override
 	public void onInit(Controller controller) {
-		System.out.println("Initialized");
+		System.out.println("Leap Initialized");
 	}
 }

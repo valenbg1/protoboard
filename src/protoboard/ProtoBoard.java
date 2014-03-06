@@ -2,6 +2,7 @@ package protoboard;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import processing.core.PApplet;
 
@@ -16,32 +17,34 @@ public class ProtoBoard extends PApplet {
 
 	private Controller controller;
 	private LeapMotionContrListener listener;
-	
-	public int drawColor_R = 126;
-	public int drawColor_G = 126;
-	public int drawColor_B = 126;
-	
-	public void changeDrawColorForth() {
-		drawColor_R = (drawColor_R + 15) % 256;
-		drawColor_G = (drawColor_G + 25) % 256;
-		drawColor_B = (drawColor_B + 35) % 256;
+
+	private AtomicInteger[] drawColor = new AtomicInteger[3];
+
+	public synchronized void changeDrawColorBack() {
+		drawColor[0].set((drawColor[0].get() - 15) % 256);
+		drawColor[1].set((drawColor[1].get() - 25) % 256);
+		drawColor[2].set((drawColor[2].get() - 35) % 256);
+	}
+
+	public synchronized void changeDrawColorForth() {
+		drawColor[0].set((drawColor[0].get() + 15) % 256);
+		drawColor[1].set((drawColor[1].get() + 25) % 256);
+		drawColor[2].set((drawColor[2].get() + 35) % 256);
 	}
 	
-	public void changeDrawColorBack() {
-		drawColor_R = (drawColor_R - 15) % 256;
-		drawColor_G = (drawColor_G - 25) % 256;
-		drawColor_B = (drawColor_B - 35) % 256;
+	public void clearBlackboard() {
+		background(0);
 	}
 
 	@Override
 	public void draw() {
 		stroke(255);
 		strokeWeight(3);
-		fill(drawColor_R, drawColor_G, drawColor_B);
-		rect(10, 10, 50, 50, 10);
-		
+		fill(drawColor[0].get(), drawColor[1].get(), drawColor[2].get());
+		rect(10, displayHeight - 60, 50, 50, 10);
+
 		if (mousePressed) {
-			stroke(drawColor_R, drawColor_G, drawColor_B);
+			stroke(drawColor[0].get(), drawColor[1].get(), drawColor[2].get());
 			strokeWeight(10);
 			line(mouseX, mouseY, pmouseX, pmouseY);
 		}
@@ -62,12 +65,9 @@ public class ProtoBoard extends PApplet {
 
 		controller = new Controller();
 		listener = new LeapMotionContrListener(this);
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				controller.addListener(listener);
-			}
-		}).run();
+		controller.addListener(listener);
+		
+		for (int i = 0; i < drawColor.length; ++i)
+			drawColor[i] = new AtomicInteger(126);
 	}
 }
