@@ -123,24 +123,29 @@ class LeapMotionContrListener extends Listener {
 					System.out.println("Leap Circle id: " + circle.id() + ", "
 							+ circle.state() + ", progress: " + circle.progress()
 							+ ", clockwise: " + clockwise);
+					
+					return;
 				}
 				
 				break;
 			case TYPE_SWIPE:
 				SwipeGesture swipe = new SwipeGesture(gesture);
-
+				
 				if (swipe.state() == State.STATE_STOP) {
 					float roll = swipe.direction().roll();
+					float pitch = swipe.direction().pitch();
 
 					if ((roll > 0)
 							&& (Math.abs(((Math.PI / 2.0f) - roll)) < 0.2618f)) {
 						board.changeScreenForth();
 
-						System.out.println("Leap Right Swipe id: " + swipe.id()
+						System.out.println("Leap Forth Swipe id: " + swipe.id()
 								+ ", " + swipe.state() + ", position: "
 								+ swipe.position() + ", direction: "
 								+ swipe.direction() + ", speed: "
 								+ swipe.speed());
+						
+						return;
 					} else if ((roll < 0)
 							&& (Math.abs(((Math.PI / 2.0f) + roll)) < 0.2618f)) {
 						board.changeScreenBack();
@@ -150,6 +155,19 @@ class LeapMotionContrListener extends Listener {
 								+ swipe.position() + ", direction: "
 								+ swipe.direction() + ", speed: "
 								+ swipe.speed());
+						
+						return;
+					} else if ((pitch < 0)
+							&& (Math.abs(((Math.PI / 2.0f) + pitch)) < 0.2618f)) {
+						board.saveCurrentScreen();
+
+						System.out.println("Leap Down Swipe id: " + swipe.id()
+								+ ", " + swipe.state() + ", position: "
+								+ swipe.position() + ", direction: "
+								+ swipe.direction() + ", speed: "
+								+ swipe.speed());
+						
+						return;
 					}
 				}
 				

@@ -2,6 +2,7 @@ package protoboard;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,6 +28,9 @@ public class ProtoBoard extends PApplet {
 	private AtomicInteger screen_pos = new AtomicInteger(-1);
 	private PGraphics curr_screen = null;
 	private AtomicBoolean[] changeScreen = new AtomicBoolean[2];
+	
+	private AtomicBoolean saveText = new AtomicBoolean(false);
+	private AtomicInteger saveText_time = new AtomicInteger(60);
 
 	private synchronized void _changeScreenBack() {
 		if ((screen_pos.get() - 1) > -1)
@@ -54,15 +58,21 @@ public class ProtoBoard extends PApplet {
 	}
 
 	public synchronized void changeDrawColorBack() {
-		drawColor[0].set((drawColor[0].get() - 15) % 256);
-		drawColor[1].set((drawColor[1].get() - 25) % 256);
-		drawColor[2].set((drawColor[2].get() - 35) % 256);
+		for (AtomicInteger ai : drawColor) {
+			if (ai.addAndGet(-20) < 0)
+				ai.set(256 + ai.get());
+		}
 	}
 
 	public synchronized void changeDrawColorForth() {
-		drawColor[0].set((drawColor[0].get() + 15) % 256);
-		drawColor[1].set((drawColor[1].get() + 25) % 256);
-		drawColor[2].set((drawColor[2].get() + 35) % 256);
+		for (AtomicInteger ai : drawColor)
+			ai.set((ai.get() + 20) % 256);
+	}
+	
+	public synchronized void saveCurrentScreen() {
+		curr_screen.save("board[" + screen_pos.get() + "]_"+ new Date().getTime() +".png");
+		saveText.compareAndSet(false, true);
+		saveText_time.set(100);
 	}
 
 	public void changeScreenBack() {
@@ -100,9 +110,30 @@ public class ProtoBoard extends PApplet {
 		rect(10, displayHeight - 60, 50, 50, 10);
 
 		// Board number
-		textSize(64);
-		fill(255, 255, 255);
-		text(screen_pos.get(), displayWidth - 90, displayHeight - 20);
+		stroke(255);
+		strokeWeight(3);
+		fill(0, 0, 0);
+		textSize(50);
+		
+		if (screen_pos.get() < 10) {
+			rect(displayWidth - 60, displayHeight - 60, 50, 50, 10);
+			fill(255, 255, 255);
+			text(screen_pos.get(), displayWidth - 51, displayHeight - 17);
+		} else {
+		rect(displayWidth - 110, displayHeight - 60, 100, 50, 10);
+			fill(255, 255, 255);
+			text(screen_pos.get(), displayWidth - 91, displayHeight - 17);
+		}
+		
+		// Save text
+		if (saveText.get()) {
+			fill(255, 255, 255);
+			textSize(30);
+			text("SAVED!", displayWidth - 110, displayHeight - 70);
+			
+			if (saveText_time.decrementAndGet() == 0)
+				saveText.set(false);
+		}
 	}
 
 	@Override
@@ -121,11 +152,12 @@ public class ProtoBoard extends PApplet {
 		listener = new LeapMotionContrListener(this);
 		controller.addListener(listener);
 
-		for (int i = 0; i < drawColor.length; ++i)
-			drawColor[i] = new AtomicInteger(126);
+		drawColor[0] = new AtomicInteger(56);
+		drawColor[1] = new AtomicInteger(78);
+		drawColor[2] = new AtomicInteger(243);
 
-		for (int i = 0; i < changeScreen.length; ++i)
-			changeScreen[i] = new AtomicBoolean(false);
+		changeScreen[0] = new AtomicBoolean(false);
+		changeScreen[1] = new AtomicBoolean(false);
 
 		addAndSetNewScreen();
 	}
