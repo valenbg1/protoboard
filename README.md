@@ -12,3 +12,5 @@ Requires
 * Processing 2.1.1 core library
 
 * Leap Motion SDK Java library 1.0.9+8391 + native libraries for your architecture (tested on a x64 Windows)
+
+* Optimal aspect ratio: 1,6 (1280x800)
