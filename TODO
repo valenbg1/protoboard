@@ -1,3 +1,22 @@
-- Externalize constants!
+- Fine adjustment of right, left, down swipe gestures (at the moment, it works using
+  pitch, roll angles of the vector, and it seems to work but with some problems).
 
-- Fine adjustment of right, left, down swipe gestures.
+- Relativize "absolute pixels" in Constants.Blackboard.
+
+- Make the possibility of changing color / screen in blackboard mode using the mouse too.
+
+- ? Some gesture for changing the drawing line size.
+
+- Improve the "SAVED!" text, for visibility.
+
+- Make a new mode: "input", in which movements detected in the Leap Motion are
+  mapped to keyboard, mouse actions (instead of showing a blackboard). For use
+  in any other applications. Note that "input" is a beta name yet.
+
+- Make a principal Swing interface to change between blackboard and "input" mode.
+
+- Make the LeapMotionListener implements the "observer" pattern (for using the same
+  code for blackboard / "input" mode).
+  
+- New gesture in blackboard mode: up swipe, for closing this mode and returning to the
+  principal Swing window (asking the user with a window that permits gestures or mouse actions).

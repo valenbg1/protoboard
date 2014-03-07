@@ -1,5 +1,7 @@
-- Left / right swipe changes the current board back / forth.
-
-- Down swipe saves an image of the current board.
-
-- Circle anticlockwise / clockwise changes the color back / forth.
+Blackboard mode
+==========
+	- Left / right swipe changes the current board back / forth.
+	
+	- Down swipe saves an image of the current board.
+	
+	- Circle anticlockwise / clockwise changes the color back / forth.

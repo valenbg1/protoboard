@@ -1,4 +1,7 @@
-package protoboard;
+package protoboard.leapmotion;
+
+import protoboard.Constants;
+import protoboard.blackboard.Blackboard;
 
 import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
@@ -9,18 +12,22 @@ import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.SwipeGesture;
 
-class LeapMotionContrListener extends Listener {
-	private ProtoBoard board;
+/**
+ * Processes the info received from the Leap Motion controller
+ * 
+ */
+public class LeapMotionListener extends Listener {
+	private Blackboard board;
 
-	public LeapMotionContrListener(ProtoBoard board) {
+	public LeapMotionListener(Blackboard board) {
 		this.board = board;
 	}
 
 	@Override
 	public void onConnect(Controller controller) {
-		System.out.println("Leap Connected");
+		System.out.println(Constants.LeapMotion.onConnect);
 		
-		if (controller.config().setFloat("Gesture.Swipe.MinLength", 225.0f))
+		if (controller.config().setFloat("Gesture.Swipe.MinLength", Constants.LeapMotion.swipe_minlength))
 			controller.config().save();
 		
 		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
@@ -32,12 +39,12 @@ class LeapMotionContrListener extends Listener {
 	@Override
 	public void onDisconnect(Controller controller) {
 		// Note: not dispatched when running in a debugger.
-		System.out.println("Leap Disconnected");
+		System.out.println(Constants.LeapMotion.onDisconnect);
 	}
 
 	@Override
 	public void onExit(Controller controller) {
-		System.out.println("Leap Exited");
+		System.out.println(Constants.LeapMotion.onExit);
 	}
 
 	@Override
@@ -120,7 +127,7 @@ class LeapMotionContrListener extends Listener {
 					else
 						board.changeDrawColorBack();
 						
-					System.out.println("Leap Circle id: " + circle.id() + ", "
+					System.out.println(Constants.LeapMotion.onCircle + " id: " + circle.id() + ", "
 							+ circle.state() + ", progress: " + circle.progress()
 							+ ", clockwise: " + clockwise);
 					
@@ -136,10 +143,10 @@ class LeapMotionContrListener extends Listener {
 					float pitch = swipe.direction().pitch();
 
 					if ((roll > 0)
-							&& (Math.abs(((Math.PI / 2.0f) - roll)) < 0.2618f)) {
+							&& (Math.abs(((Math.PI / 2.0f) - roll)) < Constants.LeapMotion.max_ang_swipe)) {
 						board.changeScreenForth();
 
-						System.out.println("Leap Forth Swipe id: " + swipe.id()
+						System.out.println(Constants.LeapMotion.onRightSwipe +  " id: " + swipe.id()
 								+ ", " + swipe.state() + ", position: "
 								+ swipe.position() + ", direction: "
 								+ swipe.direction() + ", speed: "
@@ -147,10 +154,10 @@ class LeapMotionContrListener extends Listener {
 						
 						return;
 					} else if ((roll < 0)
-							&& (Math.abs(((Math.PI / 2.0f) + roll)) < 0.2618f)) {
+							&& (Math.abs(((Math.PI / 2.0f) + roll)) < Constants.LeapMotion.max_ang_swipe)) {
 						board.changeScreenBack();
 
-						System.out.println("Leap Back Swipe id: " + swipe.id()
+						System.out.println(Constants.LeapMotion.onLeftSwipe +  " id: " + swipe.id()
 								+ ", " + swipe.state() + ", position: "
 								+ swipe.position() + ", direction: "
 								+ swipe.direction() + ", speed: "
@@ -158,10 +165,10 @@ class LeapMotionContrListener extends Listener {
 						
 						return;
 					} else if ((pitch < 0)
-							&& (Math.abs(((Math.PI / 2.0f) + pitch)) < 0.2618f)) {
+							&& (Math.abs(((Math.PI / 2.0f) + pitch)) < Constants.LeapMotion.max_ang_swipe)) {
 						board.saveCurrentScreen();
 
-						System.out.println("Leap Down Swipe id: " + swipe.id()
+						System.out.println(Constants.LeapMotion.onDownSwipe +  " id: " + swipe.id()
 								+ ", " + swipe.state() + ", position: "
 								+ swipe.position() + ", direction: "
 								+ swipe.direction() + ", speed: "
@@ -198,6 +205,6 @@ class LeapMotionContrListener extends Listener {
 
 	@Override
 	public void onInit(Controller controller) {
-		System.out.println("Leap Initialized");
+		System.out.println(Constants.LeapMotion.onInit);
 	}
 }

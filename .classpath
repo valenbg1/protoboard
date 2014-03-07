@@ -2,11 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/LeapMotionJavaLibrary.jar">
+	<classpathentry kind="lib" path="lib/LeapMotionJavaLibrary1.0.9+8391.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Protoboard/lib/native"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Protoboard/lib/native/LeapMotionJavaLibrary1.0.9+8391"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/ProcessingCoreLibrary.jar"/>
+	<classpathentry kind="lib" path="lib/ProcessingCoreLibrary2.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
