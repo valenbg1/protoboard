@@ -28,19 +28,19 @@ public final class Constants {
 		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
 		public static final float[] common_square_args = { dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000009765625f };
 		public static final float[] color_square_pos = { displayWidth*0.0078125f, displayHeight*0.925f };
-		public static final float[] number_square_pos = { displayWidth-color_square_pos[0]-common_square_args[0], color_square_pos[1] };
+		public static final float[] number_square_pos = { displayWidth - color_square_pos[0] - common_square_args[0], color_square_pos[1] };
 		public static final int number_square_fill_color[] = { 0, 0, 0 };
 		
-		public static final float number_size = common_square_args[0]*common_square_args[1]*0.02f;
+		public static final float number_size = common_square_args[0];
 		public static final int number_color[] = { 255, 255, 255 };
-		public static final float[] number_pos = { number_square_pos[0]*1.007377049180328f, number_square_pos[1] + number_size };
-		public static final float number_gt_10_xpos = number_square_pos[0]*0.97459016393443f;
+		public static final float[] number_pos = { number_square_pos[0] + common_square_args[0]*0.18f, number_square_pos[1] + common_square_args[1]*0.88f };
+		public static final float number_gt_10_xpos = number_square_pos[0] - common_square_args[0] + common_square_args[0]*0.40f;
 		
 		public static final int save_text_color[] = info_blue_rgb;
 		public static final float save_text_size = dispWidthxHeight*0.000107421875f;
 		public static final String save_text = "SAVED!";
-		public static final float[] save_text_pos = { displayWidth*0.36328125f, displayHeight*0.9125f };
-		public static final float save_text_time = 1.85f;
+		public static final float save_text_ypos = displayHeight*0.9125f;
+		public static final float save_text_time = 1.85f; // s
 		
 		public static final int[][] draw_colors = { 
 			{255, 255, 255}, // White
@@ -67,8 +67,8 @@ public final class Constants {
 		public static final String onRightSwipe = "Leap forth swipe";
 		public static final String onDownSwipe = "Leap down swipe";
 		
-		public static final float swipe_minlength = 200;
+		public static final float swipe_minlength = 200; // mm
 		
-		public static final float wait_between_gestures = 0.85f;
+		public static final float wait_between_gestures = 0.85f; // s
 	}	
 }

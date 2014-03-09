@@ -145,12 +145,14 @@ public class Blackboard extends PApplet {
 	
 	private void drawSaveText() {
 		if (save_text.get()) {
+			textSize(Constants.Blackboard.save_text_size);
+			
+			String sav_text = Constants.Blackboard.save_text;
+			final float save_t_xpos = (Constants.displayWidth / 2.0f) - (textWidth(sav_text) / 2.0f);
 			int[] save_t_color = Constants.Blackboard.save_text_color;
-			float[] save_t_pos = Constants.Blackboard.save_text_pos;
 			
 			fill(save_t_color[0], save_t_color[1], save_t_color[2]);
-			textSize(Constants.Blackboard.save_text_size);
-			text(Constants.Blackboard.save_text, save_t_pos[0], save_t_pos[1]);
+			text(sav_text, save_t_xpos, Constants.Blackboard.save_text_ypos);
 			
 			if (save_text_time.decrementAndGet() == 0)
 				save_text.set(false);
