@@ -36,6 +36,8 @@ public class Blackboard extends PApplet {
 	private AtomicBoolean save_text;
 	private AtomicInteger save_text_time;
 	
+	private AtomicBoolean mouseClicked;
+	
 	public Blackboard() {
 		super();
 		
@@ -52,15 +54,13 @@ public class Blackboard extends PApplet {
 
 		this.draw_color = new Colors();
 		
-		this.color_square = new ArrowsSquare(BlackboardC.common_square_args,
-				BlackboardC.color_square_pos, BlackboardC.square_ext_color,
-				draw_color.get());
-		this.number_square = new ArrowsSquare(BlackboardC.common_square_args,
-				BlackboardC.number_square_pos, BlackboardC.square_ext_color,
-				BlackboardC.number_square_fill_color);
+		this.color_square = ArrowsSquare.colorSquare(draw_color.get());
+		this.number_square = ArrowsSquare.numberSquare();
 
 		this.save_text = new AtomicBoolean(false);
 		this.save_text_time = new AtomicInteger(0);
+		
+		this.mouseClicked = new AtomicBoolean(false);
 	}
 	
 	private synchronized void _changeScreenBack() {
@@ -95,16 +95,12 @@ public class Blackboard extends PApplet {
 
 	public void changeDrawColorBack() {
 		draw_color.prev();
-		this.color_square = new ArrowsSquare(BlackboardC.common_square_args,
-				BlackboardC.color_square_pos, BlackboardC.square_ext_color,
-				draw_color.get());
+		color_square = ArrowsSquare.colorSquare(draw_color.get());
 	}
 
 	public void changeDrawColorForth() {
 		draw_color.next();
-		this.color_square = new ArrowsSquare(BlackboardC.common_square_args,
-				BlackboardC.color_square_pos, BlackboardC.square_ext_color,
-				draw_color.get());
+		color_square = ArrowsSquare.colorSquare(draw_color.get());
 	}
 	
 	private void changeScreen() {
@@ -132,48 +128,15 @@ public class Blackboard extends PApplet {
 		
 		changeScreen();
 		
-		drawCurrentScreen();
+		image(screen_curr, 0, 0);
 		
 		processCursor();
 		
-		drawColorSquare();
+		color_square.draw(this);
 
 		drawScreenNumber();
 		
 		drawSaveText();
-	}
-	
-	private void processCursor() {
-//		TODO
-		if (color_square.isOnTriangle(mouseX, mouseY) || number_square.isOnTriangle(mouseX, mouseY)) {
-			cursor(HAND);
-		} else {
-			noCursor();
-			
-			int[] draw_col = draw_color.get();
-			
-			stroke(draw_col[0], draw_col[1], draw_col[2]);
-			strokeWeight(BlackboardC.draw_line_weight);
-			line(mouseX, mouseY, pmouseX, pmouseY);
-		}
-	}
-
-	private void drawColorSquare() {
-		color_square.draw(this);
-	}
-	
-	private void drawCurrentScreen() {
-		int[] draw_col = draw_color.get();
-		
-		if (mousePressed) {
-			screen_curr.beginDraw();
-			screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
-			screen_curr.strokeWeight(BlackboardC.draw_line_weight);
-			screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
-			screen_curr.endDraw();
-		}
-
-		image(screen_curr, 0, 0);
 	}
 	
 	private void drawSaveText() {
@@ -191,7 +154,7 @@ public class Blackboard extends PApplet {
 				save_text.set(false);
 		}
 	}
-
+	
 	private void drawScreenNumber() {
 		int[] numb_color = BlackboardC.number_color;
 		float[] sq_pos = number_square.sq_pos, sq_args = number_square.sq_args,
@@ -201,6 +164,9 @@ public class Blackboard extends PApplet {
 		textSize(sq_args[1]);
 		
 		if (screen_p < 10) {
+			if (sq_pos[0] != BlackboardC.number_square_pos[0])
+				number_square = ArrowsSquare.numberSquare();
+			
 			number_square.draw(this);
 			fill(numb_color[0], numb_color[1], numb_color[2]);
 			text(screen_p, numb_pos[0], numb_pos[1]);
@@ -218,11 +184,51 @@ public class Blackboard extends PApplet {
 			text(screen_p, BlackboardC.number_gt_10_xpos, numb_pos[1]);
 		}
 	}
-
+	
 	@Override
 	public void exit() {
 		controller.removeListener(listener);
 		super.exit();
+	}
+
+	@Override
+	public void mouseClicked() {
+		mouseClicked.compareAndSet(false, true);
+	}
+
+	private void processCursor() {
+		if (mouseClicked.get()) {
+			if (color_square.isOnLeftTriangle(mouseX, mouseY))
+				changeDrawColorBack();
+			else if (color_square.isOnRightTriangle(mouseX, mouseY))
+				changeDrawColorForth();
+			else if (number_square.isOnLeftTriangle(mouseX, mouseY))
+				changeScreenBack();
+			else if (number_square.isOnRightTriangle(mouseX, mouseY))
+				changeScreenForth();
+
+			mouseClicked.set(false);
+		}
+
+		if (color_square.isOnAnyTriangle(mouseX, mouseY) || number_square.isOnAnyTriangle(mouseX, mouseY)) {
+			cursor(HAND);
+		} else {
+			noCursor();
+
+			int[] draw_col = draw_color.get();
+
+			stroke(draw_col[0], draw_col[1], draw_col[2]);
+			strokeWeight(BlackboardC.draw_line_weight);
+			line(mouseX, mouseY, pmouseX, pmouseY);
+
+			if (mousePressed) {
+				screen_curr.beginDraw();
+				screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
+				screen_curr.strokeWeight(BlackboardC.draw_line_weight);
+				screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
+				screen_curr.endDraw();
+			}
+		}
 	}
 
 	public synchronized void saveCurrentScreen() {

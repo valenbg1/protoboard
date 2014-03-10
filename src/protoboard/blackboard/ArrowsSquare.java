@@ -5,22 +5,36 @@ import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 
 /**
- * Represents a 2D square with 2 selection arrows, left and right. Is an immutable object.
- *
+ * Represents a 2D square with 2 selection arrows, left and right. Is an
+ * immutable object.
+ * 
  */
 public class ArrowsSquare {
-	public final int[] sq_ext_col, draw_color;
-	private final float[][] ltr_pos, rtr_pos;
-	public final float[] sq_pos, sq_args;
+	public static ArrowsSquare colorSquare(int[] draw_color) {
+		return new ArrowsSquare(BlackboardC.common_square_args,
+				BlackboardC.color_square_pos, BlackboardC.square_ext_color,
+				draw_color);
+	}
 
-	public ArrowsSquare(float[] sq_args, float[] sq_pos, int[] sq_ext_col, int[] draw_color) {
+	public static ArrowsSquare numberSquare() {
+		return new ArrowsSquare(BlackboardC.common_square_args,
+				BlackboardC.number_square_pos, BlackboardC.square_ext_color,
+				BlackboardC.number_square_fill_color);
+	}
+
+	public final int[] sq_ext_col, draw_color;
+	public final float[] sq_pos, sq_args;
+	public final float[][] ltr_pos, rtr_pos;
+
+	public ArrowsSquare(float[] sq_args, float[] sq_pos, int[] sq_ext_col,
+			int[] draw_color) {
 		this.sq_args = sq_args;
 		this.sq_pos = sq_pos;
 		this.sq_ext_col = sq_ext_col;
 		this.draw_color = draw_color;
-		
+
 		float square_triangle_length = Constants.BlackboardC.square_triangle_length;
-		
+
 		ltr_pos = new float[][] {
 			{ sq_pos[0], sq_pos[1] + sq_args[1]/2.0f - square_triangle_length/2.0f },
 			{ sq_pos[0], sq_pos[1] + sq_args[1]/2.0f + square_triangle_length/2.0f },
@@ -33,34 +47,6 @@ public class ArrowsSquare {
 			{ sq_pos[0] + sq_args[0] + square_triangle_length*((float) Math.sqrt(3))/2.0f, ltr_pos[2][1] }
 		};
 	}
-	
-	
-	private boolean isOnLeftTriangle(int mouseX, int mouseY) {
-//		TODO
-//		float sq_det = BlackboardC.square_triangle_det, sq_det_1 = 2 - BlackboardC.square_triangle_det;
-//		
-//		return (mouseX <= ltr_pos[0][0]*sq_det) && (mouseY >= ltr_pos[0][1]*sq_det_1)
-//				&& (mouseX >= ltr_pos[2][0]*sq_det_1) && (mouseY <= ltr_pos[1][1]*sq_det);
-		
-		return false;
-	}
-	
-	private boolean isOnRightTriangle(int mouseX, int mouseY) {
-//		TODO
-//		float sq_det = BlackboardC.square_triangle_det, sq_det_1 = 2 - BlackboardC.square_triangle_det;
-//		
-//		return (mouseX >= rtr_pos[0][0]*sq_det_1) && (mouseY >= rtr_pos[0][1]*sq_det_1)
-//				&& (mouseX <= rtr_pos[2][0]*sq_det) && (mouseY <= rtr_pos[1][1]*sq_det);
-		
-		return false;
-	}
-	
-	public boolean isOnTriangle(int mouseX, int mouseY) {
-//		TODO
-//		return isOnLeftTriangle(mouseX, mouseY) || isOnRightTriangle(mouseX, mouseY);
-		
-		return false;
-	}
 
 	public void draw(PApplet board) {
 		board.stroke(sq_ext_col[0], sq_ext_col[1], sq_ext_col[2]);
@@ -70,8 +56,30 @@ public class ArrowsSquare {
 
 		// Left triangle
 		board.fill(sq_ext_col[0], sq_ext_col[1], sq_ext_col[2]);
-		board.triangle(ltr_pos[0][0], ltr_pos[0][1], ltr_pos[1][0], ltr_pos[1][1], ltr_pos[2][0], ltr_pos[2][1]);
+		board.triangle(ltr_pos[0][0], ltr_pos[0][1], ltr_pos[1][0],
+				ltr_pos[1][1], ltr_pos[2][0], ltr_pos[2][1]);
 		// Right triangle
-		board.triangle(rtr_pos[0][0], rtr_pos[0][1], rtr_pos[1][0], rtr_pos[1][1], rtr_pos[2][0], rtr_pos[2][1]);
+		board.triangle(rtr_pos[0][0], rtr_pos[0][1], rtr_pos[1][0],
+				rtr_pos[1][1], rtr_pos[2][0], rtr_pos[2][1]);
+	}
+	
+	public boolean isOnAnyTriangle(int mouseX, int mouseY) {
+		return isOnLeftTriangle(mouseX, mouseY) || isOnRightTriangle(mouseX, mouseY);
+	}
+
+	public boolean isOnLeftTriangle(int mouseX, int mouseY) {
+		return (mouseX <= (sq_pos[0] + sq_args[0]/2.0f))
+				&& (mouseY >= sq_pos[1])
+				
+				&& (mouseX >= (sq_pos[0] - sq_args[1]*BlackboardC.square_triangle_det))
+				&& (mouseY <= (sq_pos[1] + sq_args[1]));
+	}
+
+	public boolean isOnRightTriangle(int mouseX, int mouseY) {
+		return (mouseX >= (sq_pos[0] + sq_args[0]/2.0f))
+				&& (mouseY >= sq_pos[1])
+				
+				&& (mouseX <= (sq_pos[0] + sq_args[0] + sq_args[1]*BlackboardC.square_triangle_det))
+				&& (mouseY <= (sq_pos[1] + sq_args[1]));
 	}
 }

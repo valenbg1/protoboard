@@ -36,7 +36,7 @@ public final class Constants {
 		public static final float[] number_square_pos = { displayWidth - color_square_pos[0] - common_square_args[0], color_square_pos[1] };
 		public static final int number_square_fill_color[] = background_rgb;
 		public static final float square_triangle_length = common_square_args[0]*0.20f;
-		public static final float square_triangle_det = 1.05f;
+		public static final float square_triangle_det = 0.4f;
 		
 		public static final int number_color[] = { 255, 255, 255 };
 		public static final float[] number_pos = { number_square_pos[0] + common_square_args[0]*0.18f, number_square_pos[1] + common_square_args[1]*0.88f };
