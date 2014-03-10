@@ -8,12 +8,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import protoboard.Constants;
+import protoboard.Constants.BlackboardC;
 import protoboard.leapmotion.LeapMotionListener;
 
 import com.leapmotion.leap.Controller;
 
 /**
- * Implements the blackboard mode of the application
+ * Implements the blackboard mode of the application.
  *
  */
 public class Blackboard extends PApplet {
@@ -28,6 +29,9 @@ public class Blackboard extends PApplet {
 	private AtomicBoolean[] screen_change;
 
 	private Colors draw_color;
+	
+	private ArrowsSquare color_square;
+	private ArrowsSquare number_square;
 
 	private AtomicBoolean save_text;
 	private AtomicInteger save_text_time;
@@ -47,6 +51,13 @@ public class Blackboard extends PApplet {
 		this.screen_change[1] = new AtomicBoolean(false);
 
 		this.draw_color = new Colors();
+		
+		this.color_square = new ArrowsSquare(BlackboardC.common_square_args,
+				BlackboardC.color_square_pos, BlackboardC.square_ext_color,
+				draw_color.get());
+		this.number_square = new ArrowsSquare(BlackboardC.common_square_args,
+				BlackboardC.number_square_pos, BlackboardC.square_ext_color,
+				BlackboardC.number_square_fill_color);
 
 		this.save_text = new AtomicBoolean(false);
 		this.save_text_time = new AtomicInteger(0);
@@ -60,7 +71,7 @@ public class Blackboard extends PApplet {
 	}
 
 	private synchronized void _changeScreenForth() {
-		if (screens.size() == Constants.Blackboard.max_screens)
+		if (screens.size() == BlackboardC.max_screens)
 			return;
 		
 		if ((screen_pos.get() + 1) == screens.size())
@@ -72,9 +83,9 @@ public class Blackboard extends PApplet {
 	}
 
 	private synchronized void addAndSetNewScreen() {
-		int[] background = Constants.Blackboard.background_rgb;
+		int[] background = BlackboardC.background_rgb;
 		
-		screen_curr = createGraphics(displayWidth, displayHeight);
+		screen_curr = createGraphics(Constants.displayWidth, Constants.displayHeight);
 		screen_curr.beginDraw();
 		screen_curr.background(background[0], background[1], background[2]);
 		screen_curr.endDraw();
@@ -84,10 +95,16 @@ public class Blackboard extends PApplet {
 
 	public void changeDrawColorBack() {
 		draw_color.prev();
+		this.color_square = new ArrowsSquare(BlackboardC.common_square_args,
+				BlackboardC.color_square_pos, BlackboardC.square_ext_color,
+				draw_color.get());
 	}
 
 	public void changeDrawColorForth() {
 		draw_color.next();
+		this.color_square = new ArrowsSquare(BlackboardC.common_square_args,
+				BlackboardC.color_square_pos, BlackboardC.square_ext_color,
+				draw_color.get());
 	}
 	
 	private void changeScreen() {
@@ -108,10 +125,17 @@ public class Blackboard extends PApplet {
 	
 	@Override
 	public void draw() {
+		// Clean background
+		int[] background = BlackboardC.background_rgb;
+		
+		background(background[0], background[1], background[2]);
+		
 		changeScreen();
-
+		
 		drawCurrentScreen();
-
+		
+		processCursor();
+		
 		drawColorSquare();
 
 		drawScreenNumber();
@@ -119,14 +143,23 @@ public class Blackboard extends PApplet {
 		drawSaveText();
 	}
 	
+	private void processCursor() {
+//		TODO
+		if (color_square.isOnTriangle(mouseX, mouseY) || number_square.isOnTriangle(mouseX, mouseY)) {
+			cursor(HAND);
+		} else {
+			noCursor();
+			
+			int[] draw_col = draw_color.get();
+			
+			stroke(draw_col[0], draw_col[1], draw_col[2]);
+			strokeWeight(BlackboardC.draw_line_weight);
+			line(mouseX, mouseY, pmouseX, pmouseY);
+		}
+	}
+
 	private void drawColorSquare() {
-		float[] sq_args = Constants.Blackboard.common_square_args, sq_pos = Constants.Blackboard.color_square_pos;
-		int[] sq_e_col = Constants.Blackboard.square_ext_color, draw_col = draw_color.get();
-		
-		stroke(sq_e_col[0], sq_e_col[1], sq_e_col[2]);
-		strokeWeight(Constants.Blackboard.square_weight);
-		fill(draw_col[0], draw_col[1], draw_col[2]);
-		rect(sq_pos[0], sq_pos[1], sq_args[0], sq_args[1], sq_args[2]);
+		color_square.draw(this);
 	}
 	
 	private void drawCurrentScreen() {
@@ -135,7 +168,7 @@ public class Blackboard extends PApplet {
 		if (mousePressed) {
 			screen_curr.beginDraw();
 			screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
-			screen_curr.strokeWeight(Constants.Blackboard.draw_line_weight);
+			screen_curr.strokeWeight(BlackboardC.draw_line_weight);
 			screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
 			screen_curr.endDraw();
 		}
@@ -145,14 +178,14 @@ public class Blackboard extends PApplet {
 	
 	private void drawSaveText() {
 		if (save_text.get()) {
-			textSize(Constants.Blackboard.save_text_size);
+			textSize(BlackboardC.save_text_size);
 			
-			String sav_text = Constants.Blackboard.save_text;
+			String sav_text = BlackboardC.save_text;
 			final float save_t_xpos = (Constants.displayWidth / 2.0f) - (textWidth(sav_text) / 2.0f);
-			int[] save_t_color = Constants.Blackboard.save_text_color;
+			int[] save_t_color = BlackboardC.save_text_color;
 			
 			fill(save_t_color[0], save_t_color[1], save_t_color[2]);
-			text(sav_text, save_t_xpos, Constants.Blackboard.save_text_ypos);
+			text(sav_text, save_t_xpos, BlackboardC.save_text_ypos);
 			
 			if (save_text_time.decrementAndGet() == 0)
 				save_text.set(false);
@@ -160,23 +193,29 @@ public class Blackboard extends PApplet {
 	}
 
 	private void drawScreenNumber() {
-		int[] numb_sq_fill_color = Constants.Blackboard.number_square_fill_color, numb_color = Constants.Blackboard.number_color, sq_e_col = Constants.Blackboard.square_ext_color;
-		float[] numb_sq_pos = Constants.Blackboard.number_square_pos, numb_pos = Constants.Blackboard.number_pos, sq_args = Constants.Blackboard.common_square_args;
+		int[] numb_color = BlackboardC.number_color;
+		float[] sq_pos = number_square.sq_pos, sq_args = number_square.sq_args,
+				numb_pos = BlackboardC.number_pos;
 		int screen_p = screen_pos.get();
 		
-		stroke(sq_e_col[0], sq_e_col[1], sq_e_col[2]);
-		strokeWeight(Constants.Blackboard.square_weight);
-		fill(numb_sq_fill_color[0], numb_sq_fill_color[1], numb_sq_fill_color[2]);
-		textSize(Constants.Blackboard.number_size);
+		textSize(sq_args[1]);
 		
 		if (screen_p < 10) {
-			rect(numb_sq_pos[0], numb_sq_pos[1], sq_args[0], sq_args[1], sq_args[2]);
+			number_square.draw(this);
 			fill(numb_color[0], numb_color[1], numb_color[2]);
 			text(screen_p, numb_pos[0], numb_pos[1]);
 		} else {
-			rect(numb_sq_pos[0] - sq_args[0], numb_sq_pos[1], 2*sq_args[0], sq_args[1], sq_args[2]);
+			if (sq_pos[0] == BlackboardC.number_square_pos[0]) {
+				number_square = new ArrowsSquare(new float[] { 2 * sq_args[0],
+						sq_args[1], sq_args[2] }, new float[] {
+						sq_pos[0] - sq_args[0], sq_pos[1] },
+						BlackboardC.square_ext_color,
+						BlackboardC.number_square_fill_color);
+			}
+			
+			number_square.draw(this);
 			fill(numb_color[0], numb_color[1], numb_color[2]);
-			text(screen_p, Constants.Blackboard.number_gt_10_xpos, numb_pos[1]);
+			text(screen_p, BlackboardC.number_gt_10_xpos, numb_pos[1]);
 		}
 	}
 
@@ -187,14 +226,15 @@ public class Blackboard extends PApplet {
 	}
 
 	public synchronized void saveCurrentScreen() {
-		screen_curr.save(Constants.Blackboard.save_name + "[" + screen_pos.get() + "]_"+ new Date().getTime() +".png");
+		screen_curr.save(BlackboardC.save_name + "[" + screen_pos.get() + "]_"+ new Date().getTime() +".png");
 		save_text.compareAndSet(false, true);
-		save_text_time.set((int) Math.ceil(frameRate*Constants.Blackboard.save_text_time));
+		save_text_time.set((int) Math.ceil(frameRate*BlackboardC.save_text_time));
 	}
 
 	@Override
 	public void setup() {
 		size(Constants.displayWidth, Constants.displayHeight);
 		addAndSetNewScreen();
+		noCursor();
 	}
 }

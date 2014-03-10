@@ -4,7 +4,7 @@ import processing.core.PApplet;
 import protoboard.blackboard.Blackboard;
 
 /**
- * Starting point of protoboard
+ * Starting point of protoboard.
  * 
  */
 public final class Main {

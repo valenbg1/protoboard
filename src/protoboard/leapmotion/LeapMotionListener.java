@@ -1,6 +1,6 @@
 package protoboard.leapmotion;
 
-import protoboard.Constants;
+import protoboard.Constants.LeapMotionListenerC;
 import protoboard.blackboard.Blackboard;
 
 import com.leapmotion.leap.CircleGesture;
@@ -13,7 +13,7 @@ import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.SwipeGesture;
 
 /**
- * Processes the info received from the Leap Motion controller
+ * Processes the info received from the Leap Motion controller.
  * 
  */
 public class LeapMotionListener extends Listener {
@@ -27,9 +27,9 @@ public class LeapMotionListener extends Listener {
 
 	@Override
 	public void onConnect(Controller controller) {
-		System.out.println(Constants.LeapMotion.onConnect);
+		System.out.println(LeapMotionListenerC.onConnect);
 		
-		if (controller.config().setFloat("Gesture.Swipe.MinLength", Constants.LeapMotion.swipe_minlength))
+		if (controller.config().setFloat("Gesture.Swipe.MinLength", LeapMotionListenerC.swipe_minlength))
 			controller.config().save();
 		
 		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
@@ -41,12 +41,12 @@ public class LeapMotionListener extends Listener {
 	@Override
 	public void onDisconnect(Controller controller) {
 		// Note: not dispatched when running in a debugger.
-		System.out.println(Constants.LeapMotion.onDisconnect);
+		System.out.println(LeapMotionListenerC.onDisconnect);
 	}
 
 	@Override
 	public void onExit(Controller controller) {
-		System.out.println(Constants.LeapMotion.onExit);
+		System.out.println(LeapMotionListenerC.onExit);
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class LeapMotionListener extends Listener {
 						else
 							board.changeDrawColorBack();
 							
-						System.out.println(Constants.LeapMotion.onCircle + " id: " + circle.id() + ", "
+						System.out.println(LeapMotionListenerC.onCircle + " id: " + circle.id() + ", "
 								+ circle.state() + ", progress: " + circle.progress()
 								+ ", clockwise: " + clockwise);
 						
@@ -155,7 +155,7 @@ public class LeapMotionListener extends Listener {
 							if (swipe.direction().getX() > 0) {
 								board.changeScreenForth();
 								
-								System.out.println(Constants.LeapMotion.onRightSwipe +  " id: " + swipe.id()
+								System.out.println(LeapMotionListenerC.onRightSwipe +  " id: " + swipe.id()
 										+ ", " + swipe.state() + ", position: "
 										+ swipe.position() + ", direction: "
 										+ swipe.direction() + ", speed: "
@@ -167,7 +167,7 @@ public class LeapMotionListener extends Listener {
 							} else {
 								board.changeScreenBack();
 								
-								System.out.println(Constants.LeapMotion.onLeftSwipe +  " id: " + swipe.id()
+								System.out.println(LeapMotionListenerC.onLeftSwipe +  " id: " + swipe.id()
 										+ ", " + swipe.state() + ", position: "
 										+ swipe.position() + ", direction: "
 										+ swipe.direction() + ", speed: "
@@ -187,7 +187,7 @@ public class LeapMotionListener extends Listener {
 							} else {
 								board.saveCurrentScreen();
 								
-								System.out.println(Constants.LeapMotion.onDownSwipe +  " id: " + swipe.id()
+								System.out.println(LeapMotionListenerC.onDownSwipe +  " id: " + swipe.id()
 										+ ", " + swipe.state() + ", position: "
 										+ swipe.position() + ", direction: "
 										+ swipe.direction() + ", speed: "
@@ -223,11 +223,11 @@ public class LeapMotionListener extends Listener {
 //		}
 		
 		if (detected_gesture)
-			wait_frames = (int) Math.ceil(frame.currentFramesPerSecond()*Constants.LeapMotion.wait_between_gestures);
+			wait_frames = (int) Math.ceil(frame.currentFramesPerSecond()*LeapMotionListenerC.wait_between_gestures);
 	}
 
 	@Override
 	public void onInit(Controller controller) {
-		System.out.println(Constants.LeapMotion.onInit);
+		System.out.println(LeapMotionListenerC.onInit);
 	}
 }

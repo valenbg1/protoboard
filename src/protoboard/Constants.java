@@ -4,19 +4,24 @@ import java.awt.Toolkit;
 
 
 /**
- * Class externalizing all the constant within the application
+ * Class externalizing all the constant within the application.
  * 
  */
 public final class Constants {
 	public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 	public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+	
+//	For testing
+//	public static final int displayWidth = 1024;
+//	public static final int displayHeight = 768;
+	
 	public static final int dispWidthxHeight = displayWidth*displayHeight;
 	
 	/**
-	 * Externalized constant within blackboard mode scope
+	 * Externalized constant within blackboard mode scope.
 	 *
 	 */
-	public static final class Blackboard {
+	public static final class BlackboardC {
 		public static final int[] info_blue_rgb = { 102, 178, 255 };
 		
 		public static final int background_rgb[] = { 0, 0, 0 };
@@ -24,14 +29,15 @@ public final class Constants {
 		public static final float draw_line_weight = dispWidthxHeight*0.000009765625f;
 		public static final int max_screens = 99;
 		
-		public static final int square_ext_color[] = { 255, 255, 255 };
+		public static final int square_ext_color[] = info_blue_rgb;
 		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
 		public static final float[] common_square_args = { dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000009765625f };
 		public static final float[] color_square_pos = { displayWidth*0.0078125f, displayHeight*0.925f };
 		public static final float[] number_square_pos = { displayWidth - color_square_pos[0] - common_square_args[0], color_square_pos[1] };
-		public static final int number_square_fill_color[] = { 0, 0, 0 };
+		public static final int number_square_fill_color[] = background_rgb;
+		public static final float square_triangle_length = common_square_args[0]*0.20f;
+		public static final float square_triangle_det = 1.05f;
 		
-		public static final float number_size = common_square_args[0];
 		public static final int number_color[] = { 255, 255, 255 };
 		public static final float[] number_pos = { number_square_pos[0] + common_square_args[0]*0.18f, number_square_pos[1] + common_square_args[1]*0.88f };
 		public static final float number_gt_10_xpos = number_square_pos[0] - common_square_args[0] + common_square_args[0]*0.40f;
@@ -53,10 +59,10 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constant within Leap Motion controller scope
+	 * Externalized constant within Leap Motion controller scope.
 	 *
 	 */
-	public static final class LeapMotion {
+	public static final class LeapMotionListenerC {
 		public static final String onConnect = "Leap connected";
 		public static final String onDisconnect = "Leap disconnected";
 		public static final String onExit = "Leap exited";

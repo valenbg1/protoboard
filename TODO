@@ -1,4 +1,4 @@
-- Make the possibility of changing color / screen in blackboard mode using the mouse too.
+- Make the possibility of changing color / screen in blackboard mode using the mouse too. (detection of the mouse part).
 
 - ? Some gesture for changing the drawing line size.
 
@@ -13,7 +13,4 @@
 - Make the LeapMotionListener implements the "observer" pattern (for using the same
   code for blackboard / "input" mode).
   
-- New gesture in blackboard mode: up swipe, for closing this mode and returning to the
-  principal Swing window (asking the user with a window that permits gestures or mouse actions).
-  
-- Relativize the absolute pixels in Constants precisely.
+- New gesture in blackboard mode: up swipe, for showing miniaturized screens.
