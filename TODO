@@ -1,7 +1,6 @@
-- Make the LeapMotionListener implements the "Observer" pattern (for using the same
-  code for blackboard / "input" mode).
-  
 - New gesture in blackboard mode: up swipe, for showing miniaturized screens.
+
+- Check the possibility of using protoboard without Leap Motion lib installed.
 
 - ? Some gesture for changing the drawing line size.
 

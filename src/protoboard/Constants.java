@@ -72,6 +72,7 @@ public final class Constants {
 		public static final String onLeftSwipe = "Leap back swipe";
 		public static final String onRightSwipe = "Leap forth swipe";
 		public static final String onDownSwipe = "Leap down swipe";
+		public static final String onUpSwipe = "Leap up swipe";
 		
 		public static final float swipe_minlength = 200; // mm
 		

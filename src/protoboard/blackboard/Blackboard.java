@@ -10,6 +10,7 @@ import processing.core.PGraphics;
 import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 import protoboard.leapmotion.LeapMotionListener;
+import protoboard.leapmotion.LeapMotionObserver;
 
 import com.leapmotion.leap.Controller;
 
@@ -17,7 +18,7 @@ import com.leapmotion.leap.Controller;
  * Implements the blackboard mode of the application.
  *
  */
-public class Blackboard extends PApplet {
+public class Blackboard extends PApplet implements LeapMotionObserver {
 	private static final long serialVersionUID = -2341687072941440919L;
 
 	private Controller controller;
@@ -187,6 +188,7 @@ public class Blackboard extends PApplet {
 	
 	@Override
 	public void exit() {
+		listener.unregister(this);
 		controller.removeListener(listener);
 		super.exit();
 	}
@@ -195,6 +197,34 @@ public class Blackboard extends PApplet {
 	public void mouseClicked() {
 		mouseClicked.compareAndSet(false, true);
 	}
+
+	@Override
+	public void onDownSwipe() {
+		saveCurrentScreen();
+	}
+
+	@Override
+	public void onLeftCircle() {
+		changeDrawColorBack();
+	}
+
+	@Override
+	public void onLeftSwipe() {
+		changeScreenBack();
+	}
+
+	@Override
+	public void onRighCircle() {
+		changeDrawColorForth();
+	}
+
+	@Override
+	public void onRighSwipe() {
+		changeScreenForth();
+	}
+
+	@Override
+	public void onUpSwipe() {}
 
 	private void processCursor() {
 		if (mouseClicked.get()) {
@@ -242,5 +272,6 @@ public class Blackboard extends PApplet {
 		size(Constants.displayWidth, Constants.displayHeight);
 		addAndSetNewScreen();
 		noCursor();
+		listener.register(this);
 	}
 }
