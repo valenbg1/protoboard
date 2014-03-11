@@ -11,7 +11,7 @@ class Colors {
 	private int pos = 0;
 	private static final int max_pos = Constants.BlackboardC.draw_colors.length;
 
-	public synchronized int[] get() {
+	public synchronized int[] getActual() {
 		return Constants.BlackboardC.draw_colors[pos];
 	}
 

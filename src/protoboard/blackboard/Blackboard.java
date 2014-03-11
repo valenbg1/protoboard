@@ -55,7 +55,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 		this.draw_color = new Colors();
 		
-		this.color_square = ArrowsSquare.colorSquare(draw_color.get());
+		this.color_square = ArrowsSquare.colorSquare(draw_color.getActual());
 		this.number_square = ArrowsSquare.numberSquare();
 
 		this.save_text = new AtomicBoolean(false);
@@ -96,12 +96,12 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	public void changeDrawColorBack() {
 		draw_color.prev();
-		color_square = ArrowsSquare.colorSquare(draw_color.get());
+		color_square = ArrowsSquare.colorSquare(draw_color.getActual());
 	}
 
 	public void changeDrawColorForth() {
 		draw_color.next();
-		color_square = ArrowsSquare.colorSquare(draw_color.get());
+		color_square = ArrowsSquare.colorSquare(draw_color.getActual());
 	}
 	
 	private void changeScreen() {
@@ -245,7 +245,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		} else {
 			noCursor();
 
-			int[] draw_col = draw_color.get();
+			int[] draw_col = draw_color.getActual();
 
 			stroke(draw_col[0], draw_col[1], draw_col[2]);
 			strokeWeight(BlackboardC.draw_line_weight);
