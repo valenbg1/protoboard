@@ -27,7 +27,8 @@ public final class Constants {
 		public static final int background_rgb[] = { 0, 0, 0 };
 		public static final String save_name = "board";
 		public static final float draw_line_weight = dispWidthxHeight*0.000009765625f;
-		public static final int max_screens = 9;
+		public static final int max_screens = 99;
+		public static final int multi_screen_around = 2;
 		
 		public static final int square_ext_color[] = info_blue_rgb;
 		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
@@ -48,8 +49,8 @@ public final class Constants {
 		public static final float save_text_ypos = displayHeight*0.9125f;
 		public static final float save_text_time = 1.85f; // s
 		
-		public static final float mini_screen_prop = 0.25f;
-		public static final float little_screen_prop = 0.45f;
+		public static final float mini_screen_prop = 0.15f;
+		public static final float little_screen_prop = 0.35f;
 		public static final float[] little_screen_pos = { displayWidth/2.0f - displayWidth*little_screen_prop/2.0f, displayHeight/2.0f - displayHeight*little_screen_prop/2.0f };
 		
 		public static final int[][] draw_colors = { 

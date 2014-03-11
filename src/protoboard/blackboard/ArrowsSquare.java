@@ -84,26 +84,27 @@ public class ArrowsSquare {
 		}
 	}
 
-	public boolean isOnAnyTriangle(int mouseX, int mouseY) {
-		return showTriangles
-				&& (isOnLeftTriangle(mouseX, mouseY) || isOnRightTriangle(mouseX, mouseY));
+	public boolean isOnAnySide(int mouseX, int mouseY) {
+		return (isOnLeft(mouseX, mouseY) || isOnRight(mouseX, mouseY));
 	}
 
-	public boolean isOnLeftTriangle(int mouseX, int mouseY) {
-		return showTriangles
-				&& (mouseX <= (sq_pos[0] + sq_args[0] / 2.0f))
+	public boolean isOnLeft(int mouseX, int mouseY) {
+		float extension = showTriangles ? sq_args[1]*BlackboardC.square_triangle_det : 0;
+		
+		return (mouseX <= (sq_pos[0] + sq_args[0] / 2.0f))
 				&& (mouseY >= sq_pos[1])
 
-				&& (mouseX >= (sq_pos[0] - sq_args[1]*BlackboardC.square_triangle_det))
+				&& (mouseX >= (sq_pos[0] - extension))
 				&& (mouseY <= (sq_pos[1] + sq_args[1]));
 	}
 
-	public boolean isOnRightTriangle(int mouseX, int mouseY) {
-		return showTriangles
-				&& (mouseX >= (sq_pos[0] + sq_args[0] / 2.0f))
+	public boolean isOnRight(int mouseX, int mouseY) {
+		float extension = showTriangles ? sq_args[1]*BlackboardC.square_triangle_det : 0;
+		
+		return (mouseX >= (sq_pos[0] + sq_args[0] / 2.0f))
 				&& (mouseY >= sq_pos[1])
 
-				&& (mouseX <= (sq_pos[0] + sq_args[0] + sq_args[1]*BlackboardC.square_triangle_det))
+				&& (mouseX <= (sq_pos[0] + sq_args[0] + extension))
 				&& (mouseY <= (sq_pos[1] + sq_args[1]));
 	}
 }

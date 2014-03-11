@@ -1,6 +1,8 @@
-- Mouse detection in multiscreen mode (changing the method of "square" detection of an ArrowsSquare).
+- Mouse action to change into multiscreen mode.
 
-- Check the possibility of using protoboard without Leap Motion lib installed.
+- Better borders for screens in multiscreen mode. 
+
+- Make the possibility of using protoboard without Leap Motion lib installed.
 
 - ? Some gesture for changing the drawing line size.
 

@@ -15,20 +15,44 @@ import protoboard.Constants.BlackboardC;
  */
 public class ScreensIterator {
 	private CopyOnWriteArrayList<PGraphics> screens;
-	private PGraphics screen_curr, screen_prev, screen_next;
-	private ArrowsSquare sq_prev, sq_next, sq_curr;
+	private PGraphics screen_curr;
+	private PGraphics[] screen_prevs, screen_nexts;
+	private ArrowsSquare sq_curr;
+	private ArrowsSquare[] sq_prevs, sq_nexts;
+	private int n_around;
 	private AtomicInteger screen_pos;
 	
 	public ScreensIterator(CopyOnWriteArrayList<PGraphics> screens,
-			int screen_pos) {
+			int screen_pos, int n_around) {
 		this.screens = screens;
 		this.screen_pos = new AtomicInteger(screen_pos);
 		this.screen_curr = screens.get(screen_pos);
-		this.screen_prev = getPrev();
-		this.screen_next = getNext();
-		this.sq_prev = null;
-		this.sq_next = null;
-		this.sq_curr = null;
+		this.n_around = n_around;
+		this.screen_prevs = new PGraphics[n_around];
+		this.screen_nexts = new PGraphics[n_around];
+		this.sq_prevs = new ArrowsSquare[n_around];
+		this.sq_nexts = new ArrowsSquare[n_around];
+		
+		getPrevs();
+		getNexts();
+		
+		float width_mini = Constants.displayWidth*BlackboardC.mini_screen_prop,
+				height_mini = Constants.displayHeight*BlackboardC.mini_screen_prop,
+				width_little = Constants.displayWidth*BlackboardC.little_screen_prop,
+				height_little = Constants.displayHeight*BlackboardC.little_screen_prop,
+				x = BlackboardC.little_screen_pos[0] + width_little,
+				y = BlackboardC.little_screen_pos[1] + height_little/2.0f - height_mini/2.0f;
+		
+		for (int i = 0; i < n_around; ++i)
+			this.sq_nexts[i] = ArrowsSquare.screenSquare(width_mini, height_mini, x + i*width_mini, y);
+		
+		x = BlackboardC.little_screen_pos[0] - width_mini;
+		y = BlackboardC.little_screen_pos[1] + height_little/2.0f - height_mini/2.0f;
+		
+		for (int i = 0; i < n_around; ++i)
+			this.sq_prevs[i] = ArrowsSquare.screenSquare(width_mini, height_mini, x - i*width_mini, y);
+
+		this.sq_curr = ArrowsSquare.screenSquare(width_little, height_little, BlackboardC.little_screen_pos[0], BlackboardC.little_screen_pos[1]);
 	}
 	
 	public synchronized void advance() {
@@ -38,9 +62,10 @@ public class ScreensIterator {
 			screen_pos.incrementAndGet();
 		
 		this.screen_curr = screens.get(screen_pos.get());
-		this.screen_prev = getPrev();
-		this.screen_next = getNext();
+		getPrevs();
+		getNexts();
 	}
+	
 	
 	public PGraphics current() {
 		return screen_curr;
@@ -51,97 +76,80 @@ public class ScreensIterator {
 	}
 	
 	public void draw(PApplet board) {
-		if (screen_prev != null)
-			drawPrev(board);
+		for (int i = 0; i < n_around; ++i) {
+			if (screen_prevs[i] != null)
+				draw(board, screen_prevs[i], sq_prevs[i]);	
+		}
 		
 		drawCurrent(board);
 		
-		if (screen_next != null)
-			drawNext(board);
+		for (int i = 0; i < n_around; ++i) {
+			if (screen_nexts[i] != null)
+				draw(board, screen_nexts[i], sq_nexts[i]);	
+		}
 	}
 	
-	private void draw(PApplet board, float x, float y, PGraphics graph, ArrowsSquare sq, boolean mini) {
-		float width = graph.width, height = graph.height;
-		
-		if (mini) {
-			width *= BlackboardC.mini_screen_prop;
-			height *= BlackboardC.mini_screen_prop;
-		} else {
-			width *= BlackboardC.little_screen_prop;
-			height *= BlackboardC.little_screen_prop;
-		}
-		
-		if (sq == null)
-			sq = ArrowsSquare.screenSquare(width, height, x, y);
-		
+	private void draw(PApplet board, PGraphics graph, ArrowsSquare sq) {
 		sq.draw(board);
-		board.image(graph, x, y, width, height);
+		board.image(graph, sq.sq_pos[0], sq.sq_pos[1], sq.sq_args[0], sq.sq_args[1]);
 	}
 	
 	public void drawCurrent(PApplet board) {
-		draw(board, BlackboardC.little_screen_pos[0], BlackboardC.little_screen_pos[1], screen_curr, sq_curr, false);
-	}
-
-	public void drawNext(PApplet board) {
-		float height = screen_next.height*BlackboardC.mini_screen_prop;
-		float x = BlackboardC.little_screen_pos[0] + Constants.displayWidth*BlackboardC.little_screen_prop;
-		float y = BlackboardC.little_screen_pos[1] + Constants.displayHeight*BlackboardC.little_screen_prop/2.0f - height/2.0f;
-		
-		draw(board, x, y, screen_next, sq_next, true);		
+		draw(board, screen_curr, sq_curr);
 	}
 	
-	public void drawPrev(PApplet board) {
-		float width = screen_prev.width*BlackboardC.mini_screen_prop, height = screen_prev.height*BlackboardC.mini_screen_prop;
-		float x = BlackboardC.little_screen_pos[0] - width;
-		float y = BlackboardC.little_screen_pos[1] + Constants.displayHeight*BlackboardC.little_screen_prop/2.0f - height/2.0f;
-		
-		draw(board, x, y, screen_prev, sq_prev, true);
-	}
-	
-	private synchronized PGraphics getNext() {
+	private synchronized void getNexts() {
 		int sc_pos_aux = screen_pos.get();
 		
-		if (sc_pos_aux < (screens.size()-1))
-			return screens.get(++sc_pos_aux);
-		else
-			return null;
+		for (int i = 0; i < n_around; ++i) {
+			if (sc_pos_aux < (screens.size()-1))
+				screen_nexts[i] = screens.get(++sc_pos_aux);
+			else
+				screen_nexts[i] = null;
+		}
 	}
 	
-	private synchronized PGraphics getPrev() {
+	private synchronized void getPrevs() {
 		int sc_pos_aux = screen_pos.get();
 		
-		if (sc_pos_aux > 0)
-			return screens.get(--sc_pos_aux);
-		else
-			return null;
+		for (int i = 0; i < n_around; ++i) {
+			if (sc_pos_aux > 0)
+				screen_prevs[i] = screens.get(--sc_pos_aux);
+			else
+				screen_prevs[i] = null;
+		}
 	}
 	
-	public boolean isOnAny(int mouseX, int mouseY) {
-		return isOnPrev(mouseX, mouseY) || isOnCurr(mouseX, mouseY) || isOnNext(mouseX, mouseY);
+	public int isOnAny(int mouseX, int mouseY) {
+		int ret = Integer.MIN_VALUE;
+		
+		if (isOnCurr(mouseX, mouseY))
+			return 0;
+		
+		for (int i = 0; i < n_around; ++i) {
+			if (isOnPrevs(mouseX, mouseY, i))
+				return -i-1;
+			else if (isOnNexts(mouseX, mouseY, i))
+				return i+1;
+		}
+		
+		return ret;
 	}
 
 	public boolean isOnCurr(int mouseX, int mouseY) {
 		return isOnSquare(mouseX, mouseY, screen_curr, sq_curr);
 	}
 	
-	public boolean isOnNext(int mouseX, int mouseY) {
-		return isOnSquare(mouseX, mouseY, screen_next, sq_next);
+	public boolean isOnNexts(int mouseX, int mouseY, int i) {
+		return isOnSquare(mouseX, mouseY, screen_nexts[i], sq_nexts[i]);
 	}
 	
-	public boolean isOnPrev(int mouseX, int mouseY) {
-		return isOnSquare(mouseX, mouseY, screen_prev, sq_prev);
+	public boolean isOnPrevs(int mouseX, int mouseY, int i) {
+		return isOnSquare(mouseX, mouseY, screen_prevs[i], sq_prevs[i]);
 	}
 	
 	private boolean isOnSquare(int mouseX, int mouseY, PGraphics graph, ArrowsSquare sq) {
-		return (graph != null) && (sq != null) && sq.isOnAnyTriangle(mouseX, mouseY);
-	}
-	
-	public PGraphics next() {
-		return screen_next;
-	}
-	
-	public PGraphics prev() {
-		return screen_prev;
+		return (graph != null) && (sq != null) && sq.isOnAnySide(mouseX, mouseY);
 	}
 	
 	public synchronized void regress() {
@@ -151,7 +159,7 @@ public class ScreensIterator {
 			screen_pos.decrementAndGet();
 		
 		this.screen_curr = screens.get(screen_pos.get());
-		this.screen_prev = getPrev();
-		this.screen_next = getNext();
+		getPrevs();
+		getNexts();
 	}
 }
