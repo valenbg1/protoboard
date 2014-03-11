@@ -39,6 +39,9 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	
 	private AtomicBoolean mouseClicked;
 	
+	private AtomicBoolean multiScreenMode;
+	private ScreensIterator screens_iter;
+	
 	public Blackboard() {
 		super();
 		
@@ -62,6 +65,9 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		this.save_text_time = new AtomicInteger(0);
 		
 		this.mouseClicked = new AtomicBoolean(false);
+		
+		this.multiScreenMode = new AtomicBoolean(false);
+		this.screens_iter = null;
 	}
 	
 	private synchronized void _changeScreenBack() {
@@ -104,6 +110,20 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		color_square = ArrowsSquare.colorSquare(draw_color.getActual());
 	}
 	
+	public synchronized void changeMultiScreenBack() {
+		if (multiScreenMode.get()) {
+			screens_iter.regress();
+			screen_pos.set(screens_iter.currentPos());
+		}
+	}
+
+	public synchronized void changeMultiScreenForth() {
+		if (multiScreenMode.get()) {
+			screens_iter.advance();
+			screen_pos.set(screens_iter.currentPos());
+		}
+	}
+	
 	private void changeScreen() {
 		if (screen_change[0].get())
 			_changeScreenBack();
@@ -111,7 +131,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 			_changeScreenForth();
 		}
 	}
-
+	
 	public void changeScreenBack() {
 		screen_change[0].compareAndSet(false, true);
 	}
@@ -133,11 +153,18 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		
 		processCursor();
 		
+		drawMultiScreenMode();
+		
 		color_square.draw(this);
 
 		drawScreenNumber();
 		
 		drawSaveText();
+	}
+	
+	private void drawMultiScreenMode() {
+		if (multiScreenMode.get())
+			screens_iter.draw(this);
 	}
 	
 	private void drawSaveText() {
@@ -155,7 +182,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 				save_text.set(false);
 		}
 	}
-	
+
 	private void drawScreenNumber() {
 		int[] numb_color = BlackboardC.number_color;
 		float[] sq_pos = number_square.sq_pos, sq_args = number_square.sq_args,
@@ -185,7 +212,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 			text(screen_p, BlackboardC.number_gt_10_xpos, numb_pos[1]);
 		}
 	}
-	
+
 	@Override
 	public void exit() {
 		listener.unregister(this);
@@ -200,65 +227,112 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	@Override
 	public void onDownSwipe() {
-		saveCurrentScreen();
+		if (multiScreenMode.get())
+			quitMultiScreenMode();
+		else
+			saveCurrentScreen();
 	}
 
 	@Override
 	public void onLeftCircle() {
-		changeDrawColorBack();
+		if (multiScreenMode.get())
+			changeMultiScreenBack();
+		else
+			changeDrawColorBack();
 	}
 
 	@Override
 	public void onLeftSwipe() {
-		changeScreenBack();
+		if (multiScreenMode.get())
+			changeMultiScreenForth();
+		else
+			changeScreenForth();
 	}
-
+	
 	@Override
 	public void onRighCircle() {
-		changeDrawColorForth();
+		if (multiScreenMode.get())
+			changeMultiScreenForth();
+		else
+			changeDrawColorForth();
 	}
-
+	
 	@Override
 	public void onRighSwipe() {
-		changeScreenForth();
+		if (multiScreenMode.get())
+			changeMultiScreenBack();
+		else
+			changeScreenBack();
 	}
-
+	
 	@Override
-	public void onUpSwipe() {}
-
+	public void onUpSwipe() {
+		toggleMultiScreenMode();
+	}
+	
 	private void processCursor() {
-		if (mouseClicked.get()) {
-			if (color_square.isOnLeftTriangle(mouseX, mouseY))
-				changeDrawColorBack();
-			else if (color_square.isOnRightTriangle(mouseX, mouseY))
-				changeDrawColorForth();
-			else if (number_square.isOnLeftTriangle(mouseX, mouseY))
-				changeScreenBack();
-			else if (number_square.isOnRightTriangle(mouseX, mouseY))
-				changeScreenForth();
+		if (multiScreenMode.get())
+			processCursorMultiScreenMode();
+		else {
+			if (mouseClicked.get()) {
+				if (color_square.isOnLeftTriangle(mouseX, mouseY))
+					changeDrawColorBack();
+				else if (color_square.isOnRightTriangle(mouseX, mouseY))
+					changeDrawColorForth();
+				else if (number_square.isOnLeftTriangle(mouseX, mouseY))
+					changeScreenBack();
+				else if (number_square.isOnRightTriangle(mouseX, mouseY))
+					changeScreenForth();
 
-			mouseClicked.set(false);
-		}
+				mouseClicked.set(false);
+			}
 
-		if (color_square.isOnAnyTriangle(mouseX, mouseY) || number_square.isOnAnyTriangle(mouseX, mouseY)) {
-			cursor(HAND);
-		} else {
-			noCursor();
+			if (color_square.isOnAnyTriangle(mouseX, mouseY) || number_square.isOnAnyTriangle(mouseX, mouseY)) {
+				cursor(HAND);
+			} else {
+				noCursor();
 
-			int[] draw_col = draw_color.getActual();
+				int[] draw_col = draw_color.getActual();
 
-			stroke(draw_col[0], draw_col[1], draw_col[2]);
-			strokeWeight(BlackboardC.draw_line_weight);
-			line(mouseX, mouseY, pmouseX, pmouseY);
+				stroke(draw_col[0], draw_col[1], draw_col[2]);
+				strokeWeight(BlackboardC.draw_line_weight);
+				line(mouseX, mouseY, pmouseX, pmouseY);
 
-			if (mousePressed) {
-				screen_curr.beginDraw();
-				screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
-				screen_curr.strokeWeight(BlackboardC.draw_line_weight);
-				screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
-				screen_curr.endDraw();
+				if (mousePressed) {
+					screen_curr.beginDraw();
+					screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
+					screen_curr.strokeWeight(BlackboardC.draw_line_weight);
+					screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
+					screen_curr.endDraw();
+				}
 			}
 		}
+	}
+
+	private void processCursorMultiScreenMode() {
+		cursor();
+//		TODO
+//		if (screens_iter.isOnAny(mouseX, mouseY)) {
+//			cursor(HAND);
+//			
+//			if (mouseClicked.get()) {
+//				if (screens_iter.isOnCurr(mouseX, mouseY)) {
+//					quitMultiScreenMode();
+//				} else if (screens_iter.isOnPrev(mouseX, mouseY))
+//					changeMultiScreenBack();
+//				else if (screens_iter.isOnNext(mouseX, mouseY))
+//					changeMultiScreenForth();
+//
+//				mouseClicked.set(false);
+//			}
+//		}
+	}
+
+	public synchronized void quitMultiScreenMode() {
+		screen_curr = screens_iter.current();
+		screen_pos.set(screens_iter.currentPos());
+		multiScreenMode.set(false);
+		screens_iter = null;
 	}
 
 	public synchronized void saveCurrentScreen() {
@@ -273,5 +347,10 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		addAndSetNewScreen();
 		noCursor();
 		listener.register(this);
+	}
+
+	public synchronized void toggleMultiScreenMode() {
+		screens_iter = new ScreensIterator(screens, screen_pos.get());
+		multiScreenMode.set(true);
 	}
 }

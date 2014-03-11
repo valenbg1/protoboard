@@ -1,4 +1,4 @@
-- New gesture in blackboard mode: up swipe, for showing miniaturized screens.
+- Mouse detection in multiscreen mode (changing the method of "square" detection of an ArrowsSquare).
 
 - Check the possibility of using protoboard without Leap Motion lib installed.
 
