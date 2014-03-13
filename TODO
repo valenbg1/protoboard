@@ -1,18 +1,22 @@
-- Change detection of circle gesture: instead of detecting a "discrete" gestures, detect a circle gesture
-  every time the user makes a complete circle.
+* Change detection of circle gesture: instead of detecting a "discrete" gestures, detect parts of circles.
 
-- Use screen tap instead of down swipe to select screen in multiscreen mode.
+* Use screen tap instead of down swipe to select screen in multiscreen mode.
 
-- ? Better borders for screens in multiscreen mode.
+* ? Better borders for screens in multiscreen mode.
 
-- Make the possibility of using protoboard without Leap Motion lib installed.
+* Make a color wheel instead of the actual color square in blackboard mode.
 
-- ? Some gesture for changing the drawing line size.
+* Nice transitions in multiscreen mode.
 
-- Fine adjustment of right, left, down swipe gestures (improved but need better performance yet).
+* Check and make the possibility of using protoboard without Leap Motion lib installed.
 
-- Make a new mode: "input", in which movements detected in the Leap Motion are
+* ? Some gesture for changing the drawing line size.
+
+* Fine adjustment of right, left, down swipe gestures (improved but need better performance yet).
+	· Add a idle state after detecting a gesture for swipe gestures specifically.
+
+* Make a new mode: "input", in which movements detected in the Leap Motion are
   mapped to keyboard, mouse actions (instead of showing a blackboard). For use
   in any other applications. Note that "input" is a beta name yet.
 
-- Make a principal Swing interface to change between blackboard and "input" mode.
+* Make a principal Swing interface to change between blackboard and "input" mode.

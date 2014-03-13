@@ -14,6 +14,7 @@ import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Gesture.State;
 import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Listener;
+import com.leapmotion.leap.ScreenTapGesture;
 import com.leapmotion.leap.SwipeGesture;
 
 /**
@@ -22,7 +23,7 @@ import com.leapmotion.leap.SwipeGesture;
  */
 public class LeapMotionListener extends Listener {
 	public enum Gestures {
-		DOWN_SWIPE, LEFT_CIRCLE, LEFT_SWIPE, RIGHT_CIRCLE, RIGHT_SWIPE, UP_SWIPE
+		DOWN_SWIPE, LEFT_CIRCLE, LEFT_SWIPE, RIGHT_CIRCLE, RIGHT_SWIPE, SCREEN_TAP, UP_SWIPE
 	}
 
 	private AtomicInteger wait_frames;
@@ -57,6 +58,10 @@ public class LeapMotionListener extends Listener {
 					observer.onRighSwipe();
 					break;
 					
+				case SCREEN_TAP:
+					observer.onScreenTap();
+					break;
+					
 				case UP_SWIPE:
 					observer.onUpSwipe();
 					break;
@@ -73,6 +78,7 @@ public class LeapMotionListener extends Listener {
 		
 		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
 		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
+		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
 	}
 	
 	@Override
@@ -183,9 +189,20 @@ public class LeapMotionListener extends Listener {
 					}
 					break;
 					
+				case TYPE_SCREEN_TAP:
+					ScreenTapGesture screenTap = new ScreenTapGesture(gesture);
+					
+					callObservers(Gestures.SCREEN_TAP);
+					
+					System.out.println(LeapMotionListenerC.onScreenTap + " id: "
+							+ screenTap.id() + ", " + screenTap.state()
+							+ ", position: " + screenTap.position()
+							+ ", direction: " + screenTap.direction());
+                    
+                    detected_gesture = true;
+                    break;
+					
 				default:
-					System.out.println("Unknown gesture type.");
-					break;
 			}
 		}
 		

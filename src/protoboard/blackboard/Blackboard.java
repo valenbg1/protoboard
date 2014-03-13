@@ -124,6 +124,11 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		}
 	}
 	
+	public synchronized void changeMultiScreenMode() {
+		screens_iter = new ScreensIterator(screens, screen_pos.get(), BlackboardC.multi_screen_around);
+		multiScreenMode.set(true);
+	}
+	
 	private void changeScreen() {
 		if (screen_change[0].get())
 			_changeScreenBack();
@@ -166,7 +171,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		if (multiScreenMode.get())
 			screens_iter.draw(this);
 	}
-	
+
 	private void drawSaveText() {
 		if (save_text.get()) {
 			textSize(BlackboardC.save_text_size);
@@ -240,7 +245,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		else
 			changeDrawColorBack();
 	}
-
+	
 	@Override
 	public void onLeftSwipe() {
 		if (multiScreenMode.get())
@@ -266,10 +271,16 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 	
 	@Override
+	public void onScreenTap() {
+		if (multiScreenMode.get())
+			quitMultiScreenMode();
+	}
+
+	@Override
 	public void onUpSwipe() {
 		changeMultiScreenMode();
 	}
-	
+
 	private void processCursor() {
 		if (multiScreenMode.get())
 			processCursorMultiScreenMode();
@@ -315,7 +326,6 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	private void processCursorMultiScreenMode() {
 		int pos;
-		cursor(ARROW);
 		
 		if (((pos = screens_iter.isOnAny(mouseX, mouseY)) != Integer.MIN_VALUE) || number_square.isOnAnySide(mouseX, mouseY)) {
 			cursor(HAND);
@@ -336,7 +346,8 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 				else if (number_square.isOnDown(mouseX, mouseY))
 					quitMultiScreenMode();
 			}
-		}
+		} else
+			cursor(ARROW);
 	}
 
 	public synchronized void quitMultiScreenMode() {
@@ -358,10 +369,5 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		addAndSetNewScreen();
 		noCursor();
 		listener.register(this);
-	}
-
-	public synchronized void changeMultiScreenMode() {
-		screens_iter = new ScreensIterator(screens, screen_pos.get(), BlackboardC.multi_screen_around);
-		multiScreenMode.set(true);
 	}
 }

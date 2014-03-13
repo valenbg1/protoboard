@@ -1,9 +1,11 @@
 Blackboard mode
 ==========
-	- Left / right swipe changes the current board back / forth.
+	* Left / right swipe changes the current board back / forth.
 	
-	- Down swipe saves an image of the current board / quits multiscreen mode.
+	* Down swipe saves an image of the current board / quits multiscreen mode.
 	
-	- Circle anticlockwise / clockwise changes the color back / forth.
+	* Circle anticlockwise / clockwise changes the color back / forth.
 	
-	- Up swipe toggles multiscreen mode.
+	* Up swipe toggles multiscreen mode.
+	
+	* Screen tap quits multiscreen mode.
