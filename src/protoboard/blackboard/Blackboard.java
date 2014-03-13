@@ -204,7 +204,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 						sq_args[1], sq_args[2] }, new float[] {
 						sq_pos[0] - sq_args[0], sq_pos[1] },
 						BlackboardC.square_ext_color,
-						BlackboardC.number_square_fill_color);
+						BlackboardC.number_square_fill_color, true, true);
 			}
 			
 			number_square.draw(this);
@@ -267,26 +267,30 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	
 	@Override
 	public void onUpSwipe() {
-		toggleMultiScreenMode();
+		changeMultiScreenMode();
 	}
 	
 	private void processCursor() {
 		if (multiScreenMode.get())
 			processCursorMultiScreenMode();
 		else {
-			if (mouseClicked.get()) {
-				if (color_square.isOnLeft(mouseX, mouseY))
-					changeDrawColorBack();
-				else if (color_square.isOnRight(mouseX, mouseY))
-					changeDrawColorForth();
-				else if (number_square.isOnLeft(mouseX, mouseY))
-					changeScreenBack();
-				else if (number_square.isOnRight(mouseX, mouseY))
-					changeScreenForth();
-			}
-
 			if (color_square.isOnAnySide(mouseX, mouseY) || number_square.isOnAnySide(mouseX, mouseY)) {
 				cursor(HAND);
+				
+				if (mouseClicked.get()) {
+					if (color_square.isOnLeft(mouseX, mouseY))
+						changeDrawColorBack();
+					else if (color_square.isOnRight(mouseX, mouseY))
+						changeDrawColorForth();
+					else if (number_square.isOnLeft(mouseX, mouseY))
+						changeScreenBack();
+					else if (number_square.isOnRight(mouseX, mouseY))
+						changeScreenForth();
+					else if (number_square.isOnUp(mouseX, mouseY))
+						changeMultiScreenMode();
+					else if (number_square.isOnDown(mouseX, mouseY))
+						saveCurrentScreen();
+				}
 			} else {
 				noCursor();
 
@@ -313,7 +317,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		int pos;
 		cursor(ARROW);
 		
-		if ((pos = screens_iter.isOnAny(mouseX, mouseY)) != Integer.MIN_VALUE) {
+		if (((pos = screens_iter.isOnAny(mouseX, mouseY)) != Integer.MIN_VALUE) || number_square.isOnAnySide(mouseX, mouseY)) {
 			cursor(HAND);
 			
 			if (mouseClicked.get()) {
@@ -322,10 +326,15 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 				else if (pos > 0) {
 					for (int i = 0; i < pos; ++i)
 						changeMultiScreenForth();
-				} else {
+				} else if (pos != Integer.MIN_VALUE){
 					for (int i = 0; i < -pos; ++i)
 						changeMultiScreenBack();
-				}
+				} else if (number_square.isOnLeft(mouseX, mouseY))
+					changeMultiScreenBack();
+				else if (number_square.isOnRight(mouseX, mouseY))
+					changeMultiScreenForth();
+				else if (number_square.isOnDown(mouseX, mouseY))
+					quitMultiScreenMode();
 			}
 		}
 	}
@@ -351,7 +360,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		listener.register(this);
 	}
 
-	public synchronized void toggleMultiScreenMode() {
+	public synchronized void changeMultiScreenMode() {
 		screens_iter = new ScreensIterator(screens, screen_pos.get(), BlackboardC.multi_screen_around);
 		multiScreenMode.set(true);
 	}

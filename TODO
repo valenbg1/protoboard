@@ -1,6 +1,9 @@
-- Mouse action to change into multiscreen mode.
+- Change detection of circle gesture: instead of detecting a "discrete" gestures, detect a circle gesture
+  every time the user makes a complete circle.
 
-- Better borders for screens in multiscreen mode. 
+- Use screen tap instead of down swipe to select screen in multiscreen mode.
+
+- ? Better borders for screens in multiscreen mode.
 
 - Make the possibility of using protoboard without Leap Motion lib installed.
 
