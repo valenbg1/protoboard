@@ -27,7 +27,7 @@ public final class Constants {
 		public static final int background_rgb[] = { 0, 0, 0 };
 		public static final String save_name = "board";
 		public static final float draw_line_weight = dispWidthxHeight*0.000009765625f;
-		public static final int max_screens = 99;
+		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		
 		public static final int square_ext_color[] = info_blue_rgb;
@@ -82,6 +82,10 @@ public final class Constants {
 		
 		public static final float swipe_minlength = 200; // mm
 		
+		public static final float circle_resolution = 0.5f; // (0, 1]: % circle to send an event of detected circle gesture
+		
 		public static final float wait_between_gestures = 0.85f; // s
+		public static final float wait_between_swipe_gestures = wait_between_gestures; // s
+		public static final float wait_between_changing_circle_id = 5f; // s
 	}	
 }
