@@ -15,10 +15,14 @@ class Colors {
 		return Constants.BlackboardC.draw_colors[pos];
 	}
 
+	public boolean isEraseColor() {
+		return (pos+1) == max_pos;
+	}
+
 	public synchronized void next() {
 		pos = (pos+1) % max_pos;
 	}
-
+	
 	public synchronized void prev() {
 		if (--pos == -1)
 			pos = max_pos-1;

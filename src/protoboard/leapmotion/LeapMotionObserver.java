@@ -7,6 +7,8 @@ package protoboard.leapmotion;
  */
 public interface LeapMotionObserver {
 	public void onDownSwipe();
+	
+	public void onKeyTap();
 
 	public void onLeftCircle();
 

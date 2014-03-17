@@ -239,6 +239,11 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 
 	@Override
+	public void onKeyTap() {
+		onScreenTap();
+	}
+	
+	@Override
 	public void onLeftCircle() {
 		if (multiScreenMode.get())
 			changeMultiScreenBack();
@@ -269,7 +274,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		else
 			changeScreenBack();
 	}
-	
+
 	@Override
 	public void onScreenTap() {
 		if (multiScreenMode.get())
@@ -305,17 +310,35 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 			} else {
 				noCursor();
 
-				int[] draw_col = draw_color.getActual();
+				int[] draw_col = draw_color.getActual(), 
+						rect_stroke_col = BlackboardC.erase_square_border_color,
+						bg_rbg = BlackboardC.background_rgb;
+				float rect_weight = BlackboardC.erase_square_weight;
 
-				stroke(draw_col[0], draw_col[1], draw_col[2]);
-				strokeWeight(BlackboardC.draw_line_weight);
-				line(mouseX, mouseY, pmouseX, pmouseY);
+				if (!draw_color.isEraseColor()) {
+					stroke(draw_col[0], draw_col[1], draw_col[2]);
+					strokeWeight(BlackboardC.draw_line_weight);
+					line(mouseX, mouseY, pmouseX, pmouseY);
+				} else {
+					stroke(rect_stroke_col[0], rect_stroke_col[1], rect_stroke_col[2]);
+					strokeWeight(BlackboardC.erase_square_border_weight);
+					fill(bg_rbg[0], bg_rbg[1], bg_rbg[2]);
+					rect(mouseX - rect_weight/2, mouseY - rect_weight/2, rect_weight, rect_weight);
+				}
 
 				if (mousePressed) {
 					screen_curr.beginDraw();
-					screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
-					screen_curr.strokeWeight(BlackboardC.draw_line_weight);
+					
+					if (!draw_color.isEraseColor()) {
+						screen_curr.strokeWeight(BlackboardC.draw_line_weight);
+						screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
+					} else {
+						screen_curr.strokeWeight(rect_weight);
+						screen_curr.stroke(bg_rbg[0], bg_rbg[1], bg_rbg[2]);
+					}
+					
 					screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
+					
 					screen_curr.endDraw();
 				}
 			}

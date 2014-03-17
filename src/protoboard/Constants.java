@@ -30,6 +30,11 @@ public final class Constants {
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		
+		public static final int erase_color[] = background_rgb;
+		public static final int erase_square_border_color[] = { 255, 255, 255 };
+		public static final float erase_square_border_weight = dispWidthxHeight*0.00000176562f;
+		public static final float erase_square_weight = draw_line_weight*1.75f;
+		
 		public static final int square_ext_color[] = info_blue_rgb;
 		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
 		public static final float[] common_square_args = { dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000009765625f };
@@ -60,6 +65,7 @@ public final class Constants {
 			{102, 255, 255}, // Blue
 			{255, 102, 102}, // Red
 			{178, 102, 255}, // Purple
+			erase_color		 // Erase color
 		};
 	}
 	
@@ -79,6 +85,7 @@ public final class Constants {
 		public static final String onDownSwipe = "Leap down swipe";
 		public static final String onUpSwipe = "Leap up swipe";
 		public static final String onScreenTap = "Screen tap";
+		public static final String onKeyTap = "Key tap";
 		
 		public static final float swipe_minlength = 200; // mm
 		
