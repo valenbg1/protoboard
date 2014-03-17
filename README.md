@@ -17,5 +17,6 @@ Requires
 	  architecture (included within the SDK)
 	  (tested on a x64 Windows)
 	+ Leap Motion Controller software		|	http://www.leapmotion.com/setup
+	  1.1.3+9188
 
 * Optimal aspect ratios: 4:3, 16:9, 16:10

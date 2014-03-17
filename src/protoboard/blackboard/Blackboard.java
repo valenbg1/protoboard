@@ -46,7 +46,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		super();
 		
 		this.controller = new Controller();
-		this.listener = new LeapMotionListener(this);
+		this.listener = new LeapMotionListener();
 		this.controller.addListener(listener);
 		
 		this.screens = new CopyOnWriteArrayList<PGraphics>();
@@ -390,7 +390,6 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	public void setup() {
 		size(Constants.displayWidth, Constants.displayHeight);
 		addAndSetNewScreen();
-		noCursor();
 		listener.register(this);
 	}
 }

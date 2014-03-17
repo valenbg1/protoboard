@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import protoboard.Constants.LeapMotionListenerC;
-import protoboard.blackboard.Blackboard;
 
 import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
@@ -36,7 +35,7 @@ public class LeapMotionListener extends Listener {
 	private AtomicInteger current_circle_id;
 	private AtomicInteger current_circle_turns;
 
-	public LeapMotionListener(Blackboard board) {
+	public LeapMotionListener() {
 		this.wait_frames = new AtomicInteger(0);
 		this.wait_swipe_frames = new AtomicInteger(0);
 		this.observers = new ConcurrentLinkedQueue<LeapMotionObserver>();

@@ -4,7 +4,7 @@ import java.awt.Toolkit;
 
 
 /**
- * Class externalizing all the constant within the application.
+ * Class externalizing all the constants within the application.
  * 
  */
 public final class Constants {
@@ -18,20 +18,21 @@ public final class Constants {
 	public static final int dispWidthxHeight = displayWidth*displayHeight;
 	
 	/**
-	 * Externalized constant within blackboard mode scope.
+	 * Externalized constants within blackboard mode scope.
 	 *
 	 */
 	public static final class BlackboardC {
 		public static final int[] info_blue_rgb = { 102, 178, 255 };
 		
 		public static final int background_rgb[] = { 0, 0, 0 };
+		public static final int background_rgb_1[] = { 255 - background_rgb[0], 255 - background_rgb[1], 255 - background_rgb[2] };
 		public static final String save_name = "board";
 		public static final float draw_line_weight = dispWidthxHeight*0.000009765625f;
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		
 		public static final int erase_color[] = background_rgb;
-		public static final int erase_square_border_color[] = { 255, 255, 255 };
+		public static final int erase_square_border_color[] = background_rgb_1;
 		public static final float erase_square_border_weight = dispWidthxHeight*0.00000176562f;
 		public static final float erase_square_weight = draw_line_weight*1.75f;
 		
@@ -44,7 +45,7 @@ public final class Constants {
 		public static final float square_triangle_length = dispWidthxHeight*0.000009765625f;
 		public static final float square_triangle_det = dispWidthxHeight*0.00001953125f;
 		
-		public static final int number_color[] = { 255, 255, 255 };
+		public static final int number_color[] = background_rgb_1;
 		public static final float[] number_pos = { number_square_pos[0] + common_square_args[0]*0.18f, number_square_pos[1] + common_square_args[1]*0.88f };
 		public static final float number_gt_10_xpos = number_square_pos[0] - common_square_args[0] + common_square_args[0]*0.40f;
 		
@@ -59,7 +60,7 @@ public final class Constants {
 		public static final float[] little_screen_pos = { displayWidth/2.0f - displayWidth*little_screen_prop/2.0f, displayHeight/2.0f - displayHeight*little_screen_prop/2.0f };
 		
 		public static final int[][] draw_colors = { 
-			{255, 255, 255}, // White
+			background_rgb_1, // White (when background is (0, 0, 0)
 			{255, 255, 102}, // Yellow
 			{102, 255, 102}, // Green
 			{102, 255, 255}, // Blue
@@ -70,7 +71,7 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constant within Leap Motion controller scope.
+	 * Externalized constants within Leap Motion controller scope.
 	 *
 	 */
 	public static final class LeapMotionListenerC {
@@ -94,5 +95,13 @@ public final class Constants {
 		public static final float wait_between_gestures = 0.85f; // s
 		public static final float wait_between_swipe_gestures = wait_between_gestures; // s
 		public static final float wait_between_changing_circle_id = 5f; // s
-	}	
+	}
+	
+	/**
+	 * Externalized constants within Input mode scope.
+	 *
+	 */
+	public static final class InputC {
+		public static final String err_no_robot = "The platform configuration does not allow low-level input control";
+	}
 }
