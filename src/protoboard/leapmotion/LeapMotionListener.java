@@ -171,51 +171,69 @@ public class LeapMotionListener extends Listener {
 				case TYPE_SWIPE:
 					if (wait_swipe_frames.get() > 0)
 						break;
-					
+
 					SwipeGesture swipe = new SwipeGesture(gesture);
+					float length = swipe.position().magnitude();
 					
 					if (swipe.state() == State.STATE_STOP) {
 						// Horizontal
 						if (Math.abs(swipe.direction().getX()) > Math.abs(swipe.direction().getY())) {
 							// Right
 							if (swipe.direction().getX() > 0) {
+								if ((length <= LeapMotionListenerC.rswipe_limits[0]) || (length >= LeapMotionListenerC.rswipe_limits[1]))
+									break;
+								
 								callObservers(Gestures.RIGHT_SWIPE);
 								
-								System.out.println(LeapMotionListenerC.onRightSwipe +  " id: " + swipe.id()
-										+ ", " + swipe.state() + ", position: "
+								System.out.println(LeapMotionListenerC.onRightSwipe
+										+ " id: " + swipe.id() + ", "
+										+ swipe.state() + ", position: "
 										+ swipe.position() + ", direction: "
 										+ swipe.direction() + ", speed: "
-										+ swipe.speed());
+										+ swipe.speed() + ", length: " + length);
+								
 							// Left
 							} else {
+								if ((length <= LeapMotionListenerC.lswipe_limits[0]) || (length >= LeapMotionListenerC.lswipe_limits[1]))
+									break;
+								
 								callObservers(Gestures.LEFT_SWIPE);
 								
-								System.out.println(LeapMotionListenerC.onLeftSwipe +  " id: " + swipe.id()
-										+ ", " + swipe.state() + ", position: "
+								System.out.println(LeapMotionListenerC.onLeftSwipe
+										+ " id: " + swipe.id() + ", "
+										+ swipe.state() + ", position: "
 										+ swipe.position() + ", direction: "
 										+ swipe.direction() + ", speed: "
-										+ swipe.speed());
+										+ swipe.speed() + ", length: " + length);
 							}
 						// Vertical
 						} else {
 							// Up
 							if (swipe.direction().getY() > 0) {
+								if ((length <= LeapMotionListenerC.uswipe_limits[0]) || (length >= LeapMotionListenerC.uswipe_limits[1]))
+									break;
+								
 								callObservers(Gestures.UP_SWIPE);
 								
-								System.out.println(LeapMotionListenerC.onUpSwipe +  " id: " + swipe.id()
-										+ ", " + swipe.state() + ", position: "
+								System.out.println(LeapMotionListenerC.onUpSwipe
+										+ " id: " + swipe.id() + ", "
+										+ swipe.state() + ", position: "
 										+ swipe.position() + ", direction: "
 										+ swipe.direction() + ", speed: "
-										+ swipe.speed());
+										+ swipe.speed() + ", length: " + length);
 							// Down
 							} else {
+								if ((length <= LeapMotionListenerC.dswipe_limits[0]) || (length >= LeapMotionListenerC.dswipe_limits[1]))
+									break;
+								
 								callObservers(Gestures.DOWN_SWIPE);
 								
-								System.out.println(LeapMotionListenerC.onDownSwipe +  " id: " + swipe.id()
-										+ ", " + swipe.state() + ", position: "
+								System.out.println(LeapMotionListenerC.onDownSwipe
+										+ " id: " + swipe.id() + ", "
+										+ swipe.state() + ", position: "
 										+ swipe.position() + ", direction: "
 										+ swipe.direction() + ", speed: "
-										+ swipe.speed());
+										+ swipe.speed() + ", length: " + length);
 							}
 						}
 						
@@ -262,7 +280,7 @@ public class LeapMotionListener extends Listener {
 		if (detected_gesture)
 			wait_frames.set((int) Math.ceil(frame.currentFramesPerSecond()*LeapMotionListenerC.wait_between_gestures));
 		
-		if (wait_between_changing_circle_id.get() == 0) {
+		if (wait_between_changing_circle_id.get() <= 0) {
 			current_circle_id.set(-1);
 			
 			wait_between_changing_circle_id.set((int) Math.ceil(frame
@@ -276,6 +294,13 @@ public class LeapMotionListener extends Listener {
 		System.out.println(LeapMotionListenerC.onInit);
 	}
 
+	/**
+	 * This implementation calls itself each method of LeapMotionObserver into the
+	 * onFrame thread handler, so every method for the LeapMotionObserver that the observer
+	 * implements must do a quick processing, or start a new thread that will do the job.
+	 * 
+	 * @param observer
+	 */
 	public synchronized void register(LeapMotionObserver observer) {
 		if (!observers.contains(observer))
 			observers.add(observer);

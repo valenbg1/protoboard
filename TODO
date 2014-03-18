@@ -4,9 +4,9 @@
 
 * Nice transitions in multiscreen mode.
 
-* Fine adjustment of right, left, down swipe gestures (improved but need better performance yet).
+* Fine adjustment of right, left, down swipe gestures (need better performance yet).
 
-* Enhance the new mode: input, in which movements detected in the Leap Motion are
+* Enhance the new mode input, in which movements detected in the Leap Motion are
   mapped to keyboard, mouse actions (instead of showing a blackboard). For use
   in any other applications.
 

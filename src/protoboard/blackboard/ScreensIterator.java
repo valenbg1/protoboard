@@ -13,7 +13,7 @@ import protoboard.Constants.BlackboardC;
  * for showing multiple screens at a time (when up swipe is detected).
  *
  */
-public class ScreensIterator {
+class ScreensIterator {
 	private CopyOnWriteArrayList<PGraphics> screens;
 	private PGraphics screen_curr;
 	private PGraphics[] screen_prevs, screen_nexts;

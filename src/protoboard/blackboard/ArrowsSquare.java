@@ -9,7 +9,7 @@ import protoboard.Constants.BlackboardC;
  * immutable object.
  * 
  */
-public class ArrowsSquare {
+class ArrowsSquare {
 	// Static factory methods
 	public static ArrowsSquare colorSquare(int[] draw_color) {
 		return new ArrowsSquare(BlackboardC.common_square_args,

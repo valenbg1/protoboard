@@ -95,16 +95,26 @@ public class Input implements LeapMotionObserver, Runnable {
 		}
 	}
 
-	private void simKey(int key) {
-		robot.keyPress(key);
-		robot.delay(delay);
-		robot.keyRelease(key);
+	private void simKey(final int key) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				robot.keyPress(key);
+				robot.delay(delay);
+				robot.keyRelease(key);
+			}
+		}).start();
 	}
 	
-	private void simMouse(int button) {
-		robot.mousePress(button);
-		robot.delay(delay);
-		robot.mouseRelease(button);
+	private void simMouse(final int button) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				robot.mousePress(button);
+				robot.delay(delay);
+				robot.mouseRelease(button);
+			}
+		}).start();
 	}
 
 	public void stop() {

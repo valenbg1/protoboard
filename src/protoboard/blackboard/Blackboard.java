@@ -301,8 +301,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 				noCursor();
 
 				int[] draw_col = draw_color.getActual(), 
-						rect_stroke_col = BlackboardC.erase_square_border_color,
-						bg_rbg = BlackboardC.background_rgb;
+						rect_stroke_col = BlackboardC.erase_square_border_color;
 				float rect_weight = BlackboardC.erase_square_weight;
 
 				if (!draw_color.isEraseColor()) {
@@ -312,20 +311,19 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 				} else {
 					stroke(rect_stroke_col[0], rect_stroke_col[1], rect_stroke_col[2]);
 					strokeWeight(BlackboardC.erase_square_border_weight);
-					fill(bg_rbg[0], bg_rbg[1], bg_rbg[2]);
+					fill(draw_col[0], draw_col[1], draw_col[2]);
 					rect(mouseX - rect_weight/2, mouseY - rect_weight/2, rect_weight, rect_weight);
 				}
 
 				if (mousePressed) {
 					screen_curr.beginDraw();
 					
-					if (!draw_color.isEraseColor()) {
+					screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
+					
+					if (!draw_color.isEraseColor())
 						screen_curr.strokeWeight(BlackboardC.draw_line_weight);
-						screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
-					} else {
+					else
 						screen_curr.strokeWeight(rect_weight);
-						screen_curr.stroke(bg_rbg[0], bg_rbg[1], bg_rbg[2]);
-					}
 					
 					screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
 					

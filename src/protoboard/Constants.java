@@ -8,12 +8,15 @@ import java.awt.Toolkit;
  * 
  */
 public final class Constants {
+	/**/
 	public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 	public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-	
-//	For testing
-//	public static final int displayWidth = 1024;
-//	public static final int displayHeight = 768;
+	/**/
+	// Testing
+	/*/
+	public static final int displayWidth = 1024;
+	public static final int displayHeight = 768;
+	/**/
 	
 	public static final int dispWidthxHeight = displayWidth*displayHeight;
 	
@@ -93,19 +96,32 @@ public final class Constants {
 		public static final String onInit = "Leap initialized";
 		
 		public static final String onCircle = "Leap circle";
-		public static final String onLeftSwipe = "Leap back swipe";
-		public static final String onRightSwipe = "Leap forth swipe";
+		public static final String onLeftSwipe = "Leap forth swipe";
+		public static final String onRightSwipe = "Leap back swipe";
 		public static final String onDownSwipe = "Leap down swipe";
 		public static final String onUpSwipe = "Leap up swipe";
 		public static final String onScreenTap = "Screen tap";
 		public static final String onKeyTap = "Key tap";
 		
-		public static final float swipe_minlength = 200; // mm
+		public static final float swipe_minlength = 120; // mm
+		// Testing
+		/*/
+		public static final float[] rswipe_limits = { 150, 300 }; // mm
+		public static final float[] lswipe_limits = { 90, 210 }; // mm
+		public static final float[] uswipe_limits = { 250, 450 }; // mm
+		public static final float[] dswipe_limits = { 35, 170 }; // mm
+		/**/
+		/**/
+		public static final float[] rswipe_limits = { 0, 800 }; // mm
+		public static final float[] lswipe_limits = { 0, 800 }; // mm
+		public static final float[] uswipe_limits = { 0, 800 }; // mm
+		public static final float[] dswipe_limits = { 0, 800 }; // mm
+		/**/
 		
 		public static final float circle_resolution = 0.5f; // (0, 1]: % circle to send an event of detected circle gesture
 		
 		public static final float wait_between_gestures = 0.85f; // s
-		public static final float wait_between_swipe_gestures = wait_between_gestures; // s
+		public static final float wait_between_swipe_gestures = 1f; // s
 		public static final float wait_between_changing_circle_id = 5f; // s
 	}
 	
@@ -116,6 +132,6 @@ public final class Constants {
 	public static final class InputC {
 		public static final String err_no_robot = "The platform configuration does not allow low-level input control";
 		public static final String err_interr = "Interrupted while running Input";
-		public static final int robot_delay = 10; // ms
+		public static final int robot_delay = 25; // ms
 	}
 }
