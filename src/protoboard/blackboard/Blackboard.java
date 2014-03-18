@@ -9,10 +9,8 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
-import protoboard.leapmotion.LeapMotionListener;
+import protoboard.Main;
 import protoboard.leapmotion.LeapMotionObserver;
-
-import com.leapmotion.leap.Controller;
 
 /**
  * Implements the blackboard mode of the application.
@@ -20,9 +18,6 @@ import com.leapmotion.leap.Controller;
  */
 public class Blackboard extends PApplet implements LeapMotionObserver {
 	private static final long serialVersionUID = -2341687072941440919L;
-
-	private Controller controller;
-	private LeapMotionListener listener;
 	
 	private CopyOnWriteArrayList<PGraphics> screens;
 	private PGraphics screen_curr;
@@ -44,10 +39,6 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	
 	public Blackboard() {
 		super();
-		
-		this.controller = new Controller();
-		this.listener = new LeapMotionListener();
-		this.controller.addListener(listener);
 		
 		this.screens = new CopyOnWriteArrayList<PGraphics>();
 		this.screen_curr = null;
@@ -220,8 +211,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	@Override
 	public void exit() {
-		listener.unregister(this);
-		controller.removeListener(listener);
+		Main.lm_listener.unregister(this);
 		super.exit();
 	}
 
@@ -268,7 +258,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 	
 	@Override
-	public void onRighSwipe() {
+	public void onRightSwipe() {
 		if (multiScreenMode.get())
 			changeMultiScreenBack();
 		else
@@ -379,7 +369,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		multiScreenMode.set(false);
 		screens_iter = null;
 	}
-
+	
 	public synchronized void saveCurrentScreen() {
 		screen_curr.save(BlackboardC.save_name + "[" + screen_pos.get() + "]_"+ new Date().getTime() +".png");
 		save_text.compareAndSet(false, true);
@@ -390,6 +380,11 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	public void setup() {
 		size(Constants.displayWidth, Constants.displayHeight);
 		addAndSetNewScreen();
-		listener.register(this);
+		Main.lm_listener.register(this);
+	}
+
+	@Override
+	public boolean sketchFullScreen() {
+		return true;
 	}
 }

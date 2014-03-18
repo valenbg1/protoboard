@@ -8,4 +8,13 @@ Blackboard mode
 	
 	* Up swipe toggles multiscreen mode.
 	
-	* Screen tap / key tap quits multiscreen mode.
+	* Screen / key tap quits multiscreen mode.
+	
+	
+Input mode
+==========
+	* Left / right presses left / right arrows.
+	
+	* Circle anticlockwise / clockwise presses left / right arrows.
+	
+	* Screen / key tap presses mouse button one.

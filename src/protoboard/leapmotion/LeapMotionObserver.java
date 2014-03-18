@@ -16,7 +16,7 @@ public interface LeapMotionObserver {
 
 	public void onRighCircle();
 
-	public void onRighSwipe();
+	public void onRightSwipe();
 	
 	public void onScreenTap();
 

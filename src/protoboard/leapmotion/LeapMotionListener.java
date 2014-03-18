@@ -68,7 +68,7 @@ public class LeapMotionListener extends Listener {
 					break;
 					
 				case RIGHT_SWIPE:
-					observer.onRighSwipe();
+					observer.onRightSwipe();
 					break;
 					
 				case SCREEN_TAP:
@@ -93,6 +93,8 @@ public class LeapMotionListener extends Listener {
 		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
 		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
 		controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);
+		
+		controller.setPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
 	}
 	
 	@Override
@@ -274,8 +276,9 @@ public class LeapMotionListener extends Listener {
 		System.out.println(LeapMotionListenerC.onInit);
 	}
 
-	public void register(LeapMotionObserver observer) {
-		observers.add(observer);
+	public synchronized void register(LeapMotionObserver observer) {
+		if (!observers.contains(observer))
+			observers.add(observer);
 	}
 
 	public void unregister(LeapMotionObserver observer) {

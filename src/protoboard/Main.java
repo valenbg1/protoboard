@@ -2,24 +2,38 @@ package protoboard;
 
 import processing.core.PApplet;
 import protoboard.blackboard.Blackboard;
+import protoboard.leapmotion.LeapMotionListener;
+
+import com.leapmotion.leap.Controller;
 
 /**
  * Starting point of protoboard.
  * 
  */
 public final class Main {
+	public static final Controller lm_controller = new Controller();
+	public static final LeapMotionListener lm_listener = new LeapMotionListener();
+	
 	public static void main(String[] args) {
-//		Testing
-//		
-//		Controller controller = new Controller();
-//		LeapMotionListener listener = new LeapMotionListener();
-//		controller.addListener(listener);
-//		
-//		Input input = new Input(listener);
-//		input.run();
-//		
-//		while (true);
+		lm_controller.addListener(lm_listener);
 		
-		PApplet.main(new String[] { "--present", Blackboard.class.getName() });
+		// Testing
+		/*/
+		Input input = null;
+		
+		try {
+			input = new Input(lm_listener);
+		} catch (AWTException e) {
+			Constants.printExceptionToErr("", e);
+		}
+		
+		input.run();
+		/**/
+		
+		/**/
+		PApplet.main(Blackboard.class.getName());
+		/**/
+		
+		//controller.removeListener(lm_listener);
 	}
 }

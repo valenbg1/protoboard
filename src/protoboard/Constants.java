@@ -17,6 +17,18 @@ public final class Constants {
 	
 	public static final int dispWidthxHeight = displayWidth*displayHeight;
 	
+	public static void printExceptionToErr(String message, Exception e) {
+		System.err.println("-------------------------------------------\n"
+				+ message + ":\n");
+
+		if (e.getMessage() != null)
+			System.err.println(e.getMessage());
+		else
+			e.printStackTrace();
+
+		System.err.println("-------------------------------------------\n");
+	}
+	
 	/**
 	 * Externalized constants within blackboard mode scope.
 	 *
@@ -103,5 +115,7 @@ public final class Constants {
 	 */
 	public static final class InputC {
 		public static final String err_no_robot = "The platform configuration does not allow low-level input control";
+		public static final String err_interr = "Interrupted while running Input";
+		public static final int robot_delay = 10; // ms
 	}
 }
