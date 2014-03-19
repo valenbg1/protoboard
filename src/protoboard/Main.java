@@ -1,7 +1,8 @@
 package protoboard;
 
-import processing.core.PApplet;
-import protoboard.blackboard.Blackboard;
+import java.awt.AWTException;
+
+import protoboard.input.Input;
 import protoboard.leapmotion.LeapMotionListener;
 
 import com.leapmotion.leap.Controller;
@@ -18,7 +19,7 @@ public final class Main {
 		lm_controller.addListener(lm_listener);
 		
 		// Testing
-		/*/
+		/**/
 		Input input = null;
 		
 		try {
@@ -30,7 +31,7 @@ public final class Main {
 		input.run();
 		/**/
 		
-		/**/
+		/*/
 		PApplet.main(Blackboard.class.getName());
 		/**/
 		

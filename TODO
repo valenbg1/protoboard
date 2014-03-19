@@ -1,17 +1,14 @@
 * ! Check and make the possibility of using protoboard without Leap Motion lib installed.
+	+ Windows: ok if the Leap Motion lib is correctly set.
+	
+* Fine adjustment of right, left, down swipe gestures (need better performance yet).
 
 * Make a color wheel instead of the actual color square in blackboard mode.
 
 * Nice transitions in multiscreen mode.
 
-* Fine adjustment of right, left, down swipe gestures (need better performance yet).
-
-* Enhance the new mode input, in which movements detected in the Leap Motion are
-  mapped to keyboard, mouse actions (instead of showing a blackboard). For use
-  in any other applications.
+* Make some way for changing the drawing line size.
 
 * Make a principal Swing interface to change between blackboard and input mode.
 
 * ? Better borders for screens in multiscreen mode.
-
-* ? Some way for changing the drawing line size.

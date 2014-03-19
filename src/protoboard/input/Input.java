@@ -2,8 +2,6 @@ package protoboard.input;
 
 import java.awt.AWTException;
 import java.awt.Robot;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -42,7 +40,9 @@ public class Input implements LeapMotionObserver, Runnable {
 	}
 
 	@Override
-	public void onDownSwipe() { }
+	public void onDownSwipe() {
+		simKey(InputC.onDownSwipe);
+	}
 
 	@Override
 	public void onKeyTap() {
@@ -56,7 +56,7 @@ public class Input implements LeapMotionObserver, Runnable {
 	
 	@Override
 	public void onLeftSwipe() {
-		simKey(KeyEvent.VK_RIGHT);
+		simKey(InputC.onLeftSwipe);
 	}
 	
 	@Override
@@ -66,16 +66,18 @@ public class Input implements LeapMotionObserver, Runnable {
 
 	@Override
 	public void onRightSwipe() {
-		simKey(KeyEvent.VK_LEFT);
+		simKey(InputC.onRightSwipe);
 	}
 
 	@Override
 	public void onScreenTap() {
-		simMouse(InputEvent.BUTTON1_DOWN_MASK);
+		simMouse(InputC.onScreenTap);
 	}
 
 	@Override
-	public void onUpSwipe() { }
+	public void onUpSwipe() {
+		simKey(InputC.onUpSwipe);
+	}
 
 	/**
 	 * Run the input mode. This method will wait until stop() is called.

@@ -1,6 +1,8 @@
 package protoboard;
 
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -133,5 +135,11 @@ public final class Constants {
 		public static final String err_no_robot = "The platform configuration does not allow low-level input control";
 		public static final String err_interr = "Interrupted while running Input";
 		public static final int robot_delay = 25; // ms
+		
+		public static final int onDownSwipe = KeyEvent.VK_UP;
+		public static final int onLeftSwipe = KeyEvent.VK_RIGHT;
+		public static final int onRightSwipe = KeyEvent.VK_LEFT;
+		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
+		public static final int onUpSwipe = KeyEvent.VK_DOWN;
 	}
 }

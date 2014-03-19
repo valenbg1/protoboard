@@ -1,6 +1,6 @@
 Blackboard mode
 ==========
-	* Left / right swipe changes the current board back / forth.
+	* Right / left swipe changes the current board back / forth.
 	
 	* Down swipe saves an image of the current board / quits multiscreen mode.
 	
@@ -13,8 +13,10 @@ Blackboard mode
 	
 Input mode
 ==========
-	* Left / right presses left / right arrows.
+	* Left / right swipe presses right / left arrows.
 	
 	* Circle anticlockwise / clockwise presses left / right arrows.
 	
 	* Screen / key tap presses mouse button one.
+	
+	* Up / down swipe presses down / up arrows.
