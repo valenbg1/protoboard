@@ -212,6 +212,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	@Override
 	public void exit() {
 		Main.lm_listener.unregister(this);
+		Main.stoppedBlackboardMode();
 		super.exit();
 	}
 

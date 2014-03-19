@@ -142,4 +142,15 @@ public final class Constants {
 		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
 		public static final int onUpSwipe = KeyEvent.VK_DOWN;
 	}
+	
+	/**
+	 * Externalized constants within the principal Swing interface.
+	 *
+	 */
+	public static final class PrincipalIfaceC {
+		public static final String title = "Protoboard";
+		
+		public static final String input_text_button = "Input mode";
+		public static final String blackboard_text_button = "Blackboard mode";
+	}
 }
