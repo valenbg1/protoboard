@@ -22,6 +22,8 @@ public final class Main {
 	public static final Controller lm_controller = new Controller();
 	public static final LeapMotionListener lm_listener = new LeapMotionListener();
 	
+	private static PrincipalIface principal_iface;
+	
 	private static AtomicBoolean running_input_mode = new AtomicBoolean(false);
 	private static Input input_mode;
 	
@@ -34,21 +36,21 @@ public final class Main {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) { }
 		
+		principal_iface = new PrincipalIface();
+		
 		// Testing
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new PrincipalIface().setVisible(true);
+				principal_iface.setVisible(true);
 			}
 		});
 	}
 	
 	public static void runBlackboardMode() {
-		if (running_blackboard_mode.compareAndSet(false, true))
+		if (running_blackboard_mode.compareAndSet(false, true)) {
+			stopInputMode();
 			PApplet.main(Blackboard.class.getName());
-	}
-	
-	public static void stoppedBlackboardMode() {
-		running_blackboard_mode.compareAndSet(true, false);
+		}
 	}
 	
 	public static void runInputMode() {
@@ -81,6 +83,13 @@ public final class Main {
 		if (running_input_mode.compareAndSet(true, false)) {
 			if (input_mode != null)
 				input_mode.stop();
+			
+			principal_iface.deselectInputButton();
 		}
+	}
+	
+	public static void stoppedBlackboardMode() {
+		running_blackboard_mode.compareAndSet(true, false);
+		principal_iface.enableBlackboardButton();
 	}
 }

@@ -378,6 +378,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	@Override
 	public void setup() {
 		size(Constants.displayWidth, Constants.displayHeight);
+		//setLocation(0, 0);
 		addAndSetNewScreen();
 		Main.lm_listener.register(this);
 	}

@@ -25,7 +25,10 @@ public class PrincipalIface extends JFrame {
 	private static final long serialVersionUID = -7522084622403945355L;
 	
 	private JPanel contentPane;
-
+	
+	private final JButton btnBlackboardMode = new JButton(PrincipalIfaceC.blackboard_text_button);
+	private final JToggleButton tglbtnInputMode= new JToggleButton(PrincipalIfaceC.input_text_button);
+	
 	public PrincipalIface() {
 		setResizable(false);
 		setTitle(PrincipalIfaceC.title);
@@ -36,26 +39,41 @@ public class PrincipalIface extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		final JToggleButton tglbtnNewToggleButton = new JToggleButton(PrincipalIfaceC.input_text_button);
-		tglbtnNewToggleButton.addMouseListener(new MouseAdapter() {
+		tglbtnInputMode.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent me) {
 				if (me.getButton() == MouseEvent.BUTTON1) {
-					if (!tglbtnNewToggleButton.isSelected())
+					if (!tglbtnInputMode.isSelected())
 						Main.stopInputMode();
 					else
 						Main.runInputMode();
 				}
 			}
 		});
-		contentPane.add(tglbtnNewToggleButton);
+		contentPane.add(tglbtnInputMode);
 		
-		JButton btnNewButton = new JButton(PrincipalIfaceC.blackboard_text_button);
-		btnNewButton.addActionListener(new ActionListener() {
+		btnBlackboardMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Main.runBlackboardMode();
+				btnBlackboardMode.setEnabled(false);
 			}
 		});
-		contentPane.add(btnNewButton);
+		contentPane.add(btnBlackboardMode);
+	}
+
+	public void deselectInputButton() {
+		tglbtnInputMode.setSelected(false);
+	}
+	
+	public void disableBlackboardButton() {
+		btnBlackboardMode.setEnabled(false);
+	}
+	
+	public void enableBlackboardButton() {
+		btnBlackboardMode.setEnabled(true);
+	}
+	
+	public void selectInputButton() {
+		tglbtnInputMode.setSelected(true);
 	}
 }
