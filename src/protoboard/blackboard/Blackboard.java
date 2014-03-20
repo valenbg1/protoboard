@@ -148,6 +148,8 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	public void draw() {
 		if ((frame != null) && windows_f_l_created.compareAndSet(false, true))
 			frame.addWindowFocusListener(window_f_l());
+		
+		setLocation(0, 0);
 
 		// Clean background
 		int[] background = BlackboardC.background_rgb;
@@ -405,7 +407,6 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	@Override
 	public void setup() {
 		size(Constants.displayWidth, Constants.displayHeight);
-		//setLocation(0, 0);
 		addAndSetNewScreen();
 		registerAsObserver();
 		Main.setBlackBoardMode(this);
