@@ -147,10 +147,33 @@ public final class Constants {
 	 * Externalized constants within the principal Swing interface.
 	 *
 	 */
-	public static final class PrincipalIfaceC {
+	public static final class MainIfaceC {
 		public static final String title = "Protoboard";
 		
 		public static final String input_text_button = "Input mode";
 		public static final String blackboard_text_button = "Blackboard mode";
+		
+		public static final String config_menu = "Configuration";
+		public static final String help_menu = "Help";
+		public static final String config_input_menu = input_text_button;
+		public static final String config_black_menu = blackboard_text_button;
+		public static final String about_opt = "About";
+		
+		public static final class AboutDialogC {
+			public static final String title = "About";
+			public static final String pro_name = MainIfaceC.title;
+			public static final String univers_name = "Complutense university of Madrid, 2014.";
+			public static final String main_text = "<font face=\"Tahoma\"><br>"
+					+ "Simple blackboard application that interacts with a Leap Motion sensor.<br><br>"
+					+ "This software is part of an end-of-degree project for computer engineering degree by:<br>"
+					+ "* Valentín Blanco Gómez:<br>"
+					+ "&emsp;·<a href=\"mailto:valentin_gomez1@hotmail.com\">valentin_gomez1@hotmail.com</a><br>"
+					+ "&emsp;·<a href=\"http://github.com/valenbg1\">http://github.com/valenbg1</a><br>"
+					+ "<br>* Raúl Sampedro Ruiz:<br>"
+					+ "&emsp;·<a href=\"mailto:rsrdesarrollo@gmail.com\">rsrdesarrollo@gmail.com</a><br>"
+					+ "&emsp;·<a href=\"http://github.com/rsrdesarrollo\">http://github.com/rsrdesarrollo</a><br><br><br><br>"
+					+ "- <a href=\"http://github.com/valenbg1/protoboard\">Protoboard</a>'s GitHub.<br><br>"
+					+ "- This software is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-3.0.html\">GPLv3</a> terms.</font>";
+		}
 	}
 }

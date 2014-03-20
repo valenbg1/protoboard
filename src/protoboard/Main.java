@@ -11,7 +11,7 @@ import processing.core.PApplet;
 import protoboard.blackboard.Blackboard;
 import protoboard.input.Input;
 import protoboard.leapmotion.LeapMotionListener;
-import protoboard.swing.PrincipalIface;
+import protoboard.swing.MainIface;
 
 import com.leapmotion.leap.Controller;
 
@@ -23,7 +23,7 @@ public final class Main {
 	public static final Controller lm_controller = new Controller();
 	public static final LeapMotionListener lm_listener = new LeapMotionListener();
 	
-	private static PrincipalIface principal_iface;
+	private static MainIface main_iface;
 	
 	private static AtomicBoolean running_input_mode = new AtomicBoolean(false);
 	private static Input input_mode;
@@ -38,11 +38,11 @@ public final class Main {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) { }
 		
-		principal_iface = new PrincipalIface();
+		main_iface = new MainIface();
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				principal_iface.setVisible(true);
+				main_iface.setVisible(true);
 			}
 		});
 	}
@@ -87,7 +87,7 @@ public final class Main {
 		if (blackboard_mode.get() != null)
 			blackboard_mode.get().minimize();
 		
-		principal_iface.deselectBlackboardButton();
+		main_iface.deselectBlackboardButton();
 	}
 	
 	public static void stopInputMode() {
@@ -96,6 +96,6 @@ public final class Main {
 				input_mode.stop();
 		}
 		
-		principal_iface.deselectInputButton();
+		main_iface.deselectInputButton();
 	}
 }
