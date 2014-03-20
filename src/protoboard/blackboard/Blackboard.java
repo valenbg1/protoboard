@@ -1,9 +1,13 @@
 package protoboard.blackboard;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.swing.JFrame;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -37,6 +41,8 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	private AtomicBoolean multiScreenMode;
 	private ScreensIterator screens_iter;
 	
+	private AtomicBoolean windows_f_l_created;
+	
 	public Blackboard() {
 		super();
 		
@@ -59,6 +65,8 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		
 		this.multiScreenMode = new AtomicBoolean(false);
 		this.screens_iter = null;
+		
+		this.windows_f_l_created = new AtomicBoolean(false);
 	}
 	
 	private synchronized void _changeScreenBack() {
@@ -138,6 +146,9 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	
 	@Override
 	public void draw() {
+		if ((frame != null) && windows_f_l_created.compareAndSet(false, true))
+			frame.addWindowFocusListener(window_f_l());
+
 		// Clean background
 		int[] background = BlackboardC.background_rgb;
 		
@@ -211,16 +222,28 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	@Override
 	public void exit() {
-		Main.lm_listener.unregister(this);
-		Main.stoppedBlackboardMode();
-		super.exit();
+		Main.stopBlackboardMode();
 	}
-
+	
+	public boolean isMaximized() {
+		return frame.getExtendedState() == JFrame.MAXIMIZED_BOTH;
+	}
+	
+	public void maximize() {
+		registerAsObserver();
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  // Maximize window
+	}
+	
+	public void minimize() {
+		unregisterAsObserver();
+		frame.setExtendedState(JFrame.ICONIFIED);  // Minimize window
+	}
+	
 	@Override
 	public void mouseClicked() {
 		mouseClicked.compareAndSet(false, true);
 	}
-
+	
 	@Override
 	public void onDownSwipe() {
 		if (multiScreenMode.get())
@@ -233,7 +256,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	public void onKeyTap() {
 		onScreenTap();
 	}
-	
+
 	@Override
 	public void onLeftCircle() {
 		if (multiScreenMode.get())
@@ -241,7 +264,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		else
 			changeDrawColorBack();
 	}
-	
+
 	@Override
 	public void onLeftSwipe() {
 		if (multiScreenMode.get())
@@ -265,13 +288,13 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		else
 			changeScreenBack();
 	}
-
+	
 	@Override
 	public void onScreenTap() {
 		if (multiScreenMode.get())
 			quitMultiScreenMode();
 	}
-
+	
 	@Override
 	public void onUpSwipe() {
 		changeMultiScreenMode();
@@ -368,23 +391,46 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		multiScreenMode.set(false);
 		screens_iter = null;
 	}
-	
+
+	private void registerAsObserver() {
+		Main.lm_listener.register(this);
+	}
+
 	public synchronized void saveCurrentScreen() {
 		screen_curr.save(BlackboardC.save_name + "[" + screen_pos.get() + "]_"+ new Date().getTime() +".png");
 		save_text.compareAndSet(false, true);
 		save_text_time.set((int) Math.ceil(frameRate*BlackboardC.save_text_time));
 	}
-
+	
 	@Override
 	public void setup() {
 		size(Constants.displayWidth, Constants.displayHeight);
 		//setLocation(0, 0);
 		addAndSetNewScreen();
-		Main.lm_listener.register(this);
+		registerAsObserver();
+		Main.setBlackBoardMode(this);
 	}
-
+	
 	@Override
 	public boolean sketchFullScreen() {
 		return true;
+	}
+	
+	private void unregisterAsObserver() {
+		Main.lm_listener.unregister(this);
+	}
+
+	private WindowFocusListener window_f_l() {	
+		return new WindowFocusListener() {
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				Main.runBlackboardMode();
+			}
+			
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				Main.stopBlackboardMode();
+			}
+		};
 	}
 }

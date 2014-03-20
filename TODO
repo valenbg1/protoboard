@@ -9,6 +9,6 @@
 
 * Make some way for changing the drawing line size.
 
-* Make a principal Swing interface to change between blackboard and input mode.
+* Improve the principal Swing interface to change between blackboard and input mode.
 
 * ? Better borders for screens in multiscreen mode.
