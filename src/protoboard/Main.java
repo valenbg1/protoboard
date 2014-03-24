@@ -16,7 +16,7 @@ import protoboard.swing.MainIface;
 import com.leapmotion.leap.Controller;
 
 /**
- * Starting point of protoboard.
+ * Singleton starting point of protoboard.
  * 
  */
 public final class Main {

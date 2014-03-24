@@ -45,13 +45,15 @@ public final class Constants {
 		public static final int background_rgb_1[] = { 255 - background_rgb[0], 255 - background_rgb[1], 255 - background_rgb[2] };
 		public static final String save_name = "board";
 		public static final float draw_line_weight = dispWidthxHeight*0.000009765625f;
+		public static final float draw_line_weight_sum = draw_line_weight*0.5f;
+		public static final float[] draw_line_weight_limits = { draw_line_weight*0.15f, draw_line_weight*5f };
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		
 		public static final int erase_color[] = background_rgb;
 		public static final int erase_square_border_color[] = background_rgb_1;
 		public static final float erase_square_border_weight = dispWidthxHeight*0.00000176562f;
-		public static final float erase_square_weight = draw_line_weight*1.75f;
+		public static final float erase_square_weight = 1.75f;
 		
 		public static final int square_ext_color[] = info_blue_rgb;
 		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
@@ -61,6 +63,7 @@ public final class Constants {
 		public static final int number_square_fill_color[] = background_rgb;
 		public static final float square_triangle_length = dispWidthxHeight*0.000009765625f;
 		public static final float square_triangle_det = dispWidthxHeight*0.00001953125f;
+		public static final float[] draw_line_weight_square_pos = {color_square_pos[0], color_square_pos[1]*0.98f - common_square_args[1]};
 		
 		public static final int number_color[] = background_rgb_1;
 		public static final float[] number_pos = { number_square_pos[0] + common_square_args[0]*0.18f, number_square_pos[1] + common_square_args[1]*0.88f };
@@ -105,7 +108,7 @@ public final class Constants {
 		public static final String onScreenTap = "Screen tap";
 		public static final String onKeyTap = "Key tap";
 		
-		public static final float swipe_minlength = 120; // mm
+		public static final float swipe_minlength = 80; // mm
 		// Testing
 		/*/
 		public static final float[] rswipe_limits = { 150, 300 }; // mm
@@ -144,7 +147,7 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constants within the principal Swing interface.
+	 * Externalized constants within the main Swing interface.
 	 *
 	 */
 	public static final class MainIfaceC {
@@ -159,6 +162,10 @@ public final class Constants {
 		public static final String config_black_menu = blackboard_text_button;
 		public static final String about_opt = "About";
 		
+		/**
+		 * Externalized constants within de About dialog interface
+		 *
+		 */
 		public static final class AboutDialogC {
 			public static final String title = "About";
 			public static final String pro_name = MainIfaceC.title;

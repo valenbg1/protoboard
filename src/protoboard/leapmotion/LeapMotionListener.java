@@ -4,6 +4,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import protoboard.AtomicFloat;
 import protoboard.Constants.LeapMotionListenerC;
 
 import com.leapmotion.leap.CircleGesture;
@@ -33,14 +34,14 @@ public class LeapMotionListener extends Listener {
 	private Queue<LeapMotionObserver> observers;
 	
 	private AtomicInteger current_circle_id;
-	private AtomicInteger current_circle_turns;
+	private AtomicFloat current_circle_turns;
 
 	public LeapMotionListener() {
 		this.wait_frames = new AtomicInteger(0);
 		this.wait_swipe_frames = new AtomicInteger(0);
 		this.observers = new ConcurrentLinkedQueue<LeapMotionObserver>();
 		this.current_circle_id = new AtomicInteger(-1);
-		this.current_circle_turns = new AtomicInteger(0);
+		this.current_circle_turns = new AtomicFloat(0);
 		this.wait_between_changing_circle_id = new AtomicInteger(0);
 	}
 
@@ -133,16 +134,14 @@ public class LeapMotionListener extends Listener {
 					
 					if (current_circle_id.get() == -1) {
 						current_circle_id.set(circle.id());
-						current_circle_turns.set(Float.floatToIntBits(circle.progress() - LeapMotionListenerC.circle_resolution));
+						current_circle_turns.set(circle.progress() - LeapMotionListenerC.circle_resolution);
 					}
 					
 					if (current_circle_id.get() == circle.id()) {
-						if ((circle.progress() - Float.intBitsToFloat(current_circle_turns.get())) > LeapMotionListenerC.circle_resolution) {
+						if ((circle.progress() - current_circle_turns.get()) > LeapMotionListenerC.circle_resolution) {
 							boolean clockwise; //  Calculate clock direction using the angle between circle normal and pointable
 							
-							current_circle_turns
-								.set(Float.floatToIntBits((Float
-										.intBitsToFloat(current_circle_turns.get()) + LeapMotionListenerC.circle_resolution)));
+							current_circle_turns.set(current_circle_turns.get() + LeapMotionListenerC.circle_resolution);
 							
 							// Clockwise if angle is less than 90 degrees
 							if (circle.pointable().direction().angleTo(circle.normal()) <= Math.PI / 4)

@@ -16,6 +16,10 @@ import javax.swing.event.HyperlinkListener;
 
 import protoboard.Constants.MainIfaceC.AboutDialogC;
 
+/**
+ * Implements the about Swing window.
+ *
+ */
 class AboutDialog extends JDialog {
 	private static final long serialVersionUID = -260010151490757326L;
 

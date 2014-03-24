@@ -3,11 +3,11 @@
 	
 * Fine adjustment of right, left, down swipe gestures (need better performance yet).
 
+* Try different options of Leap Motion configuration.
+
 * Make a color wheel instead of the actual color square in blackboard mode.
 
 * Nice transitions in multiscreen mode.
-
-* Make some way for changing the drawing line size.
 
 * Improve the principal Swing interface to change between blackboard and input mode.
 
