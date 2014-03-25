@@ -2,6 +2,7 @@ package protoboard;
 
 import java.awt.AWTException;
 import java.awt.EventQueue;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -29,7 +30,14 @@ public final class Main {
 	private static Input input_mode;
 	
 	private static AtomicReference<Blackboard> blackboard_mode = new AtomicReference<Blackboard>();
+	private static AtomicReference<File> load_folder = new AtomicReference<File>();
 	private static AtomicBoolean blck_created = new AtomicBoolean(false);
+	
+	public static File getAndNullLoadFolder_blckbrdMode() {
+		File ret = load_folder.get();
+		load_folder.set(null);
+		return ret;
+	}
 	
 	public static void main(String[] args) {
 		lm_controller.addListener(lm_listener);
@@ -53,7 +61,7 @@ public final class Main {
 		if (blck_created.compareAndSet(false, true))
 			PApplet.main(Blackboard.class.getName());
 		else if (blackboard_mode.get() != null)
-			blackboard_mode.get().maximize();
+			blackboard_mode.get().maximizeAndLoad(getAndNullLoadFolder_blckbrdMode());
 	}
 	
 	public static void runInputMode() {
@@ -81,6 +89,10 @@ public final class Main {
 	
 	public static void setBlackBoardMode(Blackboard blck) {
 		blackboard_mode.compareAndSet(null, blck);
+	}
+	
+	public static void setLoadFolder_blckbrdMode(File folder) {
+		load_folder.set(folder);
 	}
 	
 	public static void stopBlackboardMode() {

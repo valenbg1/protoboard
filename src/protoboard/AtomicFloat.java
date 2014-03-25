@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Simple atomic float operations using an AtomicInteger as backbone.
- *
+ * 
  */
 public class AtomicFloat {
 	private AtomicInteger int_aux;

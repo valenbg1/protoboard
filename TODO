@@ -1,7 +1,10 @@
 * ! Check and make the possibility of using protoboard without Leap Motion lib installed.
 	+ Windows: ok if the Leap Motion lib is correctly set.
 	
-* Fine adjustment of right, left, down swipe gestures (need better performance yet).
+* ! Refactor the Constants class.
+	+ Externalize all pixels sizes.
+	
+* Fine adjustment of right, left, down swipe gestures.
 
 * Try different options of Leap Motion configuration.
 
@@ -10,5 +13,7 @@
 * Nice transitions in multiscreen mode.
 
 * Improve the principal Swing interface to change between blackboard and input mode.
+	+ Option to set the background color.
+	+ Options to set keys for input mode.
 
 * ? Better borders for screens in multiscreen mode.

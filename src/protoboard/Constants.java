@@ -49,6 +49,7 @@ public final class Constants {
 		public static final float[] draw_line_weight_limits = { draw_line_weight*0.15f, draw_line_weight*5f };
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
+		public static final String save_extension = ".png";
 		
 		public static final int erase_color[] = background_rgb;
 		public static final int erase_square_border_color[] = background_rgb_1;
@@ -161,6 +162,10 @@ public final class Constants {
 		public static final String config_input_menu = input_text_button;
 		public static final String config_black_menu = blackboard_text_button;
 		public static final String about_opt = "About";
+		public static final String file_menu = "File";
+		public static final String load_images_opt = "Open saved images...";
+		public static final String load_select_text = "Select directory";
+		public static final String load_select_label = "Selected to load: ";
 		
 		/**
 		 * Externalized constants within de About dialog interface

@@ -22,8 +22,9 @@ class ScreensIterator {
 	private int n_around;
 	private AtomicInteger screen_pos;
 	
-	public ScreensIterator(CopyOnWriteArrayList<PGraphics> screens,
-			int screen_pos, int n_around) {
+	public ScreensIterator(Blackboard context,
+			CopyOnWriteArrayList<PGraphics> screens, int screen_pos,
+			int n_around) {
 		this.screens = screens;
 		this.screen_pos = new AtomicInteger(screen_pos);
 		this.screen_curr = screens.get(screen_pos);
@@ -44,15 +45,20 @@ class ScreensIterator {
 				y = BlackboardC.little_screen_pos[1] + height_little/2.0f - height_mini/2.0f;
 		
 		for (int i = 0; i < n_around; ++i)
-			this.sq_nexts[i] = ArrowsSquare.screenSquare(width_mini, height_mini, x + i*width_mini, y);
-		
-		x = BlackboardC.little_screen_pos[0] - width_mini;
-		y = BlackboardC.little_screen_pos[1] + height_little/2.0f - height_mini/2.0f;
-		
-		for (int i = 0; i < n_around; ++i)
-			this.sq_prevs[i] = ArrowsSquare.screenSquare(width_mini, height_mini, x - i*width_mini, y);
+			this.sq_nexts[i] = ArrowsSquare.screenSquare(context, width_mini,
+					height_mini, x + i * width_mini, y);
 
-		this.sq_curr = ArrowsSquare.screenSquare(width_little, height_little, BlackboardC.little_screen_pos[0], BlackboardC.little_screen_pos[1]);
+		x = BlackboardC.little_screen_pos[0] - width_mini;
+		y = BlackboardC.little_screen_pos[1] + height_little / 2.0f
+				- height_mini / 2.0f;
+
+		for (int i = 0; i < n_around; ++i)
+			this.sq_prevs[i] = ArrowsSquare.screenSquare(context, width_mini,
+					height_mini, x - i * width_mini, y);
+
+		this.sq_curr = ArrowsSquare.screenSquare(context, width_little,
+				height_little, BlackboardC.little_screen_pos[0],
+				BlackboardC.little_screen_pos[1]);
 	}
 	
 	public synchronized void advance() {
@@ -61,7 +67,7 @@ class ScreensIterator {
 		if (sc_pos_aux < (screens.size()-1))
 			screen_pos.incrementAndGet();
 		
-		this.screen_curr = screens.get(screen_pos.get());
+		screen_curr = screens.get(screen_pos.get());
 		getPrevs();
 		getNexts();
 	}
@@ -90,7 +96,7 @@ class ScreensIterator {
 	}
 	
 	private void draw(PApplet board, PGraphics graph, ArrowsSquare sq) {
-		sq.draw(board);
+		sq.draw();
 		board.image(graph, sq.sq_pos[0], sq.sq_pos[1], sq.sq_args[0], sq.sq_args[1]);
 	}
 	
@@ -158,7 +164,7 @@ class ScreensIterator {
 		if (sc_pos_aux > 0)
 			screen_pos.decrementAndGet();
 		
-		this.screen_curr = screens.get(screen_pos.get());
+		screen_curr = screens.get(screen_pos.get());
 		getPrevs();
 		getNexts();
 	}

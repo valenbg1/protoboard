@@ -1,11 +1,14 @@
 package protoboard.swing;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -16,9 +19,6 @@ import javax.swing.border.EmptyBorder;
 import protoboard.Constants.MainIfaceC;
 import protoboard.Main;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 /**
  * Implements the principal Swing interface.
  *
@@ -28,22 +28,45 @@ public class MainIface extends JFrame {
 	
 	private JPanel contentPane;
 	
-	private final JToggleButton tglbtnBlackboardMode = new JToggleButton(MainIfaceC.blackboard_text_button);
-	private final JToggleButton tglbtnInputMode= new JToggleButton(MainIfaceC.input_text_button);
+	private final JToggleButton tglbtnBlackboardMode;
+	private final JToggleButton tglbtnInputMode;
 	
-	private final JMenuBar menuBar = new JMenuBar();
-	private final JMenu mnNewMenu = new JMenu(MainIfaceC.config_menu);
-	private final JMenu mnNewMenu_1 = new JMenu(MainIfaceC.help_menu);
-	private final JMenuItem mntmAbout = new JMenuItem(MainIfaceC.about_opt);
-	private final JMenuItem mntmInputMode = new JMenuItem(MainIfaceC.config_input_menu);
-	private final JMenuItem mntmBlackboardMode = new JMenuItem(MainIfaceC.config_black_menu);
+	private final JMenuBar menuBar;
+	private final JMenu mnNewMenu;
+	private final JMenu mnNewMenu_1;
+	private final JMenuItem mntmAbout;
+	private final JMenuItem mntmInputMode;
+	private final JMenuItem mntmBlackboardMode;
+	private final JMenu mnFile;
+	private final JMenuItem mntmLoadSavedImages;
+	
+	private final JFileChooser file_chooser;
+	
+	private JPanel panel;
+	private JLabel lblNewLabel;
 	
 	public MainIface() {
 		setTitle(MainIfaceC.title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 384, 112);
+		setBounds(100, 100, 427, 118);
+		
+		menuBar = new JMenuBar();
+		mnNewMenu = new JMenu(MainIfaceC.config_menu);
+		mnNewMenu_1 = new JMenu(MainIfaceC.help_menu);
+		mntmAbout = new JMenuItem(MainIfaceC.about_opt);
+		mntmInputMode = new JMenuItem(MainIfaceC.config_input_menu);
+		mntmBlackboardMode = new JMenuItem(MainIfaceC.config_black_menu);
+		mnFile = new JMenu(MainIfaceC.file_menu);
+		mntmLoadSavedImages = new JMenuItem(MainIfaceC.load_images_opt);
+		
+		file_chooser = new JFileChooser(System.getProperty("user.dir"));
 		
 		setJMenuBar(menuBar);
+		
+		menuBar.add(mnFile);
+		mntmLoadSavedImages.addActionListener(mntmLoadSavedImages_action());
+		
+		mnFile.add(mntmLoadSavedImages);
 		
 		menuBar.add(mnNewMenu);
 		
@@ -58,13 +81,23 @@ public class MainIface extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		tglbtnBlackboardMode.addMouseListener(tglbtnBlackboardMode_action());
-		contentPane.add(tglbtnBlackboardMode);
+		panel = new JPanel();
+		contentPane.add(panel, BorderLayout.NORTH);
 		
-		tglbtnInputMode.addMouseListener(tglbtnInputMode_action());
-		contentPane.add(tglbtnInputMode);
+		tglbtnBlackboardMode = new JToggleButton(MainIfaceC.blackboard_text_button);
+		panel.add(tglbtnBlackboardMode);
+		tglbtnInputMode= new JToggleButton(MainIfaceC.input_text_button);
+		panel.add(tglbtnInputMode);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setEnabled(false);
+		contentPane.add(lblNewLabel, BorderLayout.WEST);
+		
+		tglbtnInputMode.addActionListener(tglbtnInputMode_action());
+		
+		tglbtnBlackboardMode.addActionListener(tglbtnBlackboardMode_action());
 	}
 	
 	public void deselectBlackboardButton() {
@@ -75,14 +108,6 @@ public class MainIface extends JFrame {
 		tglbtnInputMode.setSelected(false);
 	}
 
-	public void selectBlackboardButton() {
-		tglbtnBlackboardMode.setSelected(true);
-	}
-	
-	public void selectInputButton() {
-		tglbtnInputMode.setSelected(true);
-	}
-	
 	private ActionListener mntmAbout_action() {
 		return new ActionListener() {
 			@Override
@@ -96,30 +121,60 @@ public class MainIface extends JFrame {
 		};
 	}
 	
-	private MouseAdapter tglbtnBlackboardMode_action() {
-		return new MouseAdapter() {
+	private ActionListener mntmLoadSavedImages_action() {
+		return new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent me) {
-				if (me.getButton() == MouseEvent.BUTTON1) {
-					if (!tglbtnBlackboardMode.isSelected())
-						Main.stopBlackboardMode();
-					else
-						Main.runBlackboardMode();
+			public void actionPerformed(ActionEvent ae) {
+				file_chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+
+				if (file_chooser.showDialog(mntmLoadSavedImages, MainIfaceC.load_select_text) == JFileChooser.APPROVE_OPTION) {
+				    File f = file_chooser.getSelectedFile();
+				    
+				    // If the user accidently click a file, select the parent directory
+				    if (!f.isDirectory())
+				        f = f.getParentFile();
+				    
+				    Main.setLoadFolder_blckbrdMode(f);
+				    setSelectedToLoadLabelText(MainIfaceC.load_select_label + f.getPath());
+				}
+			}
+		};	
+	}
+	
+	public void selectBlackboardButton() {
+		tglbtnBlackboardMode.setSelected(true);
+	}
+	
+	public void selectInputButton() {
+		tglbtnInputMode.setSelected(true);
+	}
+	
+	private void setSelectedToLoadLabelText(String text) {
+		lblNewLabel.setText(text);
+	}
+	
+	private ActionListener tglbtnBlackboardMode_action() {
+		return new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				if (!tglbtnBlackboardMode.isSelected())
+					Main.stopBlackboardMode();
+				else {
+					Main.runBlackboardMode();
+					lblNewLabel.setText("");
 				}
 			}
 		};
 	}
 	
-	private MouseAdapter tglbtnInputMode_action() {
-		return new MouseAdapter() {
+	private ActionListener tglbtnInputMode_action() {
+		return new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent me) {
-				if (me.getButton() == MouseEvent.BUTTON1) {
-					if (!tglbtnInputMode.isSelected())
-						Main.stopInputMode();
-					else
-						Main.runInputMode();
-				}
+			public void actionPerformed(ActionEvent ae) {
+				if (!tglbtnInputMode.isSelected())
+					Main.stopInputMode();
+				else
+					Main.runInputMode();
 			}
 		};
 	}

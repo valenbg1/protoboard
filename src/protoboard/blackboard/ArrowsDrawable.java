@@ -10,16 +10,20 @@ import protoboard.Constants.BlackboardC;
  * 
  */
 abstract class ArrowsDrawable {
+	public final PApplet context;
 	public final int[] sq_tria_color;
 	public final float[] sq_pos, sq_args;
 	public final float[][] ltr_pos, rtr_pos, utr_pos, dtr_pos;
 	public final boolean show_lr_triangles, show_ud_triangles;
 	
-	protected ArrowsDrawable(float[] sq_args, float[] sq_pos, int[] sq_tria_color) {
-		this(sq_args, sq_pos, sq_tria_color, true, false);
+	protected ArrowsDrawable(PApplet context, float[] sq_args, float[] sq_pos, int[] sq_tria_color) {
+		this(context, sq_args, sq_pos, sq_tria_color, true, false);
 	}
 
-	protected ArrowsDrawable(float[] sq_args, float[] sq_pos, int[] sq_tria_color, boolean show_lr_triangles, boolean show_ud_triangles) {
+	protected ArrowsDrawable(PApplet context, float[] sq_args,
+			float[] sq_pos, int[] sq_tria_color, boolean show_lr_triangles,
+			boolean show_ud_triangles) {
+		this.context = context;
 		this.sq_args = sq_args;
 		this.sq_pos = sq_pos;
 		this.sq_tria_color = sq_tria_color;
@@ -65,26 +69,26 @@ abstract class ArrowsDrawable {
 		}
 	}
 
-	public abstract void draw(PApplet board);
+	public abstract void draw();
 	
-	public void drawTriangles(PApplet board) {
+	public void drawTriangles() {
 		if (show_lr_triangles) {
 			// Left triangle
-			board.fill(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);
-			board.triangle(ltr_pos[0][0], ltr_pos[0][1], ltr_pos[1][0],
+			context.fill(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);
+			context.triangle(ltr_pos[0][0], ltr_pos[0][1], ltr_pos[1][0],
 					ltr_pos[1][1], ltr_pos[2][0], ltr_pos[2][1]);
 			// Right triangle
-			board.triangle(rtr_pos[0][0], rtr_pos[0][1], rtr_pos[1][0],
+			context.triangle(rtr_pos[0][0], rtr_pos[0][1], rtr_pos[1][0],
 					rtr_pos[1][1], rtr_pos[2][0], rtr_pos[2][1]);
 		}
 		
 		if (show_ud_triangles) {
 			// Up triangle
-			board.fill(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);
-			board.triangle(utr_pos[0][0], utr_pos[0][1], utr_pos[1][0],
+			context.fill(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);
+			context.triangle(utr_pos[0][0], utr_pos[0][1], utr_pos[1][0],
 					utr_pos[1][1], utr_pos[2][0], utr_pos[2][1]);
 			// Down triangle
-			board.triangle(dtr_pos[0][0], dtr_pos[0][1], dtr_pos[1][0],
+			context.triangle(dtr_pos[0][0], dtr_pos[0][1], dtr_pos[1][0],
 					dtr_pos[1][1], dtr_pos[2][0], dtr_pos[2][1]);
 		}
 	}
