@@ -30,12 +30,12 @@ public final class Main {
 	private static Input input_mode;
 	
 	private static AtomicReference<Blackboard> blackboard_mode = new AtomicReference<Blackboard>();
-	private static AtomicReference<File> load_folder = new AtomicReference<File>();
+	private static AtomicReference<File[]> load_files = new AtomicReference<File[]>();
 	private static AtomicBoolean blck_created = new AtomicBoolean(false);
 	
-	public static File getAndNullLoadFolder_blckbrdMode() {
-		File ret = load_folder.get();
-		load_folder.set(null);
+	public static File[] getAndNullLoadFiles_blckbrdMode() {
+		File[] ret = load_files.get();
+		load_files.set(null);
 		return ret;
 	}
 	
@@ -61,7 +61,7 @@ public final class Main {
 		if (blck_created.compareAndSet(false, true))
 			PApplet.main(Blackboard.class.getName());
 		else if (blackboard_mode.get() != null)
-			blackboard_mode.get().maximizeAndLoad(getAndNullLoadFolder_blckbrdMode());
+			blackboard_mode.get().maximizeAndLoad(getAndNullLoadFiles_blckbrdMode());
 	}
 	
 	public static void runInputMode() {
@@ -91,8 +91,8 @@ public final class Main {
 		blackboard_mode.compareAndSet(null, blck);
 	}
 	
-	public static void setLoadFolder_blckbrdMode(File folder) {
-		load_folder.set(folder);
+	public static void setLoadFolder_blckbrdMode(File[] folder) {
+		load_files.set(folder);
 	}
 	
 	public static void stopBlackboardMode() {

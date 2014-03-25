@@ -283,9 +283,9 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  // Maximize window
 	}
 	
-	public void maximizeAndLoad(File folder) {
-		if (folder != null)
-			new ScreensLoader(this, folder).loadScreens();
+	public void maximizeAndLoad(File[] files) {
+		if (files != null)
+			new ScreensLoader(this, files).loadScreens();
 		
 		maximize();
 	}
@@ -478,10 +478,10 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		registerAsObserver();
 		Main.setBlackBoardMode(this);
 		
-		File load_fldr = Main.getAndNullLoadFolder_blckbrdMode();
+		File[] load_files = Main.getAndNullLoadFiles_blckbrdMode();
 		
-		if (load_fldr != null)
-			new ScreensLoader(this, load_fldr).loadScreens();
+		if (load_files != null)
+			new ScreensLoader(this, load_files).loadScreens();
 		
 		if (screens.size() == 0)
 			addAndSetNewScreen();

@@ -126,16 +126,19 @@ public class MainIface extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				file_chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				file_chooser.setMultiSelectionEnabled(true);
 
 				if (file_chooser.showDialog(mntmLoadSavedImages, MainIfaceC.load_select_text) == JFileChooser.APPROVE_OPTION) {
 				    File f = file_chooser.getSelectedFile();
 				    
 				    // If the user accidently click a file, select the parent directory
-				    if (!f.isDirectory())
-				        f = f.getParentFile();
-				    
-				    Main.setLoadFolder_blckbrdMode(f);
-				    setSelectedToLoadLabelText(MainIfaceC.load_select_label + f.getPath());
+				    if (!f.isDirectory()) {
+						Main.setLoadFolder_blckbrdMode(file_chooser.getSelectedFiles());
+						setSelectedToLoadLabelText(MainIfaceC.load_select_label+ f.getParent());
+					} else {
+						Main.setLoadFolder_blckbrdMode(f.listFiles());
+					    setSelectedToLoadLabelText(MainIfaceC.load_select_label + f.getPath());
+					}
 				}
 			}
 		};	
