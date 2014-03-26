@@ -80,7 +80,7 @@ class ScreensIterator {
 		return screen_pos;
 	}
 	
-	public void draw(PApplet board) {
+	public void draw() {
 		for (int i = 0; i < n_around; ++i) {
 			if (screen_prevs[i] != null)
 				draw(screen_prevs[i], sq_prevs[i]);	
