@@ -4,7 +4,6 @@ import java.awt.AWTException;
 import java.awt.EventQueue;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.UIManager;
 
@@ -29,13 +28,13 @@ public final class Main {
 	private static AtomicBoolean running_input_mode = new AtomicBoolean(false);
 	private static Input input_mode;
 	
-	private static AtomicReference<Blackboard> blackboard_mode = new AtomicReference<Blackboard>();
-	private static AtomicReference<File[]> load_files = new AtomicReference<File[]>();
+	private static Blackboard blackboard_mode = null;
+	private static File[] load_files = null;
 	private static AtomicBoolean blck_created = new AtomicBoolean(false);
 	
-	public static File[] getAndNullLoadFiles_blckbrdMode() {
-		File[] ret = load_files.get();
-		load_files.set(null);
+	public static synchronized File[] getAndNullLoadFiles_blckbrdMode() {
+		File[] ret = load_files;
+		load_files = null;
 		return ret;
 	}
 	
@@ -61,8 +60,10 @@ public final class Main {
 	
 		if (blck_created.compareAndSet(false, true))
 			PApplet.main(Blackboard.class.getName());
-		else if (blackboard_mode.get() != null)
-			blackboard_mode.get().maximizeAndLoad(getAndNullLoadFiles_blckbrdMode());
+		else if (blackboard_mode != null) {
+			blackboard_mode.maximizeAndLoad(getAndNullLoadFiles_blckbrdMode());
+			main_iface.clean_LoadSelectLabel();
+		}
 	}
 	
 	public static void runInputMode() {
@@ -81,24 +82,25 @@ public final class Main {
 	}
 	
 	public static boolean runningBlackboardMode() {
-		return (blackboard_mode.get() != null) && blackboard_mode.get().isMaximized();
+		return (blackboard_mode != null) && blackboard_mode.isMaximized();
 	}
 	
 	public static boolean runningInputMode() {
 		return running_input_mode.get();
 	}
 	
-	public static void setBlackBoardMode(Blackboard blck) {
-		blackboard_mode.compareAndSet(null, blck);
+	public static synchronized void setBlackBoardMode(Blackboard blck) {
+		if (blackboard_mode == null)
+			blackboard_mode = blck;
 	}
 	
-	public static void setLoadFolder_blckbrdMode(File[] folder) {
-		load_files.set(folder);
+	public static synchronized void setLoadFolder_blckbrdMode(File[] folder) {
+		load_files = folder;
 	}
 	
 	public static void stopBlackboardMode() {
-		if (blackboard_mode.get() != null)
-			blackboard_mode.get().minimize();
+		if (blackboard_mode != null)
+			blackboard_mode.minimize();
 		
 		main_iface.deselectBlackboardButton();
 	}

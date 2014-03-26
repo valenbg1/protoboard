@@ -122,6 +122,10 @@ public class MainIface extends JFrame {
 		};
 	}
 	
+	public void clean_LoadSelectLabel() {
+		setSelectedToLoadLabelText("");
+	}
+	
 	private ActionListener mntmLoadSavedImages_action() {
 		return new ActionListener() {
 			@Override
@@ -164,10 +168,8 @@ public class MainIface extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				if (!tglbtnBlackboardMode.isSelected())
 					Main.stopBlackboardMode();
-				else {
+				else
 					Main.runBlackboardMode();
-					lblNewLabel.setText("");
-				}
 			}
 		};
 	}
