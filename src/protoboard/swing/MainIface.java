@@ -45,6 +45,7 @@ public class MainIface extends JFrame {
 	
 	private JPanel panel;
 	private JLabel lblNewLabel;
+	private JMenuItem mntmExit;
 	
 	public MainIface() {
 		setTitle(MainIfaceC.title);
@@ -68,6 +69,11 @@ public class MainIface extends JFrame {
 		mntmLoadSavedImages.addActionListener(mntmLoadSavedImages_action());
 		
 		mnFile.add(mntmLoadSavedImages);
+		mnFile.addSeparator();
+		
+		mntmExit = new JMenuItem(MainIfaceC.exit_opt);
+		mntmExit.addActionListener(mntmExit_action());
+		mnFile.add(mntmExit);
 		
 		menuBar.add(mnNewMenu);
 		
@@ -101,14 +107,18 @@ public class MainIface extends JFrame {
 		tglbtnBlackboardMode.addActionListener(tglbtnBlackboardMode_action());
 	}
 	
+	public void clean_LoadSelectLabel() {
+		setSelectedToLoadLabelText("");
+	}
+	
 	public void deselectBlackboardButton() {
 		tglbtnBlackboardMode.setSelected(false);
 	}
-	
+
 	public void deselectInputButton() {
 		tglbtnInputMode.setSelected(false);
 	}
-
+	
 	private ActionListener mntmAbout_action() {
 		return new ActionListener() {
 			@Override
@@ -123,8 +133,13 @@ public class MainIface extends JFrame {
 		};
 	}
 	
-	public void clean_LoadSelectLabel() {
-		setSelectedToLoadLabelText("");
+	private ActionListener mntmExit_action() {
+		return new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				System.exit(0);
+			}
+		};
 	}
 	
 	private ActionListener mntmLoadSavedImages_action() {

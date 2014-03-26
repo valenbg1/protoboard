@@ -325,7 +325,7 @@ public class LeapMotionListener extends Listener {
 			observers.add(observer);
 	}
 
-	public void unregister(LeapMotionObserver observer) {
+	public synchronized void unregister(LeapMotionObserver observer) {
 		observers.remove(observer);
 	}
 }

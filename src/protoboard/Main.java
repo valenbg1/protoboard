@@ -72,8 +72,7 @@ public final class Main {
 			
 			try {
 				input_mode = new Input(lm_listener);
-				
-				new Thread(input_mode).start();
+				input_mode.run();
 			} catch (AWTException e) {
 				running_input_mode.compareAndSet(true, false);
 				Constants.printExceptionToErr("", e);
