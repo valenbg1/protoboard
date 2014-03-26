@@ -1,31 +1,38 @@
 package protoboard.blackboard;
 
-import protoboard.Constants;
+import protoboard.Constants.BlackboardC;
 
 /**
- * Simple class that maintain the position in a color array.
+ * Simple class that maintain the position in a color array. It's an immutable object.
  * 
  * @see Constants.BlackboardC.draw_colors
  * 
  */
 class Colors {
-	private int pos = 0;
-	private static final int max_pos = Constants.BlackboardC.draw_colors.length;
+	public final int pos;
+	public static final int max_pos = BlackboardC.draw_colors.length;
+	
+	public Colors() {
+		this.pos = 0;
+	}
+	
+	private Colors(int pos) {
+		this.pos = pos;
+	}
 
-	public synchronized int[] getActual() {
-		return Constants.BlackboardC.draw_colors[pos];
+	public int[] getActual() {
+		return BlackboardC.draw_colors[pos];
 	}
 
 	public boolean isEraseColor() {
-		return (pos + 1) == max_pos;
+		return (pos+1) == max_pos;
 	}
 
-	public synchronized void next() {
-		pos = (pos + 1) % max_pos;
+	public Colors next() {
+		return new Colors((pos+1) % max_pos);
 	}
 
-	public synchronized void prev() {
-		if (--pos == -1)
-			pos = max_pos - 1;
+	public Colors prev() {
+		return new Colors((pos-1) < 0 ? max_pos-1 : pos);
 	}
 }

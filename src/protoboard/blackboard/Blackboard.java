@@ -109,13 +109,13 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 
 	public void changeDrawColorBack() {
-		draw_color.prev();
+		draw_color = draw_color.prev();
 		color_square = ArrowsSquare.colorSquare(this, draw_color.getActual());
 		updateDrawLineSquare();
 	}
 
 	public void changeDrawColorForth() {
-		draw_color.next();
+		draw_color = draw_color.next();
 		color_square = ArrowsSquare.colorSquare(this, draw_color.getActual());
 		updateDrawLineSquare();
 	}
