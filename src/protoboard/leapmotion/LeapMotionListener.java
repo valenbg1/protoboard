@@ -24,12 +24,13 @@ import com.leapmotion.leap.SwipeGesture;
  */
 public class LeapMotionListener extends Listener {
 	public enum Gestures {
-		DOWN_SWIPE, KEY_TAP, LEFT_CIRCLE, LEFT_SWIPE, RIGHT_CIRCLE, RIGHT_SWIPE, SCREEN_TAP, UP_SWIPE
+		DOWN_SWIPE, KEY_TAP, LEFT_CIRCLE, LEFT_SWIPE,
+		RIGHT_CIRCLE, RIGHT_SWIPE, SCREEN_TAP, UP_SWIPE
 	}
 
-	private AtomicInteger wait_frames;
-	private AtomicInteger wait_swipe_frames;
-	private AtomicInteger wait_between_changing_circle_id;
+	private int wait_frames;
+	private int wait_swipe_frames;
+	private int wait_between_changing_circle_id;
 
 	private Queue<LeapMotionObserver> observers;
 	
@@ -37,12 +38,12 @@ public class LeapMotionListener extends Listener {
 	private AtomicFloat current_circle_turns;
 
 	public LeapMotionListener() {
-		this.wait_frames = new AtomicInteger(0);
-		this.wait_swipe_frames = new AtomicInteger(0);
+		this.wait_frames = 0;
+		this.wait_swipe_frames = 0;
+		this.wait_between_changing_circle_id = 0;
 		this.observers = new ConcurrentLinkedQueue<LeapMotionObserver>();
 		this.current_circle_id = new AtomicInteger(-1);
 		this.current_circle_turns = new AtomicFloat(0);
-		this.wait_between_changing_circle_id = new AtomicInteger(0);
 	}
 
 	private void callObservers(Gestures gesture) {
@@ -110,14 +111,24 @@ public class LeapMotionListener extends Listener {
 
 	@Override
 	public void onFrame(Controller controller) {
-		if (wait_swipe_frames.get() > 0)
-			wait_swipe_frames.decrementAndGet();
+		// "Weak" thread protection
+		int wait_swipe_f = wait_swipe_frames,
+				wait_between_changing_ci = wait_between_changing_circle_id,
+				wait_f = wait_frames;
 		
-		if (wait_between_changing_circle_id.get() > 0)
-			wait_between_changing_circle_id.decrementAndGet();
+		if (wait_swipe_f > 0) {
+			--wait_swipe_f;
+			wait_swipe_frames = wait_swipe_f;
+		}
 		
-		if (wait_frames.get() > 0) {
-			wait_frames.decrementAndGet();
+		if (wait_between_changing_ci > 0) {
+			--wait_between_changing_ci;
+			wait_between_changing_circle_id = wait_between_changing_ci;
+		}
+		
+		if (wait_f > 0) {
+			--wait_f;
+			wait_frames = wait_f;
 			return;
 		}
 		
@@ -137,11 +148,13 @@ public class LeapMotionListener extends Listener {
 						current_circle_turns.set(circle.progress() - LeapMotionListenerC.circle_resolution);
 					}
 					
+					float current_ct = current_circle_turns.get();
+					
 					if (current_circle_id.get() == circle.id()) {
-						if ((circle.progress() - current_circle_turns.get()) > LeapMotionListenerC.circle_resolution) {
+						if ((circle.progress() - current_ct) > LeapMotionListenerC.circle_resolution) {
 							boolean clockwise; //  Calculate clock direction using the angle between circle normal and pointable
 							
-							current_circle_turns.set(current_circle_turns.get() + LeapMotionListenerC.circle_resolution);
+							current_circle_turns.set(current_ct + LeapMotionListenerC.circle_resolution);
 							
 							// Clockwise if angle is less than 90 degrees
 							if (circle.pointable().direction().angleTo(circle.normal()) <= Math.PI / 4)
@@ -168,7 +181,7 @@ public class LeapMotionListener extends Listener {
 					break;
 					
 				case TYPE_SWIPE:
-					if (wait_swipe_frames.get() > 0)
+					if (wait_swipe_f > 0)
 						break;
 
 					SwipeGesture swipe = new SwipeGesture(gesture);
@@ -240,10 +253,11 @@ public class LeapMotionListener extends Listener {
 							}
 						}
 						
-						// Avoid detecting new swipe gestures for LeapMotionListenerC.wait_between_swipe_gestures s
-						wait_swipe_frames.set((int) Math.ceil(frame
+						// Avoid detecting new swipe gestures for
+						// LeapMotionListenerC.wait_between_swipe_gestures s
+						wait_swipe_frames = (int) Math.ceil(frame
 								.currentFramesPerSecond()
-								* LeapMotionListenerC.wait_between_swipe_gestures));
+								* LeapMotionListenerC.wait_between_swipe_gestures);
 						detected_gesture = true;
 					}
 		
@@ -283,14 +297,14 @@ public class LeapMotionListener extends Listener {
 		
 		// Avoid detecting new gestures for LeapMotionListenerC.wait_between_gestures s
 		if (detected_gesture)
-			wait_frames.set((int) Math.ceil(frame.currentFramesPerSecond()*LeapMotionListenerC.wait_between_gestures));
+			wait_frames = (int) Math.ceil(frame.currentFramesPerSecond()*LeapMotionListenerC.wait_between_gestures);
 		
-		if (wait_between_changing_circle_id.get() <= 0) {
+		if (wait_between_changing_ci <= 0) {
 			current_circle_id.set(-1);
 			
-			wait_between_changing_circle_id.set((int) Math.ceil(frame
+			wait_between_changing_circle_id = (int) Math.ceil(frame
 					.currentFramesPerSecond()
-					* LeapMotionListenerC.wait_between_changing_circle_id));
+					* LeapMotionListenerC.wait_between_changing_circle_id);
 		}
 	}
 
