@@ -33,6 +33,6 @@ class Colors {
 	}
 
 	public Colors prev() {
-		return new Colors((pos-1) < 0 ? max_pos-1 : pos);
+		return new Colors((pos-1) < 0 ? max_pos-1 : pos-1);
 	}
 }
