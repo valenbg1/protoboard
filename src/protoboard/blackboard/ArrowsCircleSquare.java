@@ -4,8 +4,8 @@ import processing.core.PApplet;
 import protoboard.Constants.BlackboardC;
 
 /**
- * Represents a 2D square with 4 selection arrow and a circle inside.
- * It's an immutable object.
+ * Represents a 2D square with 4 selection arrow and a circle inside. It's an
+ * immutable object.
  * 
  */
 class ArrowsCircleSquare extends ArrowsSquare {
@@ -37,15 +37,16 @@ class ArrowsCircleSquare extends ArrowsSquare {
 		this.ball_color = ball_color;
 	}
 
-	public ArrowsCircleSquare(PApplet context, float[] sq_args, float[] sq_pos, int[] sq_tria_color,
-			int[] draw_color, float diam, int[] ball_color) {
-		this(context, sq_args, sq_pos, sq_tria_color, draw_color, true, false, diam, ball_color);
+	public ArrowsCircleSquare(PApplet context, float[] sq_args, float[] sq_pos,
+			int[] sq_tria_color, int[] draw_color, float diam, int[] ball_color) {
+		this(context, sq_args, sq_pos, sq_tria_color, draw_color, true, false,
+				diam, ball_color);
 	}
 
 	@Override
 	public void draw() {
 		super.draw();
-		
+
 		context.stroke(ball_color[0], ball_color[1], ball_color[2]);
 		context.strokeWeight(diam);
 		context.point(center[0], center[1]);

@@ -49,6 +49,7 @@ public final class Main {
 		main_iface = new MainIface();
 		
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				main_iface.setVisible(true);
 			}

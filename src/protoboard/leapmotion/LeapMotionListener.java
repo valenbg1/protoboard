@@ -179,7 +179,8 @@ public class LeapMotionListener extends Listener {
 						if (Math.abs(swipe.direction().getX()) > Math.abs(swipe.direction().getY())) {
 							// Right
 							if (swipe.direction().getX() > 0) {
-								if ((length <= LeapMotionListenerC.rswipe_limits[0]) || (length >= LeapMotionListenerC.rswipe_limits[1]))
+								if ((length <= LeapMotionListenerC.rswipe_limits[0])
+										|| (length >= LeapMotionListenerC.rswipe_limits[1]))
 									break;
 								
 								callObservers(Gestures.RIGHT_SWIPE);
@@ -193,7 +194,8 @@ public class LeapMotionListener extends Listener {
 								
 							// Left
 							} else {
-								if ((length <= LeapMotionListenerC.lswipe_limits[0]) || (length >= LeapMotionListenerC.lswipe_limits[1]))
+								if ((length <= LeapMotionListenerC.lswipe_limits[0])
+										|| (length >= LeapMotionListenerC.lswipe_limits[1]))
 									break;
 								
 								callObservers(Gestures.LEFT_SWIPE);
@@ -209,7 +211,8 @@ public class LeapMotionListener extends Listener {
 						} else {
 							// Up
 							if (swipe.direction().getY() > 0) {
-								if ((length <= LeapMotionListenerC.uswipe_limits[0]) || (length >= LeapMotionListenerC.uswipe_limits[1]))
+								if ((length <= LeapMotionListenerC.uswipe_limits[0])
+										|| (length >= LeapMotionListenerC.uswipe_limits[1]))
 									break;
 								
 								callObservers(Gestures.UP_SWIPE);
@@ -222,7 +225,8 @@ public class LeapMotionListener extends Listener {
 										+ swipe.speed() + ", length: " + length);
 							// Down
 							} else {
-								if ((length <= LeapMotionListenerC.dswipe_limits[0]) || (length >= LeapMotionListenerC.dswipe_limits[1]))
+								if ((length <= LeapMotionListenerC.dswipe_limits[0])
+										|| (length >= LeapMotionListenerC.dswipe_limits[1]))
 									break;
 								
 								callObservers(Gestures.DOWN_SWIPE);
@@ -237,7 +241,9 @@ public class LeapMotionListener extends Listener {
 						}
 						
 						// Avoid detecting new swipe gestures for LeapMotionListenerC.wait_between_swipe_gestures s
-						wait_swipe_frames.set((int) Math.ceil(frame.currentFramesPerSecond()*LeapMotionListenerC.wait_between_swipe_gestures));
+						wait_swipe_frames.set((int) Math.ceil(frame
+								.currentFramesPerSecond()
+								* LeapMotionListenerC.wait_between_swipe_gestures));
 						detected_gesture = true;
 					}
 		

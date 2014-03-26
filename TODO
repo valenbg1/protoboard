@@ -4,7 +4,9 @@
 * ! Refactor the Constants class.
 	+ Externalize all pixels sizes.
 	
-* Fine adjustment of right, left, down swipe gestures.
+* ! Fine adjustment of right, left, down swipe gestures.
+
+* Organize thread-safe things in Blackboard & LeapMotionListener.
 
 * Try different options of Leap Motion configuration.
 
@@ -15,5 +17,6 @@
 * Improve the principal Swing interface to change between blackboard and input mode.
 	+ Option to set the background color.
 	+ Options to set keys for input mode.
+	+ Only select .png's in load mode.
 
 * ? Better borders for screens in multiscreen mode.

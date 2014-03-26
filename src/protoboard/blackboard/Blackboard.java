@@ -1,5 +1,6 @@
 package protoboard.blackboard;
 
+import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
@@ -8,8 +9,6 @@ import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.swing.JFrame;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -122,12 +121,16 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 	
 	private void changeDrawLineWeightBack() {
-		draw_line_weight.set(Math.max(draw_line_weight.get()-BlackboardC.draw_line_weight_sum, BlackboardC.draw_line_weight_limits[0]));
+		draw_line_weight.set(Math.max(draw_line_weight.get()
+				- BlackboardC.draw_line_weight_sum,
+				BlackboardC.draw_line_weight_limits[0]));
 		updateDrawLineSquare();
 	}
 
 	private void changeDrawLineWeightForth() {
-		draw_line_weight.set(Math.min(draw_line_weight.get()+BlackboardC.draw_line_weight_sum, BlackboardC.draw_line_weight_limits[1]));
+		draw_line_weight.set(Math.min(draw_line_weight.get()
+				+ BlackboardC.draw_line_weight_sum,
+				BlackboardC.draw_line_weight_limits[1]));
 		updateDrawLineSquare();
 	}
 	
@@ -263,7 +266,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 	
 	public boolean isMaximized() {
-		return frame.getExtendedState() == JFrame.MAXIMIZED_BOTH;
+		return frame.getExtendedState() == Frame.MAXIMIZED_BOTH;
 	}
 
 	public synchronized void loadAndAddScreens(Collection<File> newScreens) {
@@ -280,7 +283,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	public void maximize() {
 		registerAsObserver();
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  // Maximize window
+		frame.setExtendedState(Frame.MAXIMIZED_BOTH);  // Maximize window
 	}
 	
 	public void maximizeAndLoad(File[] files) {
@@ -292,7 +295,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	public void minimize() {
 		unregisterAsObserver();
-		frame.setExtendedState(JFrame.ICONIFIED);  // Minimize window
+		frame.setExtendedState(Frame.ICONIFIED);  // Minimize window
 	}
 	
 	@Override
@@ -432,7 +435,8 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	private void processCursorMultiScreenMode() {
 		int pos;
 		
-		if (((pos = screens_iter.isOnAny(mouseX, mouseY)) != Integer.MIN_VALUE) || number_square.isOnAnySide(mouseX, mouseY)) {
+		if (((pos = screens_iter.isOnAny(mouseX, mouseY)) != Integer.MIN_VALUE)
+				|| number_square.isOnAnySide(mouseX, mouseY)) {
 			cursor(HAND);
 			
 			if (mouseClicked.get()) {
@@ -467,9 +471,11 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 	
 	public synchronized void saveCurrentScreen() {
-		screen_curr.save(BlackboardC.save_name + "[" + screen_pos.get() + "]_"+ new Date().getTime() + BlackboardC.save_extension);
+		screen_curr.save(BlackboardC.save_name + "[" + screen_pos.get() + "]_"
+				+ new Date().getTime() + BlackboardC.save_extension);
 		save_text.compareAndSet(false, true);
-		save_text_time.set((int) Math.ceil(frameRate*BlackboardC.save_text_time));
+		save_text_time.set((int) Math.ceil(frameRate
+				* BlackboardC.save_text_time));
 	}
 	
 	@Override
@@ -497,8 +503,10 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 	
 	private void updateDrawLineSquare() {
-		int[] color = draw_color.isEraseColor() ? BlackboardC.background_rgb_1 : draw_color.getActual();
-		draw_line_square = ArrowsCircleSquare.drawLineWeightCircleSquare(this, draw_line_weight.get(), color);
+		int[] color = draw_color.isEraseColor() ? BlackboardC.background_rgb_1
+				: draw_color.getActual();
+		draw_line_square = ArrowsCircleSquare.drawLineWeightCircleSquare(this,
+				draw_line_weight.get(), color);
 	}
 
 	private WindowFocusListener window_f_l() {	

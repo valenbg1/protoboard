@@ -32,7 +32,7 @@ public final class Constants {
 			e.printStackTrace();
 
 		System.err.println("-------------------------------------------\n");
-	}
+	}	
 	
 	/**
 	 * Externalized constants within blackboard mode scope.
@@ -92,6 +92,22 @@ public final class Constants {
 	}
 	
 	/**
+	 * Externalized constants within Input mode scope.
+	 *
+	 */
+	public static final class InputC {
+		public static final String err_no_robot = "The platform configuration does not allow low-level input control";
+		public static final String err_interr = "Interrupted while running Input";
+		public static final int robot_delay = 25; // ms
+		
+		public static final int onDownSwipe = KeyEvent.VK_UP;
+		public static final int onLeftSwipe = KeyEvent.VK_RIGHT;
+		public static final int onRightSwipe = KeyEvent.VK_LEFT;
+		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
+		public static final int onUpSwipe = KeyEvent.VK_DOWN;
+	}
+	
+	/**
 	 * Externalized constants within Leap Motion controller scope.
 	 *
 	 */
@@ -132,31 +148,14 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constants within Input mode scope.
-	 *
-	 */
-	public static final class InputC {
-		public static final String err_no_robot = "The platform configuration does not allow low-level input control";
-		public static final String err_interr = "Interrupted while running Input";
-		public static final int robot_delay = 25; // ms
-		
-		public static final int onDownSwipe = KeyEvent.VK_UP;
-		public static final int onLeftSwipe = KeyEvent.VK_RIGHT;
-		public static final int onRightSwipe = KeyEvent.VK_LEFT;
-		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
-		public static final int onUpSwipe = KeyEvent.VK_DOWN;
-	}
-	
-	/**
 	 * Externalized constants within the main Swing interface.
 	 *
 	 */
 	public static final class MainIfaceC {
 		public static final String title = "Protoboard";
-		
 		public static final String input_text_button = "Input mode";
-		public static final String blackboard_text_button = "Blackboard mode";
 		
+		public static final String blackboard_text_button = "Blackboard mode";
 		public static final String config_menu = "Configuration";
 		public static final String help_menu = "Help";
 		public static final String config_input_menu = input_text_button;
@@ -165,6 +164,7 @@ public final class Constants {
 		public static final String file_menu = "File";
 		public static final String load_images_opt = "Open saved images...";
 		public static final String load_select_text = "Select files or directory";
+		
 		public static final String load_select_label = "Selected to load: ";
 		
 		/**

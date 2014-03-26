@@ -22,7 +22,8 @@ class ScreensLoader {
 		ArrayList<File> screens = new ArrayList<File>();
 
 		for (int i = 0; (i < files.length) && (i < BlackboardC.max_screens); ++i) {
-			if (files[i].getName().matches("^.*\\" + BlackboardC.save_extension + "$"))
+			if (files[i].getName().matches(
+					"^.*\\" + BlackboardC.save_extension + "$"))
 				screens.add(files[i]);
 		}
 

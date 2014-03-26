@@ -46,6 +46,7 @@ class ArrowsSquare extends ArrowsDrawable {
 		this.draw_color = draw_color;
 	}
 
+	@Override
 	public void draw() {
 		context.stroke(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);
 		context.fill(draw_color[0], draw_color[1], draw_color[2]);

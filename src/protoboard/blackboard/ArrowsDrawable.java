@@ -16,7 +16,8 @@ abstract class ArrowsDrawable {
 	public final float[][] ltr_pos, rtr_pos, utr_pos, dtr_pos;
 	public final boolean show_lr_triangles, show_ud_triangles;
 	
-	protected ArrowsDrawable(PApplet context, float[] sq_args, float[] sq_pos, int[] sq_tria_color) {
+	protected ArrowsDrawable(PApplet context, float[] sq_args, float[] sq_pos,
+			int[] sq_tria_color) {
 		this(context, sq_args, sq_pos, sq_tria_color, true, false);
 	}
 
@@ -81,7 +82,7 @@ abstract class ArrowsDrawable {
 			context.triangle(rtr_pos[0][0], rtr_pos[0][1], rtr_pos[1][0],
 					rtr_pos[1][1], rtr_pos[2][0], rtr_pos[2][1]);
 		}
-		
+
 		if (show_ud_triangles) {
 			// Up triangle
 			context.fill(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);

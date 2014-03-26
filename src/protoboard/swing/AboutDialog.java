@@ -11,6 +11,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -26,7 +27,7 @@ class AboutDialog extends JDialog {
 	public AboutDialog() {
 		setTitle(AboutDialogC.title);
 		setBounds(100, 100, 554, 417);
-		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JEditorPane dtrpnHola = new JEditorPane();
@@ -35,7 +36,8 @@ class AboutDialog extends JDialog {
 		dtrpnHola.setText(AboutDialogC.main_text);
 		dtrpnHola.setEditable(false);
 		dtrpnHola.addHyperlinkListener(new HyperlinkListener() {
-		    public void hyperlinkUpdate(HyperlinkEvent e) {
+		    @Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
 		    	if(Desktop.isDesktopSupported() && (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)) {
 		    	    try {
 						Desktop.getDesktop().browse(e.getURL().toURI());
