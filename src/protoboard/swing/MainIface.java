@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -15,7 +14,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import protoboard.Constants.BlackboardC;
 import protoboard.Constants.MainIfaceC;
 import protoboard.Main;
 
@@ -130,21 +131,22 @@ public class MainIface extends JFrame {
 		return new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				file_chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				file_chooser.setMultiSelectionEnabled(true);
+				String ext = BlackboardC.save_extension;
 
-				if (file_chooser.showDialog(mntmLoadSavedImages,
-						MainIfaceC.load_select_text) == JFileChooser.APPROVE_OPTION) {
-				    File f = file_chooser.getSelectedFile();
-				    
-				    // If the user accidently click a file, select the parent directory
-				    if (!f.isDirectory()) {
-						Main.setLoadFolder_blckbrdMode(file_chooser.getSelectedFiles());
-						setSelectedToLoadLabelText(MainIfaceC.load_select_label+ f.getParent());
-					} else {
-						Main.setLoadFolder_blckbrdMode(f.listFiles());
-					    setSelectedToLoadLabelText(MainIfaceC.load_select_label + f.getPath());
-					}
+				file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				file_chooser.setMultiSelectionEnabled(true);
+				file_chooser.setAcceptAllFileFilterUsed(false);
+
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						ext.toUpperCase() + " files (*." + ext + ")", ext);
+				file_chooser.removeChoosableFileFilter(file_chooser.getFileFilter());
+				file_chooser.setFileFilter(filter);
+
+				if (file_chooser.showOpenDialog(mntmLoadSavedImages) == JFileChooser.APPROVE_OPTION) {
+					Main.setLoadFolder_blckbrdMode(file_chooser
+							.getSelectedFiles());
+					setSelectedToLoadLabelText(MainIfaceC.load_select_label
+							+ file_chooser.getSelectedFile().getParent());
 				}
 			}
 		};	

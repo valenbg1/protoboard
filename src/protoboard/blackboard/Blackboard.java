@@ -4,7 +4,6 @@ import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
-import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -260,7 +259,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		return frame.getExtendedState() == Frame.MAXIMIZED_BOTH;
 	}
 
-	public synchronized void loadAndAddScreens(Collection<File> newScreens) {
+	private synchronized void loadAndAddScreens(File[] newScreens) {
 		for (File screen : newScreens) {
 			addAndSetNewScreen();
 
@@ -279,7 +278,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	
 	public void maximizeAndLoad(File[] files) {
 		if (files != null)
-			new ScreensLoader(this, files).loadScreens();
+			loadAndAddScreens(files);
 		
 		maximize();
 	}
@@ -468,7 +467,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	
 	public synchronized void saveCurrentScreen() {
 		screen_curr.save(BlackboardC.save_name + "[" + screen_pos + "]_"
-				+ new Date().getTime() + BlackboardC.save_extension);
+				+ new Date().getTime() + "." + BlackboardC.save_extension);
 		save_text_time.set((int) Math.ceil(frameRate
 				* BlackboardC.save_text_time));
 		save_text.set(true);
@@ -483,7 +482,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		File[] load_files = Main.getAndNullLoadFiles_blckbrdMode();
 		
 		if (load_files != null)
-			new ScreensLoader(this, load_files).loadScreens();
+			loadAndAddScreens(load_files);
 		
 		if (screens.size() == 0)
 			addAndSetNewScreen();
