@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 import protoboard.Main;
@@ -264,8 +265,18 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 			addAndSetNewScreen();
 
 			if (screen != null) {
+				PImage scr = loadImage(screen.getPath());
+				float width_dif = (float) scr.width / screen_curr.width,
+						height_dif = (float) scr.height / screen_curr.height;
+				
+				// Resize the image conveniently
+				if ((width_dif > 1) && (scr.width >= scr.height))
+					scr.resize((int) (scr.width/width_dif), (int) (scr.height/width_dif));
+				else if (height_dif > 1)
+					scr.resize((int) (scr.width/height_dif), (int) (scr.height/height_dif));
+				
 				screen_curr.beginDraw();
-				screen_curr.image(loadImage(screen.getPath()), 0, 0);
+				screen_curr.image(scr, 0, 0, scr.width, scr.height);
 				screen_curr.endDraw();
 			}
 		}
