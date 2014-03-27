@@ -163,6 +163,7 @@ public final class Constants {
 		public static final String about_opt = "About";
 		public static final String file_menu = "File";
 		public static final String load_images_opt = "Open saved images...";
+		public static final String save_images_opt = "Save all current images...";
 		public static final String exit_opt = "Exit";
 		
 		public static final String load_select_label = "Selected to load: ";

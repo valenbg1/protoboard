@@ -9,8 +9,9 @@
 * Improve the principal Swing interface to change between blackboard and input mode.
 	+ Option to set the background color.
 	+ Options to set keyboard keys for input mode.
-	+ Option to save all current blackboard screens to folder.
 	+ Option to set the save folder for blackboard mode.
+		- ? Made it persistent.
+		- Option to open current save folder.
 	+ Option to set initial size of blackboard window (when the Constants class is refactored).
 
 * Try different options of Leap Motion internal configuration.

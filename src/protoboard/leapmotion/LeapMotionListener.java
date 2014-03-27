@@ -116,6 +116,7 @@ public class LeapMotionListener extends Listener {
 				wait_between_changing_ci = wait_between_changing_circle_id,
 				wait_f = wait_frames;
 		
+		// Waiting times
 		if (wait_swipe_f > 0) {
 			--wait_swipe_f;
 			wait_swipe_frames = wait_swipe_f;

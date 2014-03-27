@@ -46,6 +46,7 @@ public class MainIface extends JFrame {
 	private JPanel panel;
 	private JLabel lblNewLabel;
 	private JMenuItem mntmExit;
+	private JMenuItem mntmSaveCurrentImages;
 	
 	public MainIface() {
 		setTitle(MainIfaceC.title);
@@ -69,6 +70,10 @@ public class MainIface extends JFrame {
 		mntmLoadSavedImages.addActionListener(mntmLoadSavedImages_action());
 		
 		mnFile.add(mntmLoadSavedImages);
+		
+		mntmSaveCurrentImages = new JMenuItem(MainIfaceC.save_images_opt);
+		mntmSaveCurrentImages.addActionListener(mntmSaveCurrentImages_action());
+		mnFile.add(mntmSaveCurrentImages);
 		mnFile.addSeparator();
 		
 		mntmExit = new JMenuItem(MainIfaceC.exit_opt);
@@ -163,6 +168,20 @@ public class MainIface extends JFrame {
 					setSelectedToLoadLabelText(MainIfaceC.load_select_label
 							+ file_chooser.getSelectedFile().getParent());
 				}
+			}
+		};	
+	}
+	
+	private ActionListener mntmSaveCurrentImages_action() {
+		return new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				file_chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				file_chooser.setMultiSelectionEnabled(false);
+				file_chooser.removeChoosableFileFilter(file_chooser.getFileFilter());
+
+				if (file_chooser.showSaveDialog(mntmLoadSavedImages) == JFileChooser.APPROVE_OPTION)
+					Main.saveImagesBlackboard(file_chooser.getSelectedFile());
 			}
 		};	
 	}

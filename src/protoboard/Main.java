@@ -88,6 +88,11 @@ public final class Main {
 		return running_input_mode.get();
 	}
 	
+	public static void saveImagesBlackboard(File path) {
+		if (blackboard_mode != null)
+			blackboard_mode.saveAllScreens(path);
+	}
+	
 	public static synchronized void setBlackBoardMode(Blackboard blck) {
 		if (blackboard_mode == null)
 			blackboard_mode = blck;

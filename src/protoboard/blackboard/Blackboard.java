@@ -45,6 +45,8 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	private float draw_line_weight;
 	private ArrowsCircleSquare draw_line_square;
 	
+	private String save_path;
+	
 	public Blackboard() {
 		super();
 		
@@ -70,6 +72,8 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		
 		this.draw_line_weight = BlackboardC.draw_line_weight;
 		updateDrawLineSquare();
+		
+		this.save_path = "";
 	}
 	
 	private synchronized void _changeScreenBack() {
@@ -256,6 +260,10 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		Main.stopBlackboardMode();
 	}
 	
+	public String getSavePath() {
+		return save_path;
+	}
+
 	public boolean isMaximized() {
 		return frame.getExtendedState() == Frame.MAXIMIZED_BOTH;
 	}
@@ -285,24 +293,24 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 			}
 		}
 	}
-
+	
 	public void maximize() {
 		registerAsObserver();
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);  // Maximize window
 	}
-	
+
 	public void maximizeAndLoad(File[] files) {
 		if (files != null)
 			loadAndAddScreens(files);
 		
 		maximize();
 	}
-
+	
 	public void minimize() {
 		unregisterAsObserver();
 		frame.setExtendedState(Frame.ICONIFIED);  // Minimize window
 	}
-	
+		
 	@Override
 	public void mouseClicked() {
 		if (multiScreenMode.get())
@@ -338,7 +346,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 			}
 		}
 	}
-		
+	
 	private void mouseClickedMultiscreenMode() {
 		int pos;
 		
@@ -373,7 +381,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	public void onKeyTap() {
 		onScreenTap();
 	}
-	
+
 	@Override
 	public void onLeftCircle() {
 		if (multiScreenMode.get())
@@ -389,7 +397,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		else
 			changeScreenForth();
 	}
-
+	
 	@Override
 	public void onRighCircle() {
 		if (multiScreenMode.get())
@@ -397,7 +405,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		else
 			changeDrawColorForth();
 	}
-	
+
 	@Override
 	public void onRightSwipe() {
 		if (multiScreenMode.get())
@@ -468,7 +476,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		} else
 			cursor(ARROW);
 	}
-
+	
 	public synchronized void quitMultiScreenMode() {
 		screen_curr = screens_iter.current();
 		screen_pos = screens_iter.currentPos();
@@ -480,9 +488,33 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		Main.lm_listener.register(this);
 	}
 	
+	public void saveAllScreens(File path) {
+		if (path.isDirectory()) {
+			String p = path.getPath() + File.separator;
+			
+			for (int i = 0; i < screens.size(); ++i)
+				saveScreen(screens.get(i), i, p);
+				
+			setSaveText();
+		}
+	}
+	
 	public synchronized void saveCurrentScreen() {
-		screen_curr.save(BlackboardC.save_name + "[" + screen_pos + "]_"
+		saveScreen(screen_curr, screen_pos, save_path);
+		setSaveText();
+	}
+	
+	private void saveScreen(PGraphics screen, int pos, String path) {
+		screen.save(path + BlackboardC.save_name + "[" + pos + "]_"
 				+ new Date().getTime() + "." + BlackboardC.save_extension);
+	}
+	
+	public void setSavePath(File path) {
+		if (path.isDirectory())
+			save_path = path.getPath() + File.separator;
+	}
+	
+	private void setSaveText() {
 		save_text_time.set((int) Math.ceil(frameRate
 				* BlackboardC.save_text_time));
 		save_text.set(true);
