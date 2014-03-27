@@ -76,7 +76,7 @@ public class Input implements LeapMotionObserver, Runnable {
 	}
 
 	/**
-	 * Run the input mode. Register the Input object with the LeapMotionListener.
+	 * Run the input mode. Registers the Input object with the LeapMotionListener.
 	 * 
 	 */
 	@Override

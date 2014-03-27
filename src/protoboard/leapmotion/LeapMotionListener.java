@@ -137,9 +137,7 @@ public class LeapMotionListener extends Listener {
 		GestureList gestures = frame.gestures();
 		boolean detected_gesture = false;
 		
-		for (int i = 0; i < gestures.count(); ++i) {
-			Gesture gesture = gestures.get(i);
-
+		for (Gesture gesture : gestures) {
 			switch (gesture.type()) {
 				case TYPE_CIRCLE:
 					CircleGesture circle = new CircleGesture(gesture);

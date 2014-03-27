@@ -5,7 +5,7 @@ import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 
 /**
- * Represents a 2D abstract square (for selection) with 4 selection arrows:
+ * Represents a 2D abstract square (for selection) with 4 optional selection arrows:
  * left, right, up, down.
  * 
  */

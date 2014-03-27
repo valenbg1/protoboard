@@ -4,7 +4,7 @@ import processing.core.PApplet;
 import protoboard.Constants.BlackboardC;
 
 /**
- * Represents a 2D square with 4 selection arrow and a circle inside. It's an
+ * Represents a 2D square with 4 optional selection arrow and a circle inside. It's an
  * immutable object.
  * 
  */

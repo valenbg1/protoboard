@@ -180,8 +180,11 @@ public class MainIface extends JFrame {
 				file_chooser.setMultiSelectionEnabled(false);
 				file_chooser.removeChoosableFileFilter(file_chooser.getFileFilter());
 
-				if (file_chooser.showSaveDialog(mntmLoadSavedImages) == JFileChooser.APPROVE_OPTION)
+				if (file_chooser.showSaveDialog(mntmLoadSavedImages) == JFileChooser.APPROVE_OPTION) {
 					Main.saveImagesBlackboard(file_chooser.getSelectedFile());
+					setSelectedToLoadLabelText(MainIfaceC.save_to_label
+							+ file_chooser.getSelectedFile().getPath());
+				}
 			}
 		};	
 	}

@@ -20,7 +20,7 @@ import com.leapmotion.leap.Controller;
  * 
  */
 public final class Main {
-	public static final Controller lm_controller = new Controller();
+	private static Controller lm_controller = new Controller();
 	public static final LeapMotionListener lm_listener = new LeapMotionListener();
 	
 	private static MainIface main_iface;

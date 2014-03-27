@@ -167,6 +167,7 @@ public final class Constants {
 		public static final String exit_opt = "Exit";
 		
 		public static final String load_select_label = "Selected to load: ";
+		public static final String save_to_label = "Current images saved to: ";
 		
 		/**
 		 * Externalized constants within de About dialog interface
