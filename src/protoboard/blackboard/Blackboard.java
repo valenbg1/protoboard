@@ -115,14 +115,14 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		updateDrawLineSquare();
 	}
 	
-	private synchronized void changeDrawLineWeightBack() {
+	public synchronized void changeDrawLineWeightBack() {
 		draw_line_weight = Math.max(draw_line_weight
 				- BlackboardC.draw_line_weight_sum,
 				BlackboardC.draw_line_weight_limits[0]);
 		updateDrawLineSquare();
 	}
 
-	private synchronized void changeDrawLineWeightForth() {
+	public synchronized void changeDrawLineWeightForth() {
 		draw_line_weight = Math.min(draw_line_weight
 				+ BlackboardC.draw_line_weight_sum,
 				BlackboardC.draw_line_weight_limits[1]);
@@ -260,7 +260,11 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		return frame.getExtendedState() == Frame.MAXIMIZED_BOTH;
 	}
 
-	private synchronized void loadAndAddScreens(File[] newScreens) {
+	/**
+	 * @param newScreens an array of PNG's
+	 * 
+	 */
+	public synchronized void loadAndAddScreens(File[] newScreens) {
 		for (File screen : newScreens) {
 			addAndSetNewScreen();
 
@@ -472,7 +476,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		screens_iter = null;
 	}
 	
-	private void registerAsObserver() {
+	public void registerAsObserver() {
 		Main.lm_listener.register(this);
 	}
 	
@@ -504,7 +508,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		return true;
 	}
 	
-	private void unregisterAsObserver() {
+	public void unregisterAsObserver() {
 		Main.lm_listener.unregister(this);
 	}
 	
