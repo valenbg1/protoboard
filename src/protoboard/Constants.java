@@ -13,9 +13,9 @@ import processing.core.PVector;
  */
 public final class Constants {
 	/**/
-	public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width/3;
-	public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height -100;
-	/**/
+	public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+	public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+	/**/	
 	// Testing
 	/*/
 	public static final int displayWidth = 1024;
@@ -34,7 +34,7 @@ public final class Constants {
 			e.printStackTrace();
 
 		System.err.println("-------------------------------------------\n");
-	}	
+	}
 	
 	/**
 	 * Externalized constants within blackboard mode scope.
@@ -61,6 +61,7 @@ public final class Constants {
 		public static final int square_ext_color[] = info_blue_rgb;
 		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
 		public static final PVector common_square_diag = new PVector(dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000048828125f);
+		public static final float common_square_rad = 6;
 		public static final PVector color_square_pos = new PVector(displayWidth*0.0078125f, displayHeight*0.925f);
 		public static final PVector number_square_pos = new PVector(displayWidth - color_square_pos.x - common_square_diag.x, color_square_pos.y);
 		public static final int number_square_fill_color[] = background_rgb;
@@ -69,7 +70,7 @@ public final class Constants {
 		public static final PVector draw_line_weight_square_pos = new PVector(color_square_pos.x, color_square_pos.y*0.98f - common_square_diag.y);
 		
 		public static final int number_color[] = background_rgb_1;
-		public static final PVector number_pos = new PVector(number_square_pos.x + common_square_diag.x*0.18f, number_square_pos.x + common_square_diag.x*0.88f );
+		public static final PVector number_pos = new PVector(number_square_pos.x + common_square_diag.x*0.18f, number_square_pos.y + common_square_diag.y*0.88f );
 		public static final float number_gt_10_xpos = number_square_pos.x - common_square_diag.x + common_square_diag.x*0.40f;
 		
 		public static final int save_text_color[] = info_blue_rgb;
@@ -155,8 +156,8 @@ public final class Constants {
 	 */
 	public static final class MainIfaceC {
 		public static final String title = "Protoboard";
-		public static final String input_text_button = "Input mode";
 		
+		public static final String input_text_button = "Input mode";
 		public static final String blackboard_text_button = "Blackboard mode";
 		public static final String config_menu = "Configuration";
 		public static final String help_menu = "Help";
@@ -166,11 +167,12 @@ public final class Constants {
 		public static final String file_menu = "File";
 		public static final String load_images_opt = "Open saved images...";
 		public static final String save_images_opt = "Save all current images...";
+		
 		public static final String exit_opt = "Exit";
-		
 		public static final String load_select_label = "Selected to load: ";
-		public static final String save_to_label = "Current images saved to: ";
 		
+		public static final String save_to_label = "Current images saved to: ";	
+	
 		/**
 		 * Externalized constants within de About dialog interface
 		 *

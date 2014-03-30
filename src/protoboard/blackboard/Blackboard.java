@@ -237,10 +237,11 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			text(screen_p, numb_pos);
 		} else {
 			if (pos.x == BlackboardC.number_square_pos.x) {
-				number_square = new ArrowsSquare(this, diag, 
+				number_square = new ArrowsSquare(this,
+						new PVector(diag.x*2f, diag.y),
 						new PVector(pos.x - diag.x, pos.y),
 						color(BlackboardC.square_ext_color),
-						color(BlackboardC.number_square_fill_color), true, true);
+						color(BlackboardC.number_square_fill_color), true, true, BlackboardC.common_square_rad);
 			}
 			
 			number_square.draw();
@@ -525,8 +526,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		registerAsObserver();
 		Main.setBlackBoardMode(this);
 		
-		System.out.println("Detected Screen size: "+Constants.displayWidth+"x"+Constants.displayHeight);
-		System.out.println("Detected Window size: "+this.displayWidth+"x"+this.displayHeight);
+		System.out.println("Displaying Screen size: " + Constants.displayWidth
+				+ "x" + Constants.displayHeight);
+		System.out.println("Detected Window size: " + this.displayWidth + "x"
+				+ this.displayHeight);
 		
 		File[] load_files = Main.getAndNullLoadFiles_blckbrdMode();
 		

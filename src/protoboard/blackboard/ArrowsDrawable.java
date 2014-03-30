@@ -13,7 +13,7 @@ abstract class ArrowsDrawable {
 	public final MyPApplet context;
 	public final int sq_tria_color;
 	public final PVector pos, diag;
-	public final float[][] ltr_pos, rtr_pos, utr_pos, dtr_pos;
+	public final PVector[] ltr_pos, rtr_pos, utr_pos, dtr_pos;
 	public final boolean show_lr_triangles, show_ud_triangles;
 	
 	protected ArrowsDrawable(MyPApplet context, PVector diag, PVector pos,
@@ -34,16 +34,16 @@ abstract class ArrowsDrawable {
 		if (this.show_lr_triangles) {
 			float square_triangle_length = Constants.BlackboardC.square_triangle_length;
 	
-			ltr_pos = new float[][] {
-				{ pos.x, pos.y + diag.y/2.0f - square_triangle_length/2.0f },
-				{ pos.x, pos.y + diag.y/2.0f + square_triangle_length/2.0f },
-				{ pos.x - square_triangle_length*((float) Math.sqrt(3))/2.0f, pos.y + diag.y/2.0f }
+			ltr_pos = new PVector[] {
+				new PVector(pos.x, pos.y + diag.y/2.0f - square_triangle_length/2.0f),
+				new PVector(pos.x, pos.y + diag.y/2.0f + square_triangle_length/2.0f),
+				new PVector(pos.x - square_triangle_length*((float) Math.sqrt(3))/2.0f, pos.y + diag.y/2.0f)
 			};
 			
-			rtr_pos = new float[][] {
-				{ pos.x + diag.x, ltr_pos[0][1] },
-				{ pos.x + diag.x, ltr_pos[1][1] },
-				{ pos.x + diag.x + square_triangle_length*((float) Math.sqrt(3))/2.0f, ltr_pos[2][1] }
+			rtr_pos = new PVector[] {
+				new PVector(pos.x + diag.x, ltr_pos[0].y),
+				new PVector(pos.x + diag.x, ltr_pos[1].y),
+				new PVector(pos.x + diag.x + square_triangle_length*((float) Math.sqrt(3))/2.0f, ltr_pos[2].y)
 			};
 		} else {
 			this.ltr_pos = null;
@@ -53,16 +53,16 @@ abstract class ArrowsDrawable {
 		if (this.show_ud_triangles) {
 			float square_triangle_length = Constants.BlackboardC.square_triangle_length;
 	
-			utr_pos = new float[][] {
-				{ pos.x + diag.x/2.0f - square_triangle_length/2.0f, pos.y },
-				{ pos.x + diag.x/2.0f + square_triangle_length/2.0f, pos.y },
-				{ pos.x + diag.x/2.0f, pos.y - square_triangle_length*((float) Math.sqrt(3))/2.0f }
+			utr_pos = new PVector[] {
+				new PVector(pos.x + diag.x/2.0f - square_triangle_length/2.0f, pos.y),
+				new PVector(pos.x + diag.x/2.0f + square_triangle_length/2.0f, pos.y),
+				new PVector(pos.x + diag.x/2.0f, pos.y - square_triangle_length*((float) Math.sqrt(3))/2.0f)
 			};
 			
-			dtr_pos = new float[][] {
-				{ pos.x + diag.x/2.0f - square_triangle_length/2.0f, pos.y + diag.y },
-				{ pos.x + diag.x/2.0f + square_triangle_length/2.0f, pos.y + diag.y },
-				{ pos.x + diag.x/2.0f, pos.y + diag.y + square_triangle_length*((float) Math.sqrt(3))/2.0f }
+			dtr_pos = new PVector[] {
+				new PVector(pos.x + diag.x/2.0f - square_triangle_length/2.0f, pos.y + diag.y),
+				new PVector(pos.x + diag.x/2.0f + square_triangle_length/2.0f, pos.y + diag.y),
+				new PVector(pos.x + diag.x/2.0f, pos.y + diag.y + square_triangle_length*((float) Math.sqrt(3))/2.0f)
 			};
 		} else {
 			this.utr_pos = null;
@@ -76,21 +76,17 @@ abstract class ArrowsDrawable {
 		if (show_lr_triangles) {
 			// Left triangle
 			context.fill(sq_tria_color);
-			context.triangle(ltr_pos[0][0], ltr_pos[0][1], ltr_pos[1][0],
-					ltr_pos[1][1], ltr_pos[2][0], ltr_pos[2][1]);
+			context.triangle(ltr_pos[0], ltr_pos[1], ltr_pos[2]);
 			// Right triangle
-			context.triangle(rtr_pos[0][0], rtr_pos[0][1], rtr_pos[1][0],
-					rtr_pos[1][1], rtr_pos[2][0], rtr_pos[2][1]);
+			context.triangle(rtr_pos[0], rtr_pos[1], rtr_pos[2]);
 		}
 
 		if (show_ud_triangles) {
 			// Up triangle
 			context.fill(sq_tria_color);
-			context.triangle(utr_pos[0][0], utr_pos[0][1], utr_pos[1][0],
-					utr_pos[1][1], utr_pos[2][0], utr_pos[2][1]);
+			context.triangle(utr_pos[0], utr_pos[1], utr_pos[2]);
 			// Down triangle
-			context.triangle(dtr_pos[0][0], dtr_pos[0][1], dtr_pos[1][0],
-					dtr_pos[1][1], dtr_pos[2][0], dtr_pos[2][1]);
+			context.triangle(dtr_pos[0], dtr_pos[1], dtr_pos[2]);
 		}
 	}
 

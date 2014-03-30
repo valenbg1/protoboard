@@ -3,7 +3,6 @@ package protoboard.blackboard;
 import java.util.ArrayList;
 import java.util.List;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import protoboard.Constants;
@@ -98,6 +97,47 @@ class ScreensIterator {
 		draw(screen_curr, sq_curr);
 	}
 	
+	public int isOnAny(int mouseX, int mouseY) {
+		int ret = Integer.MIN_VALUE;
+		
+		if (isOnCurr(mouseX, mouseY))
+			return 0;
+		
+		for (int i = 0; i < n_around; ++i) {
+			if (isOnPrevs(mouseX, mouseY, i))
+				return -i-1;
+			else if (isOnNexts(mouseX, mouseY, i))
+				return i+1;
+		}
+		
+		return ret;
+	}
+	
+	private boolean isOnCurr(int mouseX, int mouseY) {
+		return isOnSquare(mouseX, mouseY, screen_curr, sq_curr);
+	}
+	
+	private boolean isOnNexts(int mouseX, int mouseY, int i) {
+		return isOnSquare(mouseX, mouseY, screen_nexts[i], sq_nexts[i]);
+	}
+
+	private boolean isOnPrevs(int mouseX, int mouseY, int i) {
+		return isOnSquare(mouseX, mouseY, screen_prevs[i], sq_prevs[i]);
+	}
+	
+	private boolean isOnSquare(int mouseX, int mouseY, PGraphics graph, ArrowsSquare sq) {
+		return (graph != null) && (sq != null) && sq.isOnAnySide(mouseX, mouseY);
+	}
+	
+	public synchronized void regress() {
+		if (screen_pos > 0)
+			--screen_pos;
+		
+		screen_curr = screens.get(screen_pos);
+		setPrevs();
+		setNexts();
+	}
+	
 	private synchronized void setNexts() {
 		int sc_pos_aux = screen_pos;
 
@@ -118,46 +158,5 @@ class ScreensIterator {
 			else
 				screen_prevs[i] = null;
 		}
-	}
-	
-	public int isOnAny(int mouseX, int mouseY) {
-		int ret = Integer.MIN_VALUE;
-		
-		if (isOnCurr(mouseX, mouseY))
-			return 0;
-		
-		for (int i = 0; i < n_around; ++i) {
-			if (isOnPrevs(mouseX, mouseY, i))
-				return -i-1;
-			else if (isOnNexts(mouseX, mouseY, i))
-				return i+1;
-		}
-		
-		return ret;
-	}
-
-	private boolean isOnCurr(int mouseX, int mouseY) {
-		return isOnSquare(mouseX, mouseY, screen_curr, sq_curr);
-	}
-	
-	private boolean isOnNexts(int mouseX, int mouseY, int i) {
-		return isOnSquare(mouseX, mouseY, screen_nexts[i], sq_nexts[i]);
-	}
-	
-	private boolean isOnPrevs(int mouseX, int mouseY, int i) {
-		return isOnSquare(mouseX, mouseY, screen_prevs[i], sq_prevs[i]);
-	}
-	
-	private boolean isOnSquare(int mouseX, int mouseY, PGraphics graph, ArrowsSquare sq) {
-		return (graph != null) && (sq != null) && sq.isOnAnySide(mouseX, mouseY);
-	}
-	
-	public synchronized void regress() {
-		if (screen_pos > 0)
-			--screen_pos;
-		
-		screen_curr = screens.get(screen_pos);
-		setPrevs();
-		setNexts();
 	}
 }
