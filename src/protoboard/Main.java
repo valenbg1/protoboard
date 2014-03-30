@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.UIManager;
 
-import processing.core.PApplet;
 import protoboard.blackboard.Blackboard;
+import protoboard.blackboard.MyPApplet;
 import protoboard.input.Input;
 import protoboard.leapmotion.LeapMotionListener;
 import protoboard.swing.MainIface;
@@ -59,7 +59,7 @@ public final class Main {
 		stopInputMode();
 	
 		if (blck_created.compareAndSet(false, true))
-			PApplet.main(Blackboard.class.getName());
+			MyPApplet.main(Blackboard.class.getName());
 		else if (blackboard_mode != null) {
 			blackboard_mode.maximizeAndLoad(getAndNullLoadFiles_blckbrdMode());
 			main_iface.clean_LoadSelectLabel();

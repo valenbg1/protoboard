@@ -1,6 +1,6 @@
 package protoboard.blackboard;
 
-import processing.core.PApplet;
+import processing.core.PVector;
 import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 
@@ -10,24 +10,24 @@ import protoboard.Constants.BlackboardC;
  * 
  */
 abstract class ArrowsDrawable {
-	public final PApplet context;
-	public final int[] sq_tria_color;
-	public final float[] sq_pos, sq_args;
+	public final MyPApplet context;
+	public final int sq_tria_color;
+	public final PVector pos, diag;
 	public final float[][] ltr_pos, rtr_pos, utr_pos, dtr_pos;
 	public final boolean show_lr_triangles, show_ud_triangles;
 	
-	protected ArrowsDrawable(PApplet context, float[] sq_args, float[] sq_pos,
-			int[] sq_tria_color) {
-		this(context, sq_args, sq_pos, sq_tria_color, true, false);
+	protected ArrowsDrawable(MyPApplet context, PVector diag, PVector pos,
+			int sq_tria_color) {
+		this(context, diag, pos, sq_tria_color, true, false);
 	}
 
-	protected ArrowsDrawable(PApplet context, float[] sq_args,
-			float[] sq_pos, int[] sq_tria_color, boolean show_lr_triangles,
+	protected ArrowsDrawable(MyPApplet context, PVector diag,
+			PVector pos, int sq_tria_color2, boolean show_lr_triangles,
 			boolean show_ud_triangles) {
 		this.context = context;
-		this.sq_args = sq_args;
-		this.sq_pos = sq_pos;
-		this.sq_tria_color = sq_tria_color;
+		this.diag = diag;
+		this.pos = pos;
+		this.sq_tria_color = sq_tria_color2;
 		this.show_lr_triangles = show_lr_triangles;
 		this.show_ud_triangles = show_ud_triangles;
 		
@@ -35,15 +35,15 @@ abstract class ArrowsDrawable {
 			float square_triangle_length = Constants.BlackboardC.square_triangle_length;
 	
 			ltr_pos = new float[][] {
-				{ sq_pos[0], sq_pos[1] + sq_args[1]/2.0f - square_triangle_length/2.0f },
-				{ sq_pos[0], sq_pos[1] + sq_args[1]/2.0f + square_triangle_length/2.0f },
-				{ sq_pos[0] - square_triangle_length*((float) Math.sqrt(3))/2.0f, sq_pos[1] + sq_args[1]/2.0f }
+				{ pos.x, pos.y + diag.y/2.0f - square_triangle_length/2.0f },
+				{ pos.x, pos.y + diag.y/2.0f + square_triangle_length/2.0f },
+				{ pos.x - square_triangle_length*((float) Math.sqrt(3))/2.0f, pos.y + diag.y/2.0f }
 			};
 			
 			rtr_pos = new float[][] {
-				{ sq_pos[0] + sq_args[0], ltr_pos[0][1] },
-				{ sq_pos[0] + sq_args[0], ltr_pos[1][1] },
-				{ sq_pos[0] + sq_args[0] + square_triangle_length*((float) Math.sqrt(3))/2.0f, ltr_pos[2][1] }
+				{ pos.x + diag.x, ltr_pos[0][1] },
+				{ pos.x + diag.x, ltr_pos[1][1] },
+				{ pos.x + diag.x + square_triangle_length*((float) Math.sqrt(3))/2.0f, ltr_pos[2][1] }
 			};
 		} else {
 			this.ltr_pos = null;
@@ -54,15 +54,15 @@ abstract class ArrowsDrawable {
 			float square_triangle_length = Constants.BlackboardC.square_triangle_length;
 	
 			utr_pos = new float[][] {
-				{ sq_pos[0] + sq_args[0]/2.0f - square_triangle_length/2.0f, sq_pos[1] },
-				{ sq_pos[0] + sq_args[0]/2.0f + square_triangle_length/2.0f, sq_pos[1] },
-				{ sq_pos[0] + sq_args[0]/2.0f, sq_pos[1] - square_triangle_length*((float) Math.sqrt(3))/2.0f }
+				{ pos.x + diag.x/2.0f - square_triangle_length/2.0f, pos.y },
+				{ pos.x + diag.x/2.0f + square_triangle_length/2.0f, pos.y },
+				{ pos.x + diag.x/2.0f, pos.y - square_triangle_length*((float) Math.sqrt(3))/2.0f }
 			};
 			
 			dtr_pos = new float[][] {
-				{ sq_pos[0] + sq_args[0]/2.0f - square_triangle_length/2.0f, sq_pos[1] + sq_args[1] },
-				{ sq_pos[0] + sq_args[0]/2.0f + square_triangle_length/2.0f, sq_pos[1] + sq_args[1] },
-				{ sq_pos[0] + sq_args[0]/2.0f, sq_pos[1] + sq_args[1] + square_triangle_length*((float) Math.sqrt(3))/2.0f }
+				{ pos.x + diag.x/2.0f - square_triangle_length/2.0f, pos.y + diag.y },
+				{ pos.x + diag.x/2.0f + square_triangle_length/2.0f, pos.y + diag.y },
+				{ pos.x + diag.x/2.0f, pos.y + diag.y + square_triangle_length*((float) Math.sqrt(3))/2.0f }
 			};
 		} else {
 			this.utr_pos = null;
@@ -75,7 +75,7 @@ abstract class ArrowsDrawable {
 	public void drawTriangles() {
 		if (show_lr_triangles) {
 			// Left triangle
-			context.fill(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);
+			context.fill(sq_tria_color);
 			context.triangle(ltr_pos[0][0], ltr_pos[0][1], ltr_pos[1][0],
 					ltr_pos[1][1], ltr_pos[2][0], ltr_pos[2][1]);
 			// Right triangle
@@ -85,7 +85,7 @@ abstract class ArrowsDrawable {
 
 		if (show_ud_triangles) {
 			// Up triangle
-			context.fill(sq_tria_color[0], sq_tria_color[1], sq_tria_color[2]);
+			context.fill(sq_tria_color);
 			context.triangle(utr_pos[0][0], utr_pos[0][1], utr_pos[1][0],
 					utr_pos[1][1], utr_pos[2][0], utr_pos[2][1]);
 			// Down triangle
@@ -105,40 +105,40 @@ abstract class ArrowsDrawable {
 	public boolean isOnDown(int mouseX, int mouseY) {
 		float extension = BlackboardC.square_triangle_det;
 		
-		return (mouseX <= (sq_pos[0] + sq_args[0]))
-				&& (mouseY <= (sq_pos[1] + sq_args[1] + extension))
+		return (mouseX <= (pos.x + diag.x))
+				&& (mouseY <= (pos.y + diag.y + extension))
 
-				&& (mouseX >= sq_pos[0])
-				&& (mouseY >= (sq_pos[1] + sq_args[1]));
+				&& (mouseX >= pos.x)
+				&& (mouseY >= (pos.y + diag.y));
 	}
 
 	public boolean isOnLeft(int mouseX, int mouseY) {
 		float extension = show_lr_triangles ? BlackboardC.square_triangle_det : 0;
 		
-		return (mouseX <= (sq_pos[0] + sq_args[0] / 2.0f))
-				&& (mouseY >= sq_pos[1])
+		return (mouseX <= (pos.x + diag.x / 2.0f))
+				&& (mouseY >= pos.y)
 
-				&& (mouseX >= (sq_pos[0] - extension))
-				&& (mouseY <= (sq_pos[1] + sq_args[1]));
+				&& (mouseX >= (pos.x - extension))
+				&& (mouseY <= (pos.y + diag.y));
 	}
 	
 	public boolean isOnRight(int mouseX, int mouseY) {
 		float extension = show_lr_triangles ? BlackboardC.square_triangle_det : 0;
 		
-		return (mouseX >= (sq_pos[0] + sq_args[0] / 2.0f))
-				&& (mouseY >= sq_pos[1])
+		return (mouseX >= (pos.x + diag.x / 2.0f))
+				&& (mouseY >= pos.y)
 
-				&& (mouseX <= (sq_pos[0] + sq_args[0] + extension))
-				&& (mouseY <= (sq_pos[1] + sq_args[1]));
+				&& (mouseX <= (pos.x + diag.x + extension))
+				&& (mouseY <= (pos.y + diag.y));
 	}
 
 	public boolean isOnUp(int mouseX, int mouseY) {
 		float extension = BlackboardC.square_triangle_det;
 		
-		return (mouseX <= (sq_pos[0] + sq_args[0]))
-				&& (mouseY >= (sq_pos[1] - extension))
+		return (mouseX <= (pos.x + diag.x))
+				&& (mouseY >= (pos.y - extension))
 
-				&& (mouseX >= sq_pos[0])
-				&& (mouseY <= sq_pos[1]);
+				&& (mouseX >= pos.x)
+				&& (mouseY <= pos.y);
 	}
 }

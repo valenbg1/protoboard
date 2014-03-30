@@ -5,6 +5,7 @@ import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
 import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 
@@ -21,7 +22,7 @@ class ScreensIterator {
 	private final ArrowsSquare[] sq_prevs, sq_nexts;
 	private final int n_around;
 	private int screen_pos;
-	private final PApplet context;
+	private final MyPApplet context;
 	
 	public ScreensIterator(Blackboard context, List<PGraphics> screens,
 			int screen_pos, int n_around) {
@@ -38,28 +39,22 @@ class ScreensIterator {
 		setPrevs();
 		setNexts();
 		
-		float width_mini = Constants.displayWidth*BlackboardC.mini_screen_prop,
-				height_mini = Constants.displayHeight*BlackboardC.mini_screen_prop,
-				width_little = Constants.displayWidth*BlackboardC.little_screen_prop,
-				height_little = Constants.displayHeight*BlackboardC.little_screen_prop,
-				x = BlackboardC.little_screen_pos[0] + width_little,
-				y = BlackboardC.little_screen_pos[1] + height_little/2.0f - height_mini/2.0f;
+		PVector mini = new PVector(Constants.displayWidth*BlackboardC.mini_screen_prop, Constants.displayHeight*BlackboardC.mini_screen_prop);
+		PVector little = new PVector(Constants.displayWidth*BlackboardC.little_screen_prop, Constants.displayHeight*BlackboardC.little_screen_prop);
+		float x = BlackboardC.little_screen_pos.x + little.x;
+		float y = BlackboardC.little_screen_pos.y + little.y/2.0f - mini.y/2.0f;
 		
 		for (int i = 0; i < n_around; ++i)
-			this.sq_nexts[i] = ArrowsSquare.screenSquare(context, width_mini,
-					height_mini, x + i * width_mini, y);
+			this.sq_nexts[i] = ArrowsSquare.screenSquare(context, mini, new PVector(x + i * mini.x, y));
 
-		x = BlackboardC.little_screen_pos[0] - width_mini;
-		y = BlackboardC.little_screen_pos[1] + height_little / 2.0f
-				- height_mini / 2.0f;
+		x = BlackboardC.little_screen_pos.x - mini.x;
+		y = BlackboardC.little_screen_pos.y + little.y / 2.0f
+				- mini.y / 2.0f;
 
 		for (int i = 0; i < n_around; ++i)
-			this.sq_prevs[i] = ArrowsSquare.screenSquare(context, width_mini,
-					height_mini, x - i * width_mini, y);
+			this.sq_prevs[i] = ArrowsSquare.screenSquare(context, mini, new PVector(x - i * mini.x, y));
 
-		this.sq_curr = ArrowsSquare.screenSquare(context, width_little,
-				height_little, BlackboardC.little_screen_pos[0],
-				BlackboardC.little_screen_pos[1]);
+		this.sq_curr = ArrowsSquare.screenSquare(context, little, BlackboardC.little_screen_pos);
 	}
 	
 	public synchronized void advance() {
@@ -96,7 +91,7 @@ class ScreensIterator {
 	
 	private void draw(PGraphics graph, ArrowsSquare sq) {
 		sq.draw();
-		context.image(graph, sq.sq_pos[0], sq.sq_pos[1], sq.sq_args[0], sq.sq_args[1]);
+		context.image(graph, sq.pos, sq.diag);
 	}
 	
 	private void drawCurrent() {

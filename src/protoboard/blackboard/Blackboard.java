@@ -9,9 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.core.PVector;
 import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 import protoboard.Main;
@@ -21,7 +21,7 @@ import protoboard.leapmotion.LeapMotionObserver;
  * Implements the blackboard mode of the application.
  *
  */
-public class Blackboard extends PApplet implements LeapMotionObserver {
+public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	private static final long serialVersionUID = -2341687072941440919L;
 	
 	private CopyOnWriteArrayList<PGraphics> screens;
@@ -59,7 +59,7 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 		this.draw_color = new Colors();
 		
-		this.color_square = ArrowsSquare.colorSquare(this, draw_color.getActual());
+		this.color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
 		this.number_square = ArrowsSquare.numberSquare(this);
 
 		this.save_text = new AtomicBoolean(false);
@@ -109,13 +109,13 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 
 	public void changeDrawColorBack() {
 		draw_color = draw_color.prev();
-		color_square = ArrowsSquare.colorSquare(this, draw_color.getActual());
+		color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
 		updateDrawLineSquare();
 	}
 
 	public void changeDrawColorForth() {
 		draw_color = draw_color.next();
-		color_square = ArrowsSquare.colorSquare(this, draw_color.getActual());
+		color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
 		updateDrawLineSquare();
 	}
 	
@@ -222,31 +222,30 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	
 	private void drawScreenNumber() {
 		int[] numb_color = BlackboardC.number_color;
-		float[] sq_pos = number_square.sq_pos, sq_args = number_square.sq_args,
+		PVector pos = number_square.pos, diag = number_square.diag,
 				numb_pos = BlackboardC.number_pos;
 		int screen_p = screen_pos;
 		
-		textSize(sq_args[1]);
+		textSize(diag.y);
 		
 		if (screen_p < 10) {
-			if (sq_pos[0] != BlackboardC.number_square_pos[0])
+			if (pos.x != BlackboardC.number_square_pos.x)
 				number_square = ArrowsSquare.numberSquare(this);
 			
 			number_square.draw();
 			fill(numb_color[0], numb_color[1], numb_color[2]);
-			text(screen_p, numb_pos[0], numb_pos[1]);
+			text(screen_p, numb_pos);
 		} else {
-			if (sq_pos[0] == BlackboardC.number_square_pos[0]) {
-				number_square = new ArrowsSquare(this, new float[] {
-						2 * sq_args[0], sq_args[1], sq_args[2] }, new float[] {
-						sq_pos[0] - sq_args[0], sq_pos[1] },
-						BlackboardC.square_ext_color,
-						BlackboardC.number_square_fill_color, true, true);
+			if (pos.x == BlackboardC.number_square_pos.x) {
+				number_square = new ArrowsSquare(this, diag, 
+						new PVector(pos.x - diag.x, pos.y),
+						color(BlackboardC.square_ext_color),
+						color(BlackboardC.number_square_fill_color), true, true);
 			}
 			
 			number_square.draw();
 			fill(numb_color[0], numb_color[1], numb_color[2]);
-			text(screen_p, BlackboardC.number_gt_10_xpos, numb_pos[1]);
+			text(screen_p, BlackboardC.number_gt_10_xpos, numb_pos.y);
 		}
 	}
 	
@@ -526,6 +525,9 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 		registerAsObserver();
 		Main.setBlackBoardMode(this);
 		
+		System.out.println("Detected Screen size: "+Constants.displayWidth+"x"+Constants.displayHeight);
+		System.out.println("Detected Window size: "+this.displayWidth+"x"+this.displayHeight);
+		
 		File[] load_files = Main.getAndNullLoadFiles_blckbrdMode();
 		
 		if (load_files != null)
@@ -545,10 +547,9 @@ public class Blackboard extends PApplet implements LeapMotionObserver {
 	}
 	
 	private void updateDrawLineSquare() {
-		int[] color = draw_color.isEraseColor() ? BlackboardC.background_rgb_1
+		int[] raw_color = draw_color.isEraseColor() ? BlackboardC.background_rgb_1
 				: draw_color.getActual();
-		draw_line_square = ArrowsCircleSquare.drawLineWeightCircleSquare(this,
-				draw_line_weight, color);
+		draw_line_square = ArrowsCircleSquare.drawLineWeightCircleSquare(this, draw_line_weight, color(raw_color));
 	}
 
 	/**

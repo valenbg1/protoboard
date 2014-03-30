@@ -4,6 +4,8 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import processing.core.PVector;
+
 
 /**
  * Class externalizing all the constants within the application.
@@ -11,8 +13,8 @@ import java.awt.event.KeyEvent;
  */
 public final class Constants {
 	/**/
-	public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-	public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+	public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width/3;
+	public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height -100;
 	/**/
 	// Testing
 	/*/
@@ -58,17 +60,17 @@ public final class Constants {
 		
 		public static final int square_ext_color[] = info_blue_rgb;
 		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
-		public static final float[] common_square_args = { dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000009765625f };
-		public static final float[] color_square_pos = { displayWidth*0.0078125f, displayHeight*0.925f };
-		public static final float[] number_square_pos = { displayWidth - color_square_pos[0] - common_square_args[0], color_square_pos[1] };
+		public static final PVector common_square_diag = new PVector(dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000048828125f);
+		public static final PVector color_square_pos = new PVector(displayWidth*0.0078125f, displayHeight*0.925f);
+		public static final PVector number_square_pos = new PVector(displayWidth - color_square_pos.x - common_square_diag.x, color_square_pos.y);
 		public static final int number_square_fill_color[] = background_rgb;
 		public static final float square_triangle_length = dispWidthxHeight*0.000009765625f;
 		public static final float square_triangle_det = dispWidthxHeight*0.00001953125f;
-		public static final float[] draw_line_weight_square_pos = {color_square_pos[0], color_square_pos[1]*0.98f - common_square_args[1]};
+		public static final PVector draw_line_weight_square_pos = new PVector(color_square_pos.x, color_square_pos.y*0.98f - common_square_diag.y);
 		
 		public static final int number_color[] = background_rgb_1;
-		public static final float[] number_pos = { number_square_pos[0] + common_square_args[0]*0.18f, number_square_pos[1] + common_square_args[1]*0.88f };
-		public static final float number_gt_10_xpos = number_square_pos[0] - common_square_args[0] + common_square_args[0]*0.40f;
+		public static final PVector number_pos = new PVector(number_square_pos.x + common_square_diag.x*0.18f, number_square_pos.x + common_square_diag.x*0.88f );
+		public static final float number_gt_10_xpos = number_square_pos.x - common_square_diag.x + common_square_diag.x*0.40f;
 		
 		public static final int save_text_color[] = info_blue_rgb;
 		public static final float save_text_size = dispWidthxHeight*0.000107421875f;
@@ -78,7 +80,7 @@ public final class Constants {
 		
 		public static final float mini_screen_prop = 0.15f;
 		public static final float little_screen_prop = 0.35f;
-		public static final float[] little_screen_pos = { displayWidth/2.0f - displayWidth*little_screen_prop/2.0f, displayHeight/2.0f - displayHeight*little_screen_prop/2.0f };
+		public static final PVector little_screen_pos = new PVector(displayWidth/2.0f - displayWidth*little_screen_prop/2.0f, displayHeight/2.0f - displayHeight*little_screen_prop/2.0f);
 		
 		public static final int[][] draw_colors = { 
 			background_rgb_1, // White (when background is (0, 0, 0)
