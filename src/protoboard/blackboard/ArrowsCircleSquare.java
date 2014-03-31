@@ -15,7 +15,7 @@ class ArrowsCircleSquare extends ArrowsSquare {
 				BlackboardC.draw_line_weight_square_pos,
 				context.color(BlackboardC.square_ext_color),
 				context.color(BlackboardC.number_square_fill_color), diam,
-				ball_color, BlackboardC.common_square_rad);
+				ball_color);
 	}
 
 	public final PVector center;
@@ -25,9 +25,9 @@ class ArrowsCircleSquare extends ArrowsSquare {
 
 	public ArrowsCircleSquare(MyPApplet context, PVector diag, PVector pos,
 			int sq_tria_color, int draw_color, boolean show_lr_triangles,
-			boolean show_ud_triangles, float diam, int ball_color, float rad) {
+			boolean show_ud_triangles, float diam, int ball_color) {
 		super(context, diag, pos, sq_tria_color, draw_color,
-				show_lr_triangles, show_ud_triangles, rad);
+				show_lr_triangles, show_ud_triangles);
 
 		this.center = new PVector(pos.x + diag.x/2, pos.y + diag.y/2);
 		this.diam = diam <= diag.mag() ? diam : diag.mag();
@@ -35,8 +35,8 @@ class ArrowsCircleSquare extends ArrowsSquare {
 	}
 
 	public ArrowsCircleSquare(MyPApplet context, PVector diag, PVector pos,
-			int sq_tria_color, int draw_color, float diam, int ball_color, float rad) {
-		this(context, diag, pos, sq_tria_color, draw_color, true, false, diam, ball_color, rad);
+			int sq_tria_color, int draw_color, float diam, int ball_color) {
+		this(context, diag, pos, sq_tria_color, draw_color, true, false, diam, ball_color);
 	}
 
 	@Override

@@ -241,7 +241,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 						new PVector(diag.x*2f, diag.y),
 						new PVector(pos.x - diag.x, pos.y),
 						color(BlackboardC.square_ext_color),
-						color(BlackboardC.number_square_fill_color), true, true, BlackboardC.common_square_rad);
+						color(BlackboardC.number_square_fill_color), true, true);
 			}
 			
 			number_square.draw();

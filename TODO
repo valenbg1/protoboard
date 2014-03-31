@@ -2,7 +2,8 @@
 	+ Windows: ok if the Leap Motion lib is correctly set.
 	
 * ! Refactor the Constants class.
-	+ Externalize all pixels sizes, and make it window responsive (no more constant...).
+	+ Externalize all pixels sizes, and make it window responsive (no more constant...). New class
+	  with all resolutions, and create objects any time the window is resized.
 	
 * ! Fine adjustment of right, left, down swipe gestures.
 
@@ -10,9 +11,10 @@
 	+ Option to set the background color.
 	+ Options to set keyboard keys for input mode.
 	+ Option to set the save folder for blackboard mode.
-		- ? Make it persistent.
 		- Option to open current save folder.
+		- ? Make it persistent.
 	+ Option to set initial size of blackboard window (when the Constants class is refactored).
+	+ Option to set the Blackboard mode windowed or full-screen.
 
 * Try different options of Leap Motion internal configuration.
 
