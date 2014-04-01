@@ -1,11 +1,11 @@
 * ! Check and make the possibility of using protoboard without Leap Motion lib installed.
 	+ Windows: ok if the Leap Motion lib is correctly set.
 	
-* ! Refactor the Constants class.
-	+ Externalize all pixels sizes, and make it window responsive (no more constant...). New class
-	  with all resolutions, and create objects any time the window is resized.
-	
-* ! Fine adjustment of right, left, down swipe gestures.
+* ! Fine adjustment of swipe gestures.
+
+* Create objects any time the window is resized. (Fix multiscreen mode when resizing).
+
+* New gesture: two hands moving translates the current screen (+ minor changes to the current screen).
 
 * Improve the principal Swing interface to change between blackboard and input mode.
 	+ Option to set the background color.
@@ -13,7 +13,7 @@
 	+ Option to set the save folder for blackboard mode.
 		- Option to open current save folder.
 		- ? Make it persistent.
-	+ Option to set initial size of blackboard window (when the Constants class is refactored).
+	+ Option to set initial size of blackboard window.
 	+ Option to set the Blackboard mode windowed or full-screen.
 
 * Try different options of Leap Motion internal configuration.

@@ -553,7 +553,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public void setup() {
 		// TODO
 		size(BlackboardC.displayWidth, BlackboardC.displayHeight);
-		this.sizes = new Sizes(0, 0);
+		this.sizes = new Sizes(0, 0, displayWidth, displayHeight);
 		
 		updateDrawablesSizes();
 		registerAsObserver();
@@ -574,7 +574,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	
 	private void updateDrawablesSizes() {
 		if ((width != sizes.width) || (height != sizes.height)) {
-			sizes = new Sizes(width, height);
+			sizes = new Sizes(width, height, displayWidth, displayHeight);
 			color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
 			number_square = ArrowsSquare.numberSquare(this);
 			
