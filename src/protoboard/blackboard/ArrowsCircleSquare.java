@@ -10,9 +10,11 @@ import protoboard.Constants.BlackboardC;
  */
 class ArrowsCircleSquare extends ArrowsSquare {
 	// Static factory methods
-	public static ArrowsCircleSquare drawLineWeightCircleSquare(MyPApplet context, float diam, int ball_color) {
-		return new ArrowsCircleSquare(context, BlackboardC.common_square_diag,
-				BlackboardC.draw_line_weight_square_pos,
+	public static ArrowsCircleSquare drawLineWeightCircleSquare(Blackboard context, float diam, int ball_color) {
+		Sizes sizes = context.getSizes();
+		
+		return new ArrowsCircleSquare(context, sizes.common_square_diag,
+				sizes.draw_line_weight_square_pos,
 				context.color(BlackboardC.square_ext_color),
 				context.color(BlackboardC.number_square_fill_color), diam,
 				ball_color);
@@ -23,7 +25,7 @@ class ArrowsCircleSquare extends ArrowsSquare {
 
 	public final int ball_color;
 
-	public ArrowsCircleSquare(MyPApplet context, PVector diag, PVector pos,
+	public ArrowsCircleSquare(Blackboard context, PVector diag, PVector pos,
 			int sq_tria_color, int draw_color, boolean show_lr_triangles,
 			boolean show_ud_triangles, float diam, int ball_color) {
 		super(context, diag, pos, sq_tria_color, draw_color,
@@ -34,7 +36,7 @@ class ArrowsCircleSquare extends ArrowsSquare {
 		this.ball_color = ball_color;
 	}
 
-	public ArrowsCircleSquare(MyPApplet context, PVector diag, PVector pos,
+	public ArrowsCircleSquare(Blackboard context, PVector diag, PVector pos,
 			int sq_tria_color, int draw_color, float diam, int ball_color) {
 		this(context, diag, pos, sq_tria_color, draw_color, true, false, diam, ball_color);
 	}

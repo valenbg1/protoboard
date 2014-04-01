@@ -4,26 +4,12 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import processing.core.PVector;
-
 
 /**
  * Class externalizing all the constants within the application.
  * 
  */
 public final class Constants {
-	/**/
-	public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-	public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-	/**/	
-	// Testing
-	/*/
-	public static final int displayWidth = 1024;
-	public static final int displayHeight = 768;
-	/**/
-	
-	public static final int dispWidthxHeight = displayWidth*displayHeight;
-	
 	public static void printExceptionToErr(String message, Exception e) {
 		System.err.println("-------------------------------------------\n"
 				+ message + ":\n");
@@ -41,47 +27,34 @@ public final class Constants {
 	 *
 	 */
 	public static final class BlackboardC {
+		public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+		public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+		
 		public static final int[] info_blue_rgb = { 102, 178, 255 };
 		
 		public static final int background_rgb[] = { 0, 0, 0 };
 		public static final int background_rgb_1[] = { 255 - background_rgb[0], 255 - background_rgb[1], 255 - background_rgb[2] };
 		public static final String save_name = "board";
-		public static final float draw_line_weight = dispWidthxHeight*0.000009765625f;
-		public static final float draw_line_weight_sum = draw_line_weight*0.5f;
-		public static final float[] draw_line_weight_limits = { draw_line_weight*0.15f, draw_line_weight*5f };
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		public static final String save_extension = "png";
 		
 		public static final int erase_color[] = background_rgb;
 		public static final int erase_square_border_color[] = background_rgb_1;
-		public static final float erase_square_border_weight = dispWidthxHeight*0.00000176562f;
 		public static final float erase_square_weight = 1.75f;
 		
 		public static final int square_ext_color[] = info_blue_rgb;
-		public static final float square_weight = dispWidthxHeight*0.0000029296875f;
-		public static final PVector common_square_diag = new PVector(dispWidthxHeight*0.000048828125f, dispWidthxHeight*0.000048828125f);
 		public static final float common_square_rad = 6;
-		public static final PVector color_square_pos = new PVector(displayWidth*0.0078125f, displayHeight*0.925f);
-		public static final PVector number_square_pos = new PVector(displayWidth - color_square_pos.x - common_square_diag.x, color_square_pos.y);
 		public static final int number_square_fill_color[] = background_rgb;
-		public static final float square_triangle_length = dispWidthxHeight*0.000009765625f;
-		public static final float square_triangle_det = dispWidthxHeight*0.00001953125f;
-		public static final PVector draw_line_weight_square_pos = new PVector(color_square_pos.x, color_square_pos.y*0.98f - common_square_diag.y);
 		
 		public static final int number_color[] = background_rgb_1;
-		public static final PVector number_pos = new PVector(number_square_pos.x + common_square_diag.x*0.18f, number_square_pos.y + common_square_diag.y*0.88f );
-		public static final float number_gt_10_xpos = number_square_pos.x - common_square_diag.x + common_square_diag.x*0.40f;
 		
 		public static final int save_text_color[] = info_blue_rgb;
-		public static final float save_text_size = dispWidthxHeight*0.000107421875f;
 		public static final String save_text = "SAVED!";
-		public static final float save_text_ypos = displayHeight*0.9125f;
 		public static final float save_text_time = 1.85f; // s
 		
 		public static final float mini_screen_prop = 0.15f;
 		public static final float little_screen_prop = 0.35f;
-		public static final PVector little_screen_pos = new PVector(displayWidth/2.0f - displayWidth*little_screen_prop/2.0f, displayHeight/2.0f - displayHeight*little_screen_prop/2.0f);
 		
 		public static final int[][] draw_colors = { 
 			background_rgb_1, // White (when background is (0, 0, 0)

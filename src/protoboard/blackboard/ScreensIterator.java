@@ -5,7 +5,6 @@ import java.util.List;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
-import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 
 /**
@@ -38,37 +37,30 @@ class ScreensIterator {
 		setPrevs();
 		setNexts();
 		
-		PVector mini = new PVector(Constants.displayWidth*BlackboardC.mini_screen_prop, Constants.displayHeight*BlackboardC.mini_screen_prop);
-		PVector little = new PVector(Constants.displayWidth*BlackboardC.little_screen_prop, Constants.displayHeight*BlackboardC.little_screen_prop);
-		float x = BlackboardC.little_screen_pos.x + little.x;
-		float y = BlackboardC.little_screen_pos.y + little.y/2.0f - mini.y/2.0f;
+		Sizes sizes = context.getSizes();
+		
+		PVector mini = new PVector(sizes.width*BlackboardC.mini_screen_prop, sizes.height*BlackboardC.mini_screen_prop);
+		PVector little = new PVector(sizes.width*BlackboardC.little_screen_prop, sizes.height*BlackboardC.little_screen_prop);
+		float x = sizes.little_screen_pos.x + little.x;
+		float y = sizes.little_screen_pos.y + little.y/2.0f - mini.y/2.0f;
 		
 		for (int i = 0; i < n_around; ++i)
 			this.sq_nexts[i] = ArrowsSquare.screenSquare(context, mini, new PVector(x + i * mini.x, y));
 
-		x = BlackboardC.little_screen_pos.x - mini.x;
-		y = BlackboardC.little_screen_pos.y + little.y / 2.0f
+		x = sizes.little_screen_pos.x - mini.x;
+		y = sizes.little_screen_pos.y + little.y / 2.0f
 				- mini.y / 2.0f;
 
 		for (int i = 0; i < n_around; ++i)
 			this.sq_prevs[i] = ArrowsSquare.screenSquare(context, mini, new PVector(x - i * mini.x, y));
 
-		this.sq_curr = ArrowsSquare.screenSquare(context, little, BlackboardC.little_screen_pos);
+		this.sq_curr = ArrowsSquare.screenSquare(context, little, sizes.little_screen_pos);
 	}
-	
-	public synchronized void advance() {
-		if (screen_pos < (screens.size()-1))
-			++screen_pos;
-		
-		screen_curr = screens.get(screen_pos);
-		setPrevs();
-		setNexts();
-	}
-	
 	
 	public PGraphics current() {
 		return screen_curr;
 	}
+	
 	
 	public int currentPos() {
 		return screen_pos;
@@ -120,16 +112,25 @@ class ScreensIterator {
 	private boolean isOnNexts(int mouseX, int mouseY, int i) {
 		return isOnSquare(mouseX, mouseY, screen_nexts[i], sq_nexts[i]);
 	}
-
+	
 	private boolean isOnPrevs(int mouseX, int mouseY, int i) {
 		return isOnSquare(mouseX, mouseY, screen_prevs[i], sq_prevs[i]);
 	}
-	
+
 	private boolean isOnSquare(int mouseX, int mouseY, PGraphics graph, ArrowsSquare sq) {
 		return (graph != null) && (sq != null) && sq.isOnAnySide(mouseX, mouseY);
 	}
 	
-	public synchronized void regress() {
+	public synchronized void next() {
+		if (screen_pos < (screens.size()-1))
+			++screen_pos;
+		
+		screen_curr = screens.get(screen_pos);
+		setPrevs();
+		setNexts();
+	}
+	
+	public synchronized void prev() {
 		if (screen_pos > 0)
 			--screen_pos;
 		

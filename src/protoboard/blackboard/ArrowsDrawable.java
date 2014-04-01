@@ -1,8 +1,6 @@
 package protoboard.blackboard;
 
 import processing.core.PVector;
-import protoboard.Constants;
-import protoboard.Constants.BlackboardC;
 
 /**
  * Represents a 2D abstract square (for selection) with 4 optional selection arrows:
@@ -10,30 +8,34 @@ import protoboard.Constants.BlackboardC;
  * 
  */
 abstract class ArrowsDrawable {
-	public final MyPApplet context;
+	public final Blackboard context;
 	public final int sq_tria_color;
 	public final PVector pos, diag;
 	public final PVector[] ltr_pos, rtr_pos, utr_pos, dtr_pos;
 	public final boolean show_lr_triangles, show_ud_triangles;
+	public final float square_triangle_det;
 	
-	protected ArrowsDrawable(MyPApplet context, PVector diag, PVector pos,
+	protected ArrowsDrawable(Blackboard context, PVector diag, PVector pos,
 			int sq_tria_color) {
 		this(context, diag, pos, sq_tria_color, true, false);
 	}
 
-	protected ArrowsDrawable(MyPApplet context, PVector diag,
+	protected ArrowsDrawable(Blackboard context, PVector diag,
 			PVector pos, int sq_tria_color2, boolean show_lr_triangles,
 			boolean show_ud_triangles) {
+		Sizes sizes = context.getSizes();
+		
 		this.context = context;
 		this.diag = diag;
 		this.pos = pos;
 		this.sq_tria_color = sq_tria_color2;
 		this.show_lr_triangles = show_lr_triangles;
 		this.show_ud_triangles = show_ud_triangles;
+		this.square_triangle_det = sizes.square_triangle_det;
+		
+		float square_triangle_length = sizes.square_triangle_length;
 		
 		if (this.show_lr_triangles) {
-			float square_triangle_length = Constants.BlackboardC.square_triangle_length;
-	
 			ltr_pos = new PVector[] {
 				new PVector(pos.x, pos.y + diag.y/2.0f - square_triangle_length/2.0f),
 				new PVector(pos.x, pos.y + diag.y/2.0f + square_triangle_length/2.0f),
@@ -51,8 +53,6 @@ abstract class ArrowsDrawable {
 		}
 		
 		if (this.show_ud_triangles) {
-			float square_triangle_length = Constants.BlackboardC.square_triangle_length;
-	
 			utr_pos = new PVector[] {
 				new PVector(pos.x + diag.x/2.0f - square_triangle_length/2.0f, pos.y),
 				new PVector(pos.x + diag.x/2.0f + square_triangle_length/2.0f, pos.y),
@@ -99,7 +99,7 @@ abstract class ArrowsDrawable {
 	}
 
 	public boolean isOnDown(int mouseX, int mouseY) {
-		float extension = BlackboardC.square_triangle_det;
+		float extension = square_triangle_det;
 		
 		return (mouseX <= (pos.x + diag.x))
 				&& (mouseY <= (pos.y + diag.y + extension))
@@ -109,7 +109,7 @@ abstract class ArrowsDrawable {
 	}
 
 	public boolean isOnLeft(int mouseX, int mouseY) {
-		float extension = show_lr_triangles ? BlackboardC.square_triangle_det : 0;
+		float extension = show_lr_triangles ? square_triangle_det : 0;
 		
 		return (mouseX <= (pos.x + diag.x / 2.0f))
 				&& (mouseY >= pos.y)
@@ -119,7 +119,7 @@ abstract class ArrowsDrawable {
 	}
 	
 	public boolean isOnRight(int mouseX, int mouseY) {
-		float extension = show_lr_triangles ? BlackboardC.square_triangle_det : 0;
+		float extension = show_lr_triangles ? square_triangle_det : 0;
 		
 		return (mouseX >= (pos.x + diag.x / 2.0f))
 				&& (mouseY >= pos.y)
@@ -129,7 +129,7 @@ abstract class ArrowsDrawable {
 	}
 
 	public boolean isOnUp(int mouseX, int mouseY) {
-		float extension = BlackboardC.square_triangle_det;
+		float extension = square_triangle_det;
 		
 		return (mouseX <= (pos.x + diag.x))
 				&& (mouseY >= (pos.y - extension))
