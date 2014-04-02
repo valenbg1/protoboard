@@ -3,9 +3,11 @@
 	
 * ! Fine adjustment of swipe gestures.
 
-* Create objects any time the window is resized. (Fix multiscreen mode when resizing).
-
 * New gesture: two hands moving translates the current screen (+ minor changes to the current screen).
+
+* Send a swipe gesture event like a circle gesture event: every time the gesture progress reaches some point.
+
+* Fix closing the blackboard window.
 
 * Improve the principal Swing interface to change between blackboard and input mode.
 	+ Option to set the background color.

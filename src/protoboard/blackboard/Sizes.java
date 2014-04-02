@@ -58,7 +58,7 @@ class Sizes {
 		this.square_weight = displWidthxHeight*0.0000029296875f;
 		this.common_square_diag = new PVector(displWidthxHeight*0.000048828125f, displWidthxHeight*0.000048828125f);
 		this.square_triangle_length = displWidthxHeight*0.000009765625f;
-		this.color_square_pos = new PVector(square_triangle_length + width*0.0048125f, height - common_square_diag.y - square_triangle_length - height*0.0075f);
+		this.color_square_pos = new PVector(square_triangle_length + displayWidth*0.0048125f, height - common_square_diag.y - square_triangle_length - displayHeight*0.0075f);
 		this.number_square_pos = new PVector(width - color_square_pos.x - common_square_diag.x, color_square_pos.y);
 		this.square_triangle_det = displWidthxHeight*0.00001953125f;
 		this.draw_line_weight_square_pos = new PVector(color_square_pos.x, color_square_pos.y*0.98f - common_square_diag.y);

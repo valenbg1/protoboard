@@ -1,7 +1,7 @@
 package protoboard.leapmotion;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import protoboard.AtomicFloat;
@@ -32,7 +32,7 @@ public class LeapMotionListener extends Listener {
 	private int wait_swipe_frames;
 	private int wait_between_changing_circle_id;
 
-	private Queue<LeapMotionObserver> observers;
+	private Set<LeapMotionObserver> observers;
 	
 	private AtomicInteger current_circle_id;
 	private AtomicFloat current_circle_turns;
@@ -41,7 +41,7 @@ public class LeapMotionListener extends Listener {
 		this.wait_frames = 0;
 		this.wait_swipe_frames = 0;
 		this.wait_between_changing_circle_id = 0;
-		this.observers = new ConcurrentLinkedQueue<LeapMotionObserver>();
+		this.observers = new CopyOnWriteArraySet<LeapMotionObserver>();
 		this.current_circle_id = new AtomicInteger(-1);
 		this.current_circle_turns = new AtomicFloat(0);
 	}
@@ -319,12 +319,11 @@ public class LeapMotionListener extends Listener {
 	 * 
 	 * @param observer
 	 */
-	public synchronized void register(LeapMotionObserver observer) {
-		if (!observers.contains(observer))
-			observers.add(observer);
+	public void register(LeapMotionObserver observer) {
+		observers.add(observer);
 	}
 
-	public synchronized void unregister(LeapMotionObserver observer) {
+	public void unregister(LeapMotionObserver observer) {
 		observers.remove(observer);
 	}
 }

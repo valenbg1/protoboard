@@ -30,7 +30,7 @@ public final class Main {
 	
 	private static Blackboard blackboard_mode = null;
 	private static File[] load_files = null;
-	private static AtomicBoolean blck_created = new AtomicBoolean(false);
+	private static AtomicBoolean running_blackboard_mode = new AtomicBoolean(false);
 	
 	public static synchronized File[] getAndNullLoadFiles_blckbrdMode() {
 		File[] ret = load_files;
@@ -57,11 +57,13 @@ public final class Main {
 	
 	public static void runBlackboardMode() {
 		stopInputMode();
+		
+		Blackboard blck = blackboard_mode;
 	
-		if (blck_created.compareAndSet(false, true))
+		if (running_blackboard_mode.compareAndSet(false, true))
 			MyPApplet.main(Blackboard.class.getName());
-		else if (blackboard_mode != null) {
-			blackboard_mode.maximizeAndLoad(getAndNullLoadFiles_blckbrdMode());
+		else if (runningBlackboardMode() && (blck != null)) {
+			blck.toFrontAndLoad(getAndNullLoadFiles_blckbrdMode());
 			main_iface.clean_LoadSelectLabel();
 		}
 	}
@@ -71,8 +73,9 @@ public final class Main {
 			stopBlackboardMode();
 			
 			try {
-				input_mode = new Input(lm_listener);
-				input_mode.run();
+				Input inp = new Input(lm_listener);
+				input_mode = inp;
+				inp.run();
 			} catch (AWTException e) {
 				running_input_mode.compareAndSet(true, false);
 				Constants.printExceptionToErr("", e);
@@ -81,7 +84,7 @@ public final class Main {
 	}
 	
 	public static boolean runningBlackboardMode() {
-		return (blackboard_mode != null) && blackboard_mode.isMaximized();
+		return running_blackboard_mode.get();
 	}
 	
 	public static boolean runningInputMode() {
@@ -89,12 +92,14 @@ public final class Main {
 	}
 	
 	public static void saveImagesBlackboard(File path) {
-		if (blackboard_mode != null)
-			blackboard_mode.saveAllScreens(path);
+		Blackboard blck = blackboard_mode;
+		
+		if (runningBlackboardMode() && (blck != null))
+			blck.saveAllScreens(path);
 	}
 	
 	public static synchronized void setBlackBoardMode(Blackboard blck) {
-		if (blackboard_mode == null)
+		if (runningBlackboardMode())
 			blackboard_mode = blck;
 	}
 	
@@ -103,16 +108,20 @@ public final class Main {
 	}
 	
 	public static void stopBlackboardMode() {
-		if (blackboard_mode != null)
-			blackboard_mode.minimize();
+		Blackboard blck = blackboard_mode;
+		
+		if (runningBlackboardMode() && (blck != null))
+			blck.minimize();
 		
 		main_iface.deselectBlackboardButton();
 	}
 	
 	public static void stopInputMode() {
 		if (running_input_mode.compareAndSet(true, false)) {
-			if (input_mode != null)
-				input_mode.stop();
+			Input inp = input_mode;
+			
+			if (inp != null)
+				inp.stop();
 		}
 		
 		main_iface.deselectInputButton();
