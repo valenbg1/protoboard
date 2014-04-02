@@ -607,7 +607,8 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		return new WindowFocusListener() {
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
-				Main.runBlackboardMode();
+				Main.stopInputMode();
+				registerAsObserver();
 			}
 			
 			@Override
