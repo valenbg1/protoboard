@@ -84,6 +84,38 @@ public class LeapMotionListener extends Listener {
 		}
 	}
 
+	private boolean circleGesture(CircleGesture circle) {
+		boolean clockwise;  //  Calculate clock direction using the angle between circle normal and pointable
+		
+		// Clockwise if angle is less than 90 degrees
+		if (clockwise = (circle.pointable().direction().angleTo(circle.normal()) <= Math.PI / 4))
+			callObservers(Gestures.RIGHT_CIRCLE);
+		else
+			callObservers(Gestures.LEFT_CIRCLE);
+		
+		if (clockwise)
+			callObservers(Gestures.RIGHT_CIRCLE);
+		else
+			callObservers(Gestures.LEFT_CIRCLE);
+			
+		System.out.println(LeapMotionListenerC.onCircle + " id: " + circle.id() + ", "
+				+ circle.state() + ", progress: " + circle.progress()
+				+ ", clockwise: " + clockwise);
+		
+		return true;
+	}
+	
+	private boolean keyTapGesture(KeyTapGesture keyTap) {
+		callObservers(Gestures.KEY_TAP);
+		
+		System.out.println(LeapMotionListenerC.onKeyTap + " id: "
+				+ keyTap.id() + ", " + keyTap.state()
+				+ ", position: " + keyTap.position()
+				+ ", direction: " + keyTap.direction());
+		
+		return true;
+	}
+
 	@Override
 	public void onConnect(Controller controller) {
 		System.out.println(LeapMotionListenerC.onConnect);
@@ -98,7 +130,7 @@ public class LeapMotionListener extends Listener {
 		
 		controller.setPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
 	}
-	
+
 	@Override
 	public void onDisconnect(Controller controller) {
 		System.out.println(LeapMotionListenerC.onDisconnect);
@@ -108,7 +140,7 @@ public class LeapMotionListener extends Listener {
 	public void onExit(Controller controller) {
 		System.out.println(LeapMotionListenerC.onExit);
 	}
-
+	
 	@Override
 	public void onFrame(Controller controller) {
 		// "Weak" thread protection
@@ -151,24 +183,8 @@ public class LeapMotionListener extends Listener {
 					
 					if (current_circle_id.get() == circle.id()) {
 						if ((circle.progress() - current_ct) > LeapMotionListenerC.circle_resolution) {
-							boolean clockwise; //  Calculate clock direction using the angle between circle normal and pointable
-							
 							current_circle_turns.set(current_ct + LeapMotionListenerC.circle_resolution);
-							
-							// Clockwise if angle is less than 90 degrees
-							if (circle.pointable().direction().angleTo(circle.normal()) <= Math.PI / 4)
-								clockwise = true;
-							else
-								clockwise = false;
-							
-							if (clockwise)
-								callObservers(Gestures.RIGHT_CIRCLE);
-							else
-								callObservers(Gestures.LEFT_CIRCLE);
-								
-							System.out.println(LeapMotionListenerC.onCircle + " id: " + circle.id() + ", "
-									+ circle.state() + ", progress: " + circle.progress()
-									+ ", clockwise: " + clockwise);
+							circleGesture(circle);
 						}
 						
 						if (circle.state() == State.STATE_STOP) {
@@ -182,112 +198,27 @@ public class LeapMotionListener extends Listener {
 				case TYPE_SWIPE:
 					if (wait_swipe_f > 0)
 						break;
-
-					SwipeGesture swipe = new SwipeGesture(gesture);
-					float length = swipe.position().magnitude();
 					
-					if (swipe.state() == State.STATE_STOP) {
-						// Horizontal
-						if (Math.abs(swipe.direction().getX()) > Math.abs(swipe.direction().getY())) {
-							// Right
-							if (swipe.direction().getX() > 0) {
-								if ((length <= LeapMotionListenerC.rswipe_limits[0])
-										|| (length >= LeapMotionListenerC.rswipe_limits[1]))
-									break;
-								
-								callObservers(Gestures.RIGHT_SWIPE);
-								
-								System.out.println(LeapMotionListenerC.onRightSwipe
-										+ " id: " + swipe.id() + ", "
-										+ swipe.state() + ", position: "
-										+ swipe.position() + ", direction: "
-										+ swipe.direction() + ", speed: "
-										+ swipe.speed() + ", length: " + length);
-								
-							// Left
-							} else {
-								if ((length <= LeapMotionListenerC.lswipe_limits[0])
-										|| (length >= LeapMotionListenerC.lswipe_limits[1]))
-									break;
-								
-								callObservers(Gestures.LEFT_SWIPE);
-								
-								System.out.println(LeapMotionListenerC.onLeftSwipe
-										+ " id: " + swipe.id() + ", "
-										+ swipe.state() + ", position: "
-										+ swipe.position() + ", direction: "
-										+ swipe.direction() + ", speed: "
-										+ swipe.speed() + ", length: " + length);
-							}
-						// Vertical
-						} else {
-							// Up
-							if (swipe.direction().getY() > 0) {
-								if ((length <= LeapMotionListenerC.uswipe_limits[0])
-										|| (length >= LeapMotionListenerC.uswipe_limits[1]))
-									break;
-								
-								callObservers(Gestures.UP_SWIPE);
-								
-								System.out.println(LeapMotionListenerC.onUpSwipe
-										+ " id: " + swipe.id() + ", "
-										+ swipe.state() + ", position: "
-										+ swipe.position() + ", direction: "
-										+ swipe.direction() + ", speed: "
-										+ swipe.speed() + ", length: " + length);
-							// Down
-							} else {
-								if ((length <= LeapMotionListenerC.dswipe_limits[0])
-										|| (length >= LeapMotionListenerC.dswipe_limits[1]))
-									break;
-								
-								callObservers(Gestures.DOWN_SWIPE);
-								
-								System.out.println(LeapMotionListenerC.onDownSwipe
-										+ " id: " + swipe.id() + ", "
-										+ swipe.state() + ", position: "
-										+ swipe.position() + ", direction: "
-										+ swipe.direction() + ", speed: "
-										+ swipe.speed() + ", length: " + length);
-							}
-						}
-						
+					if ((gesture.state() == State.STATE_STOP) && swipeGesture(new SwipeGesture(gesture))) {
 						// Avoid detecting new swipe gestures for
 						// LeapMotionListenerC.wait_between_swipe_gestures s
-						wait_swipe_frames = (int) Math.ceil(frame
+						wait_swipe_f = (int) Math.ceil(frame
 								.currentFramesPerSecond()
 								* LeapMotionListenerC.wait_between_swipe_gestures);
+						wait_swipe_frames = wait_swipe_f;
 						detected_gesture = true;
 					}
 		
 					break;
 					
 				case TYPE_SCREEN_TAP:
-					ScreenTapGesture screenTap = new ScreenTapGesture(gesture);
-					
-					callObservers(Gestures.SCREEN_TAP);
-					
-					System.out.println(LeapMotionListenerC.onScreenTap + " id: "
-							+ screenTap.id() + ", " + screenTap.state()
-							+ ", position: " + screenTap.position()
-							+ ", direction: " + screenTap.direction());
-                    
+					screenTapGesture(new ScreenTapGesture(gesture));
                     detected_gesture = true;
-                    
                     break;
                     
 				case TYPE_KEY_TAP:
-					KeyTapGesture keyTap = new KeyTapGesture(gesture);
-					
-					callObservers(Gestures.KEY_TAP);
-					
-					System.out.println(LeapMotionListenerC.onKeyTap + " id: "
-							+ keyTap.id() + ", " + keyTap.state()
-							+ ", position: " + keyTap.position()
-							+ ", direction: " + keyTap.direction());
-                    
+					keyTapGesture(new KeyTapGesture(gesture));
                     detected_gesture = true;
-                    
                     break;
                     
 				default:
@@ -321,6 +252,88 @@ public class LeapMotionListener extends Listener {
 	 */
 	public void register(LeapMotionObserver observer) {
 		observers.add(observer);
+	}
+
+	private boolean screenTapGesture(ScreenTapGesture screenTap) {
+		callObservers(Gestures.SCREEN_TAP);
+		
+		System.out.println(LeapMotionListenerC.onScreenTap + " id: "
+				+ screenTap.id() + ", " + screenTap.state()
+				+ ", position: " + screenTap.position()
+				+ ", direction: " + screenTap.direction());
+		
+		return true;
+	}
+
+	private boolean swipeGesture(SwipeGesture swipe) {
+		float length = swipe.position().magnitude();
+		
+		// Horizontal
+		if (Math.abs(swipe.direction().getX()) > Math.abs(swipe.direction().getY())) {
+			// Right
+			if (swipe.direction().getX() > 0) {
+				if ((length <= LeapMotionListenerC.rswipe_limits[0])
+						|| (length >= LeapMotionListenerC.rswipe_limits[1]))
+					return false;
+				
+				callObservers(Gestures.RIGHT_SWIPE);
+				
+				System.out.println(LeapMotionListenerC.onRightSwipe
+						+ " id: " + swipe.id() + ", "
+						+ swipe.state() + ", position: "
+						+ swipe.position() + ", direction: "
+						+ swipe.direction() + ", speed: "
+						+ swipe.speed() + ", length: " + length);
+				
+			// Left
+			} else {
+				if ((length <= LeapMotionListenerC.lswipe_limits[0])
+						|| (length >= LeapMotionListenerC.lswipe_limits[1]))
+					return false;
+				
+				callObservers(Gestures.LEFT_SWIPE);
+				
+				System.out.println(LeapMotionListenerC.onLeftSwipe
+						+ " id: " + swipe.id() + ", "
+						+ swipe.state() + ", position: "
+						+ swipe.position() + ", direction: "
+						+ swipe.direction() + ", speed: "
+						+ swipe.speed() + ", length: " + length);
+			}
+		// Vertical
+		} else {
+			// Up
+			if (swipe.direction().getY() > 0) {
+				if ((length <= LeapMotionListenerC.uswipe_limits[0])
+						|| (length >= LeapMotionListenerC.uswipe_limits[1]))
+					return false;
+				
+				callObservers(Gestures.UP_SWIPE);
+				
+				System.out.println(LeapMotionListenerC.onUpSwipe
+						+ " id: " + swipe.id() + ", "
+						+ swipe.state() + ", position: "
+						+ swipe.position() + ", direction: "
+						+ swipe.direction() + ", speed: "
+						+ swipe.speed() + ", length: " + length);
+			// Down
+			} else {
+				if ((length <= LeapMotionListenerC.dswipe_limits[0])
+						|| (length >= LeapMotionListenerC.dswipe_limits[1]))
+					return false;
+				
+				callObservers(Gestures.DOWN_SWIPE);
+				
+				System.out.println(LeapMotionListenerC.onDownSwipe
+						+ " id: " + swipe.id() + ", "
+						+ swipe.state() + ", position: "
+						+ swipe.position() + ", direction: "
+						+ swipe.direction() + ", speed: "
+						+ swipe.speed() + ", length: " + length);
+			}
+		}
+		
+		return true;
 	}
 
 	public void unregister(LeapMotionObserver observer) {
