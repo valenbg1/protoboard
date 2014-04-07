@@ -11,7 +11,7 @@ public interface LeapMotionObserver {
 	public void onKeyTap();
 
 	public void onLeftCircle();
-
+	
 	public void onLeftSwipe();
 
 	public void onRighCircle();
@@ -19,6 +19,8 @@ public interface LeapMotionObserver {
 	public void onRightSwipe();
 
 	public void onScreenTap();
+
+	public void onTranslation(float x, float y);
 
 	public void onUpSwipe();
 }

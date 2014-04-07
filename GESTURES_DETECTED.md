@@ -25,3 +25,5 @@ Input mode
 * Screen / key tap presses mouse button one.
 
 * Up / down swipe presses down / up arrows.
+
+* Two hands moving together up / down move the mouse wheel down / up.

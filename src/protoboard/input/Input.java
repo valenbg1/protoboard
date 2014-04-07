@@ -71,6 +71,12 @@ public class Input implements LeapMotionObserver, Runnable {
 	}
 
 	@Override
+	public void onTranslation(float x, float y) {
+		if (Math.abs(y) > InputC.translation_threshold)
+			robot.mouseWheel(y < 0 ? -InputC.wheel_notches : InputC.wheel_notches);
+	}
+
+	@Override
 	public void onUpSwipe() {
 		simKey(InputC.onUpSwipe);
 	}
@@ -84,7 +90,7 @@ public class Input implements LeapMotionObserver, Runnable {
 		if (running.compareAndSet(false, true))
 			lmlistener.register(this);
 	}
-
+	
 	private void simKey(final int key) {
 		new Thread(new Runnable() {
 			@Override
@@ -95,7 +101,7 @@ public class Input implements LeapMotionObserver, Runnable {
 			}
 		}).start();
 	}
-	
+
 	private void simMouse(final int button) {
 		new Thread(new Runnable() {
 			@Override

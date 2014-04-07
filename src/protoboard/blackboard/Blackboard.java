@@ -617,4 +617,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			}
 		};
 	}
+
+	@Override
+	public void onTranslation(float x, float y) {
+		// TODO Auto-generated method stub
+		
+	}
 }

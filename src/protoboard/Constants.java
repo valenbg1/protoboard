@@ -81,6 +81,9 @@ public final class Constants {
 		public static final int onRightSwipe = KeyEvent.VK_LEFT;
 		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
 		public static final int onUpSwipe = KeyEvent.VK_DOWN;
+		
+		public static final float translation_threshold = 2;
+		public static final int wheel_notches = 1;
 	}
 	
 	/**
@@ -100,6 +103,7 @@ public final class Constants {
 		public static final String onUpSwipe = "Leap up swipe";
 		public static final String onScreenTap = "Screen tap";
 		public static final String onKeyTap = "Key tap";
+		public static final String onTranslation = "Translation";
 		
 		public static final float swipe_minlength = 80; // mm
 		// Testing
@@ -121,6 +125,10 @@ public final class Constants {
 		public static final float wait_between_gestures = 0.85f; // s
 		public static final float wait_between_swipe_gestures = 1f; // s
 		public static final float wait_between_changing_circle_id = 5f; // s
+		
+		public static final float interval_frame_translation = 0.1f;
+		public static final float confidence_threshold_translation = 0.9f; // (0, 1]
+		public static final float palms_near_threshold = 160; // mm
 	}
 	
 	/**

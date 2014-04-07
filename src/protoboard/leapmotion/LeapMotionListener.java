@@ -13,10 +13,12 @@ import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Gesture.State;
 import com.leapmotion.leap.GestureList;
+import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.KeyTapGesture;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.ScreenTapGesture;
 import com.leapmotion.leap.SwipeGesture;
+import com.leapmotion.leap.Vector;
 
 /**
  * Processes the info received from the Leap Motion controller.
@@ -25,7 +27,8 @@ import com.leapmotion.leap.SwipeGesture;
 public class LeapMotionListener extends Listener {
 	public enum Gestures {
 		DOWN_SWIPE, KEY_TAP, LEFT_CIRCLE, LEFT_SWIPE,
-		RIGHT_CIRCLE, RIGHT_SWIPE, SCREEN_TAP, UP_SWIPE
+		RIGHT_CIRCLE, RIGHT_SWIPE, SCREEN_TAP, TRANSLATION, 
+		UP_SWIPE
 	}
 
 	private int wait_frames;
@@ -44,6 +47,10 @@ public class LeapMotionListener extends Listener {
 		this.observers = new CopyOnWriteArraySet<LeapMotionObserver>();
 		this.current_circle_id = new AtomicInteger(-1);
 		this.current_circle_turns = new AtomicFloat(0);
+	}
+
+	private boolean areClose(Hand handl, Hand handr) {
+		return handr.palmPosition().minus(handl.palmPosition()).magnitude() <= LeapMotionListenerC.palms_near_threshold;
 	}
 
 	private void callObservers(Gestures gesture) {
@@ -77,13 +84,16 @@ public class LeapMotionListener extends Listener {
 					observer.onScreenTap();
 					break;
 					
+				case TRANSLATION:
+					break;
+					
 				case UP_SWIPE:
 					observer.onUpSwipe();
 					break;
 			}
 		}
 	}
-
+	
 	private boolean circleGesture(CircleGesture circle) {
 		boolean clockwise;  //  Calculate clock direction using the angle between circle normal and pointable
 		
@@ -104,7 +114,7 @@ public class LeapMotionListener extends Listener {
 		
 		return true;
 	}
-	
+
 	private boolean keyTapGesture(KeyTapGesture keyTap) {
 		callObservers(Gestures.KEY_TAP);
 		
@@ -135,12 +145,12 @@ public class LeapMotionListener extends Listener {
 	public void onDisconnect(Controller controller) {
 		System.out.println(LeapMotionListenerC.onDisconnect);
 	}
-
+	
 	@Override
 	public void onExit(Controller controller) {
 		System.out.println(LeapMotionListenerC.onExit);
 	}
-	
+
 	@Override
 	public void onFrame(Controller controller) {
 		// "Weak" thread protection
@@ -225,6 +235,10 @@ public class LeapMotionListener extends Listener {
 			}
 		}
 		
+		translationGesture(
+				frame,
+				controller.frame((int) (frame.currentFramesPerSecond() * LeapMotionListenerC.interval_frame_translation)));
+
 		// Avoid detecting new gestures for LeapMotionListenerC.wait_between_gestures s
 		if (detected_gesture)
 			wait_frames = (int) Math.ceil(frame.currentFramesPerSecond()*LeapMotionListenerC.wait_between_gestures);
@@ -242,7 +256,7 @@ public class LeapMotionListener extends Listener {
 	public void onInit(Controller controller) {
 		System.out.println(LeapMotionListenerC.onInit);
 	}
-
+	
 	/**
 	 * This implementation calls itself each method of LeapMotionObserver into the
 	 * onFrame thread handler, so every method for the LeapMotionObserver that the observer
@@ -264,7 +278,7 @@ public class LeapMotionListener extends Listener {
 		
 		return true;
 	}
-
+	
 	private boolean swipeGesture(SwipeGesture swipe) {
 		float length = swipe.position().magnitude();
 		
@@ -334,6 +348,38 @@ public class LeapMotionListener extends Listener {
 		}
 		
 		return true;
+	}
+
+	private boolean translationGesture(Frame latestFrame, Frame refFrame) {
+		float t_prob;
+		Hand la_handl, la_handr;
+		Hand re_handl, re_handr;
+		
+		if ((latestFrame.hands().count() == 2) && (refFrame.hands().count() == 2)) {
+			la_handl = latestFrame.hands().leftmost();
+			la_handr = latestFrame.hands().rightmost();
+			re_handl = refFrame.hands().leftmost();
+			re_handr = refFrame.hands().rightmost();
+
+			if (areClose(la_handl, la_handr)
+					&& areClose(re_handl, re_handr)
+					&& la_handl.id() == re_handl.id()
+					&& la_handr.id() == re_handr.id()
+					&& (t_prob = latestFrame.translationProbability(refFrame)) > LeapMotionListenerC.confidence_threshold_translation) {
+				Vector translation = latestFrame.translation(refFrame);
+
+				for (LeapMotionObserver observer : observers)
+					observer.onTranslation(translation.getX(), translation.getY());
+
+				System.out.println(LeapMotionListenerC.onTranslation + " x: "
+						+ translation.getX() + ", y: " + translation.getY()
+						+ ", prob: " + t_prob);
+
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public void unregister(LeapMotionObserver observer) {

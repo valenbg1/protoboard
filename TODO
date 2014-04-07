@@ -2,10 +2,9 @@
 	+ Windows: ok if the Leap Motion lib is correctly set.
 	
 * ! Fine adjustment of swipe gestures.
+	+ Send a swipe gesture event like a circle gesture event: every time the gesture progress reaches some point.
 
-* New gesture: two hands moving translates the current screen (+ minor changes to the current screen).
-
-* Send a swipe gesture event like a circle gesture event: every time the gesture progress reaches some point.
+* Implement the new gesture on blackboard mode: translate the current screent.
 
 * Fix closing the blackboard window.
 
