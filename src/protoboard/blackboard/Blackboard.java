@@ -14,6 +14,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
 import protoboard.Constants.BlackboardC;
+import protoboard.Constants.LeapMotionListenerC;
 import protoboard.Main;
 import protoboard.leapmotion.LeapMotionObserver;
 
@@ -445,19 +446,19 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	@Override
 	public void onTranslation(float d_x, float d_y) {
 		if (!multiScreenMode.get()) {
-			PVector draw_p_aux = new PVector(screen_draw_p.x, screen_draw_p.y);
-			float t_threshold = BlackboardC.translation_threshold, t_size = sizes.translation_size;
+			PVector trans = new PVector(0, 0);
+			float t_threshold = LeapMotionListenerC.leap_translation_threshold, t_size = sizes.translation_size;
 			
 			if (Math.abs(d_x) > t_threshold)
-				draw_p_aux.x = draw_p_aux.x + (d_x/t_size);
+				trans.x = d_x/t_size;
 			
 			if (Math.abs(d_y) > t_threshold)
-				draw_p_aux.y = draw_p_aux.y + (-d_y/t_size);
+				trans.y = -d_y/t_size;
 			
-			screen_draw_p = boundScreenfrom(draw_p_aux);
+			translateScreen(trans.x, trans.y);
 		}
 	}
-
+	
 	@Override
 	public void onUpSwipe() {
 		enterMultiScreenMode();
@@ -499,7 +500,9 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 					else
 						screen_curr.strokeWeight(rect_weight);
 					
-					screen_curr.line(mouseX, mouseY, pmouseX, pmouseY);
+					screen_curr.line(mouseX - screen_draw_p.x, mouseY
+							- screen_draw_p.y, pmouseX - screen_draw_p.x,
+							pmouseY - screen_draw_p.y);
 					
 					screen_curr.endDraw();
 				}
@@ -521,7 +524,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		multiScreenMode.set(false);
 		screens_iter = null;
 	}
-	
+
 	public void registerAsObserver() {
 		Main.lm_listener.register(this);
 	}
@@ -607,6 +610,15 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			loadAndAddScreens(files);
 		
 		toFront();
+	}
+	
+	public void translateScreen(float d_x, float d_y) {
+		PVector draw_p_aux = new PVector(screen_draw_p.x, screen_draw_p.y);
+		
+		draw_p_aux.x = draw_p_aux.x + d_x;
+		draw_p_aux.y = draw_p_aux.y + d_y;
+		
+		screen_draw_p = boundScreenfrom(draw_p_aux);
 	}
 	
 	public void unregisterAsObserver() {

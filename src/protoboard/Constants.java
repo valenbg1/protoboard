@@ -34,8 +34,7 @@ public final class Constants {
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		public static final String save_extension = "png";
-		public static final float translation_threshold = 5.0f;
-		public static final float screen_factor = 1.5f;
+		public static final float screen_factor = 1.4f;
 		
 		public static final int erase_color[] = background_rgb;
 		public static final int erase_square_border_color[] = background_rgb_1;
@@ -127,6 +126,7 @@ public final class Constants {
 		public static final float interval_frame_translation = 0.1f;
 		public static final float confidence_threshold_translation = 0.9f; // (0, 1]
 		public static final float palms_near_threshold = 160; // mm
+		public static final float leap_translation_threshold = 5.0f;
 	}
 	
 	/**
