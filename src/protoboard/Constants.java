@@ -79,8 +79,7 @@ public final class Constants {
 		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
 		public static final int onUpSwipe = KeyEvent.VK_DOWN;
 		
-		public static final float translation_threshold = 5.0f;
-		public static final int wheel_notches = 1;
+		public static final float wheel_notches_factor = 35.0f;
 	}
 	
 	/**
@@ -126,7 +125,7 @@ public final class Constants {
 		public static final float interval_frame_translation = 0.1f;
 		public static final float confidence_threshold_translation = 0.9f; // (0, 1]
 		public static final float palms_near_threshold = 160; // mm
-		public static final float leap_translation_threshold = 5.0f;
+		public static final float translation_threshold = 5.0f;
 	}
 	
 	/**

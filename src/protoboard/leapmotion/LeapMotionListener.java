@@ -102,11 +102,6 @@ public class LeapMotionListener extends Listener {
 			callObservers(Gestures.RIGHT_CIRCLE);
 		else
 			callObservers(Gestures.LEFT_CIRCLE);
-		
-		if (clockwise)
-			callObservers(Gestures.RIGHT_CIRCLE);
-		else
-			callObservers(Gestures.LEFT_CIRCLE);
 			
 		System.out.println(LeapMotionListenerC.onCircle + " id: " + circle.id() + ", "
 				+ circle.state() + ", progress: " + circle.progress()

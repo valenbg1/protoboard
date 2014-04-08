@@ -6,7 +6,6 @@
 	+ Study interaction between translating and other gestures.
 
 * Two hands moving gesture on Input mode:
-	+ Adapt code to work like blackboard mode.
 	+ Study problem with horizontal scrolling.
 
 * Fix closing the blackboard window.

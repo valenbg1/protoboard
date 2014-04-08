@@ -447,13 +447,13 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public void onTranslation(float d_x, float d_y) {
 		if (!multiScreenMode.get()) {
 			PVector trans = new PVector(0, 0);
-			float t_threshold = LeapMotionListenerC.leap_translation_threshold, t_size = sizes.translation_size;
+			float t_threshold = LeapMotionListenerC.translation_threshold, t_factor = sizes.translation_factor;
 			
 			if (Math.abs(d_x) > t_threshold)
-				trans.x = d_x/t_size;
+				trans.x = d_x/t_factor;
 			
 			if (Math.abs(d_y) > t_threshold)
-				trans.y = -d_y/t_size;
+				trans.y = -d_y/t_factor;
 			
 			translateScreen(trans.x, trans.y);
 		}

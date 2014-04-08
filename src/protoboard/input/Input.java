@@ -5,6 +5,7 @@ import java.awt.Robot;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import protoboard.Constants.InputC;
+import protoboard.Constants.LeapMotionListenerC;
 import protoboard.leapmotion.LeapMotionListener;
 import protoboard.leapmotion.LeapMotionObserver;
 
@@ -71,9 +72,15 @@ public class Input implements LeapMotionObserver, Runnable {
 	}
 
 	@Override
-	public void onTranslation(final float x, final float y) {
-		if (Math.abs(y) > InputC.translation_threshold)
-			robot.mouseWheel(y < 0 ? -InputC.wheel_notches : InputC.wheel_notches);
+	public void onTranslation(float d_x, float d_y) {
+		float t_threshold = LeapMotionListenerC.translation_threshold, w_factor = InputC.wheel_notches_factor,
+				d_y_abs = Math.abs(d_y);
+		
+		if (d_y_abs > t_threshold) {
+			int wheel_f = (int) Math.ceil(d_y_abs/w_factor);
+			
+			robot.mouseWheel(d_y < 0 ? -wheel_f : wheel_f);
+		}
 	}
 
 	@Override
