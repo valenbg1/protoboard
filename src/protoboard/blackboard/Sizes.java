@@ -39,6 +39,8 @@ class Sizes {
 	
 	public final PVector little_screen_pos;
 	
+	public final float translation_size;
+	
 	public Sizes(int width, int height, int displayWidth, int displayHeight) {
 		this.width = width;
 		this.height = height;
@@ -72,5 +74,7 @@ class Sizes {
 		this.little_screen_pos = new PVector(width / 2.0f - width
 				* BlackboardC.little_screen_prop / 2.0f, height / 2.0f - height
 				* BlackboardC.little_screen_prop / 2.0f);
+		
+		this.translation_size = 1372000f/displWidthxHeight;
 	}
 }

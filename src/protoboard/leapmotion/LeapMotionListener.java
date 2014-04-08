@@ -172,72 +172,70 @@ public class LeapMotionListener extends Listener {
 		if (wait_f > 0) {
 			--wait_f;
 			wait_frames = wait_f;
-			return;
 		}
 		
 		Frame frame = controller.frame();
 		GestureList gestures = frame.gestures();
-		boolean detected_gesture = false;
+		boolean detected_gesture = translationGesture(frame, controller.frame((int) (frame.currentFramesPerSecond()*LeapMotionListenerC.interval_frame_translation)));
 		
-		for (Gesture gesture : gestures) {
-			switch (gesture.type()) {
-				case TYPE_CIRCLE:
-					CircleGesture circle = new CircleGesture(gesture);
-					
-					if (current_circle_id.get() == -1) {
-						current_circle_id.set(circle.id());
-						current_circle_turns.set(circle.progress() - LeapMotionListenerC.circle_resolution);
-					}
-					
-					float current_ct = current_circle_turns.get();
-					
-					if (current_circle_id.get() == circle.id()) {
-						if ((circle.progress() - current_ct) > LeapMotionListenerC.circle_resolution) {
-							current_circle_turns.set(current_ct + LeapMotionListenerC.circle_resolution);
-							circleGesture(circle);
+		if (!detected_gesture && (frame.hands().count() == 1) && (wait_f <= 0)) {
+			for (Gesture gesture : gestures) {
+				switch (gesture.type()) {
+					case TYPE_CIRCLE:
+						CircleGesture circle = new CircleGesture(gesture);
+						
+						if (current_circle_id.get() == -1) {
+							current_circle_id.set(circle.id());
+							current_circle_turns.set(circle.progress() - LeapMotionListenerC.circle_resolution);
 						}
 						
-						if (circle.state() == State.STATE_STOP) {
-							current_circle_id.set(-1);
+						float current_ct = current_circle_turns.get();
+						
+						if (current_circle_id.get() == circle.id()) {
+							if ((circle.progress() - current_ct) > LeapMotionListenerC.circle_resolution) {
+								current_circle_turns.set(current_ct + LeapMotionListenerC.circle_resolution);
+								circleGesture(circle);
+							}
+							
+							if (circle.state() == State.STATE_STOP) {
+								current_circle_id.set(-1);
+								detected_gesture = true;
+							}
+						}
+						
+						break;
+						
+					case TYPE_SWIPE:
+						if (wait_swipe_f > 0)
+							break;
+						
+						if ((gesture.state() == State.STATE_STOP) && swipeGesture(new SwipeGesture(gesture))) {
+							// Avoid detecting new swipe gestures for
+							// LeapMotionListenerC.wait_between_swipe_gestures s
+							wait_swipe_f = (int) Math.ceil(frame
+									.currentFramesPerSecond()
+									* LeapMotionListenerC.wait_between_swipe_gestures);
+							wait_swipe_frames = wait_swipe_f;
 							detected_gesture = true;
 						}
-					}
-					
-					break;
-					
-				case TYPE_SWIPE:
-					if (wait_swipe_f > 0)
+			
 						break;
-					
-					if ((gesture.state() == State.STATE_STOP) && swipeGesture(new SwipeGesture(gesture))) {
-						// Avoid detecting new swipe gestures for
-						// LeapMotionListenerC.wait_between_swipe_gestures s
-						wait_swipe_f = (int) Math.ceil(frame
-								.currentFramesPerSecond()
-								* LeapMotionListenerC.wait_between_swipe_gestures);
-						wait_swipe_frames = wait_swipe_f;
-						detected_gesture = true;
-					}
-		
-					break;
-					
-				case TYPE_SCREEN_TAP:
-					screenTapGesture(new ScreenTapGesture(gesture));
-                    detected_gesture = true;
-                    break;
-                    
-				case TYPE_KEY_TAP:
-					keyTapGesture(new KeyTapGesture(gesture));
-                    detected_gesture = true;
-                    break;
-                    
-				default:
+						
+					case TYPE_SCREEN_TAP:
+						screenTapGesture(new ScreenTapGesture(gesture));
+	                    detected_gesture = true;
+	                    break;
+	                    
+					case TYPE_KEY_TAP:
+						keyTapGesture(new KeyTapGesture(gesture));
+	                    detected_gesture = true;
+	                    break;
+	                    
+					default:
+				}
 			}
 		}
-		
-		translationGesture(
-				frame,
-				controller.frame((int) (frame.currentFramesPerSecond() * LeapMotionListenerC.interval_frame_translation)));
+			
 
 		// Avoid detecting new gestures for LeapMotionListenerC.wait_between_gestures s
 		if (detected_gesture)

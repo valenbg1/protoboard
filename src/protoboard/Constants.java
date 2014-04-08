@@ -1,6 +1,5 @@
 package protoboard;
 
-import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -27,9 +26,6 @@ public final class Constants {
 	 *
 	 */
 	public static final class BlackboardC {
-		public static final int displayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-		public static final int displayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-		
 		public static final int[] info_blue_rgb = { 102, 178, 255 };
 		
 		public static final int background_rgb[] = { 0, 0, 0 };
@@ -38,6 +34,8 @@ public final class Constants {
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		public static final String save_extension = "png";
+		public static final float translation_threshold = 5.0f;
+		public static final float screen_factor = 1.5f;
 		
 		public static final int erase_color[] = background_rgb;
 		public static final int erase_square_border_color[] = background_rgb_1;
@@ -74,7 +72,7 @@ public final class Constants {
 	public static final class InputC {
 		public static final String err_no_robot = "The platform configuration does not allow low-level input control";
 		public static final String err_interr = "Interrupted while running Input";
-		public static final int robot_delay = 25; // ms
+		public static final int robot_delay = 15; // ms
 		
 		public static final int onDownSwipe = KeyEvent.VK_UP;
 		public static final int onLeftSwipe = KeyEvent.VK_RIGHT;
@@ -82,7 +80,7 @@ public final class Constants {
 		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
 		public static final int onUpSwipe = KeyEvent.VK_DOWN;
 		
-		public static final float translation_threshold = 2;
+		public static final float translation_threshold = 5.0f;
 		public static final int wheel_notches = 1;
 	}
 	

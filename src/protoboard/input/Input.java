@@ -71,7 +71,7 @@ public class Input implements LeapMotionObserver, Runnable {
 	}
 
 	@Override
-	public void onTranslation(float x, float y) {
+	public void onTranslation(final float x, final float y) {
 		if (Math.abs(y) > InputC.translation_threshold)
 			robot.mouseWheel(y < 0 ? -InputC.wheel_notches : InputC.wheel_notches);
 	}

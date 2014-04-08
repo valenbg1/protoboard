@@ -28,6 +28,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	private PGraphics screen_curr;
 	private int screen_pos;
 	private AtomicBoolean[] screen_change;
+	private PVector screen_draw_p;
 	
 	private Sizes sizes;
 
@@ -58,6 +59,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		this.screen_change = new AtomicBoolean[2];
 		this.screen_change[0] = new AtomicBoolean(false);
 		this.screen_change[1] = new AtomicBoolean(false);
+		this.screen_draw_p = new PVector(0, 0);
 		
 		this.sizes = null;
 
@@ -99,12 +101,29 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	}
 
 	private synchronized void addAndSetNewScreen() {
-		PGraphics s_curr_aux = newScreen(displayWidth, displayHeight);
+		float f = BlackboardC.screen_factor;
+		
+		PGraphics s_curr_aux = newScreen((int) (displayWidth*f), (int) (displayHeight*f));
 		screens.add(s_curr_aux);
 		screen_pos = screens.size()-1;
 		screen_curr = s_curr_aux;
 	}
 	
+	private PVector boundScreenfrom(PVector pos) {
+		if (screen_curr != null) {
+			PVector pos_aux = new PVector(pos.x, pos.y);
+			
+			pos_aux.x = Math.max(pos_aux.x, -(screen_curr.width - width));
+			pos_aux.x = Math.min(pos_aux.x, 0);
+			
+			pos_aux.y = Math.max(pos_aux.y, -(screen_curr.height - height));
+			pos_aux.y = Math.min(pos_aux.y, 0);
+			
+			return pos_aux;
+		} else
+			return new PVector(0, 0);
+	}
+
 	public void changeDrawColorBack() {
 		draw_color = draw_color.prev();
 		color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
@@ -123,21 +142,21 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 				sizes.draw_line_weight_limits[0]);
 		updateDrawLineSquare();
 	}
-
+	
 	public synchronized void changeDrawLineWeightForth() {
 		draw_line_weight = Math.min(draw_line_weight
 				+ sizes.draw_line_weight_sum,
 				sizes.draw_line_weight_limits[1]);
 		updateDrawLineSquare();
 	}
-	
+
 	public synchronized void changeMultiScreenBack() {
 		if (multiScreenMode.get()) {
 			screens_iter.prev();
 			screen_pos = screens_iter.currentPos();
 		}
 	}
-
+	
 	public synchronized void changeMultiScreenForth() {
 		if (multiScreenMode.get()) {
 			screens_iter.next();
@@ -187,7 +206,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		changeScreen();
 	
 		screen_curr.smooth();
-		image(screen_curr, 0, 0);
+		image(screen_curr, screen_draw_p.x, screen_draw_p.y);
 		
 		processCursor();
 		
@@ -201,7 +220,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		
 		drawSaveText();
 	}
-	
+
 	private void drawMultiScreenMode() {
 		if (multiScreenMode.get())
 			screens_iter.draw();
@@ -254,7 +273,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			text(screen_p, sizes.number_gt_10_xpos, numb_pos.y);
 		}
 	}
-
+	
 	public void enterMultiScreenMode() {
 		screens_iter = new ScreensIterator(this, screens, screen_pos, BlackboardC.multi_screen_around);
 		multiScreenMode.set(true);
@@ -272,11 +291,11 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public Sizes getSizes() {
 		return sizes;
 	}
-	
+
 	public boolean isFocused() {
 		return (frame != null) && (frame.isFocused());
 	}
-
+	
 	/**
 	 * @param newScreens an array of PNG's
 	 * 
@@ -295,14 +314,14 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			}
 		}
 	}
-	
+
 	public void minimize() {
 		unregisterAsObserver();
 		
 		if (frame != null)
 			frame.setExtendedState(JFrame.ICONIFIED);  // Minimize window
 	}
-
+	
 	@Override
 	public void mouseClicked() {
 		if (multiScreenMode.get())
@@ -338,7 +357,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			}
 		}
 	}
-	
+
 	private void mouseClickedMultiscreenMode() {
 		int pos;
 		
@@ -360,7 +379,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 				quitMultiScreenMode();
 		}
 	}
-
+	
 	private PGraphics newScreen(int width, int height) {
 		int[] background = BlackboardC.background_rgb;
 		PGraphics scr = createGraphics(width, height);
@@ -371,7 +390,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		
 		return scr;
 	}
-	
+		
 	@Override
 	public void onDownSwipe() {
 		if (multiScreenMode.get())
@@ -379,7 +398,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		else
 			saveCurrentScreen();
 	}
-		
+	
 	@Override
 	public void onKeyTap() {
 		onScreenTap();
@@ -400,7 +419,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		else
 			changeScreenForth();
 	}
-	
+
 	@Override
 	public void onRighCircle() {
 		if (multiScreenMode.get())
@@ -408,7 +427,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		else
 			changeDrawColorForth();
 	}
-
+	
 	@Override
 	public void onRightSwipe() {
 		if (multiScreenMode.get())
@@ -416,11 +435,27 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		else
 			changeScreenBack();
 	}
-	
+
 	@Override
 	public void onScreenTap() {
 		if (multiScreenMode.get())
 			quitMultiScreenMode();
+	}
+	
+	@Override
+	public void onTranslation(float d_x, float d_y) {
+		if (!multiScreenMode.get()) {
+			PVector draw_p_aux = new PVector(screen_draw_p.x, screen_draw_p.y);
+			float t_threshold = BlackboardC.translation_threshold, t_size = sizes.translation_size;
+			
+			if (Math.abs(d_x) > t_threshold)
+				draw_p_aux.x = draw_p_aux.x + (d_x/t_size);
+			
+			if (Math.abs(d_y) > t_threshold)
+				draw_p_aux.y = draw_p_aux.y + (-d_y/t_size);
+			
+			screen_draw_p = boundScreenfrom(draw_p_aux);
+		}
 	}
 
 	@Override
@@ -486,7 +521,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		multiScreenMode.set(false);
 		screens_iter = null;
 	}
-
+	
 	public void registerAsObserver() {
 		Main.lm_listener.register(this);
 	}
@@ -542,8 +577,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	
 	@Override
 	public void setup() {
-		// TODO
-		size(BlackboardC.displayWidth, BlackboardC.displayHeight);
+		size(displayWidth/2, displayHeight/2);
 		this.sizes = new Sizes(0, 0, displayWidth, displayHeight);
 		
 		updateDrawablesSizes();
@@ -590,9 +624,11 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			
 			if (multiScreenMode.get())
 				screens_iter = new ScreensIterator(this, screens, screen_pos, BlackboardC.multi_screen_around);
+			
+			screen_draw_p = boundScreenfrom(screen_draw_p);
 		}
 	}
-	
+
 	private void updateDrawLineSquare() {
 		int[] raw_color = draw_color.isEraseColor() ? BlackboardC.background_rgb_1
 				: draw_color.getActual();
@@ -616,11 +652,5 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 				unregisterAsObserver();
 			}
 		};
-	}
-
-	@Override
-	public void onTranslation(float x, float y) {
-		// TODO Auto-generated method stub
-		
 	}
 }

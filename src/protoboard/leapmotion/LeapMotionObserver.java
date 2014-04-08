@@ -20,7 +20,11 @@ public interface LeapMotionObserver {
 
 	public void onScreenTap();
 
-	public void onTranslation(float x, float y);
+	/**
+	 * @param d_x delta translation in x axis (mm)
+	 * @param d_y delta translation in y axis (mm)
+	 */
+	public void onTranslation(float d_x, float d_y);
 
 	public void onUpSwipe();
 }

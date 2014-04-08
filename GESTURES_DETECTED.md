@@ -13,6 +13,8 @@ Blackboard mode
 * Up swipe toggles multiscreen mode.
 
 * Screen / key tap quits multiscreen mode.
+
+* Two hands moving together translate the current board.
 	
 	
 Input mode
