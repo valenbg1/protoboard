@@ -68,7 +68,7 @@ class Sizes {
 		this.number_pos = new PVector(number_square_pos.x + common_square_diag.x*0.18f, number_square_pos.y + common_square_diag.y*0.88f );
 		this.number_gt_10_xpos = number_square_pos.x - common_square_diag.x + common_square_diag.x*0.40f;
 		
-		this.save_text_size = displWidthxHeight*0.000107421875f;
+		this.save_text_size = widthxHeight*0.5f*0.000407421875f;
 		this.save_text_ypos = height*0.9125f;
 		
 		this.little_screen_pos = new PVector(width / 2.0f - width

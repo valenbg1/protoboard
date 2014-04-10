@@ -10,17 +10,19 @@ import protoboard.Constants.BlackboardC;
 /**
  * Implements an iterator over the screens of the blackboard. Used
  * for showing multiple screens at a time (when up swipe is detected).
+ * It's an immutable object.
  *
  */
 class ScreensIterator {
 	private final ArrayList<PGraphics> screens;
-	private PGraphics screen_curr;
-	private PGraphics[] screen_prevs, screen_nexts;
+	private final PGraphics screen_curr;
+	private final PGraphics[] screen_prevs, screen_nexts;
 	private final ArrowsSquare sq_curr;
 	private final ArrowsSquare[] sq_prevs, sq_nexts;
 	private final int n_around;
-	private int screen_pos;
-	private final MyPApplet context;
+	private final int screen_pos;
+	private final Blackboard context;
+	private final int pos_sq_color;
 	
 	public ScreensIterator(Blackboard context, List<PGraphics> screens,
 			int screen_pos, int n_around) {
@@ -33,6 +35,7 @@ class ScreensIterator {
 		this.sq_prevs = new ArrowsSquare[n_around];
 		this.sq_nexts = new ArrowsSquare[n_around];
 		this.context = context;
+		this.pos_sq_color = context.color(BlackboardC.alert_red_rgb);
 		
 		setPrevs();
 		setNexts();
@@ -57,27 +60,18 @@ class ScreensIterator {
 		this.sq_curr = ArrowsSquare.screenSquare(context, little, sizes.little_screen_pos);
 	}
 	
-	public PGraphics current() {
-		return screen_curr;
-	}
-	
-	
-	public int currentPos() {
-		return screen_pos;
-	}
-	
 	public void draw() {
 		for (int i = 0; i < n_around; ++i) {
 			if (screen_prevs[i] != null)
 				draw(screen_prevs[i], sq_prevs[i]);	
 		}
 		
-		drawCurrent();
-		
 		for (int i = 0; i < n_around; ++i) {
 			if (screen_nexts[i] != null)
 				draw(screen_nexts[i], sq_nexts[i]);	
 		}
+		
+		drawCurrent();
 	}
 	
 	private void draw(PGraphics graph, ArrowsSquare sq) {
@@ -87,6 +81,17 @@ class ScreensIterator {
 	
 	private void drawCurrent() {
 		draw(screen_curr, sq_curr);
+
+		PVector sq_pos = context.getScreen_draw_p(), factor = new PVector(
+				sq_curr.diag.x / screen_curr.width, sq_curr.diag.y
+						/ screen_curr.height);
+		sq_pos = new PVector(sq_curr.pos.x + Math.abs(sq_pos.x * factor.x),
+				sq_curr.pos.y + Math.abs(sq_pos.y * factor.y));
+
+		context.noFill();
+		context.stroke(pos_sq_color);
+		context.rect(sq_pos, new PVector(context.width * factor.x,
+				context.height * factor.y), 0);
 	}
 	
 	public int isOnAny(int mouseX, int mouseY) {
@@ -119,24 +124,6 @@ class ScreensIterator {
 
 	private boolean isOnSquare(int mouseX, int mouseY, PGraphics graph, ArrowsSquare sq) {
 		return (graph != null) && (sq != null) && sq.isOnAnySide(mouseX, mouseY);
-	}
-	
-	public synchronized void next() {
-		if (screen_pos < (screens.size()-1))
-			++screen_pos;
-		
-		screen_curr = screens.get(screen_pos);
-		setPrevs();
-		setNexts();
-	}
-	
-	public synchronized void prev() {
-		if (screen_pos > 0)
-			--screen_pos;
-		
-		screen_curr = screens.get(screen_pos);
-		setPrevs();
-		setNexts();
 	}
 	
 	private synchronized void setNexts() {

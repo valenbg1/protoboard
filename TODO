@@ -30,3 +30,5 @@
 * ? Better borders for screens in multiscreen mode.
 
 * ? Option to delete screen in Blackboard mode (careful with threading).
+
+* ? Feedback to user when reaches bounds of screen in blackboard mode.
