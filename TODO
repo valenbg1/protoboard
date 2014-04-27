@@ -10,8 +10,6 @@
 
 * Fix closing the blackboard window.
 
-* Implement a keyboard/mouse based action to translate the current screen in blackboard mode.
-
 * Improve the principal Swing interface to change between blackboard and input mode:
 	+ Option to set the background color.
 	+ Options to set keyboard keys for input mode.

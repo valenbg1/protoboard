@@ -1,5 +1,6 @@
 package protoboard.blackboard;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
@@ -308,6 +309,26 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		return (frame != null) && (frame.isFocused());
 	}
 
+	@Override
+	public void keyPressed() {
+		if (key == CODED) {
+			switch (keyCode) {
+				case KeyEvent.VK_LEFT:
+					onTranslation(-sizes.translation_arrows, 0);
+					break;
+				case KeyEvent.VK_RIGHT:
+					onTranslation(sizes.translation_arrows, 0);
+					break;
+				case KeyEvent.VK_UP:
+					onTranslation(0, sizes.translation_arrows);
+					break;
+				case KeyEvent.VK_DOWN:
+					onTranslation(0, -sizes.translation_arrows);
+					break;
+			}
+		}
+	}
+	
 	/**
 	 * @param newScreens an array of PNG's
 	 * 
@@ -326,14 +347,14 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			}
 		}
 	}
-	
+
 	public void minimize() {
 		unregisterAsObserver();
 		
 		if (frame != null)
 			frame.setExtendedState(JFrame.ICONIFIED);  // Minimize window
 	}
-
+	
 	@Override
 	public void mouseClicked() {
 		if (multiScreenMode.get())
@@ -369,7 +390,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			}
 		}
 	}
-	
+
 	private void mouseClickedMultiscreenMode() {
 		int pos;
 		
@@ -391,7 +412,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 				quitMultiScreenMode();
 		}
 	}
-
+	
 	private PGraphics newScreen(int width, int height) {
 		int[] background = BlackboardC.background_rgb;
 		PGraphics scr = createGraphics(width, height);

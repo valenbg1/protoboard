@@ -40,6 +40,7 @@ class Sizes {
 	public final PVector little_screen_pos;
 	
 	public final float translation_factor;
+	public final float translation_arrows;
 	
 	public Sizes(int width, int height, int displayWidth, int displayHeight) {
 		this.width = width;
@@ -76,5 +77,6 @@ class Sizes {
 				* BlackboardC.little_screen_prop / 2.0f);
 		
 		this.translation_factor = 1372000f/displWidthxHeight;
+		this.translation_arrows = displWidthxHeight*0.0000290625f;
 	}
 }
