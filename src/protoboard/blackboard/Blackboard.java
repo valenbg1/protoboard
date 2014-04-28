@@ -1,5 +1,6 @@
 package protoboard.blackboard;
 
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -203,6 +204,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		if ((frame != null) && !frame_setup.compareAndSet(false, true)) {
 			frame.addWindowFocusListener(window_f_l());
 			frame.setResizable(true);
+			frame.setMinimumSize(new Dimension(BlackboardC.minimum_size_px, BlackboardC.minimum_size_px));
 		}
 		
 		setLocation(0, 0);
@@ -620,7 +622,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	
 	@Override
 	public void setup() {
-		size(displayWidth/2, displayHeight/2);
+		size(displayWidth/BlackboardC.initial_size_factor, displayHeight/BlackboardC.initial_size_factor);
 		this.sizes = new Sizes(0, 0, displayWidth, displayHeight);
 		
 		updateDrawablesSizes();

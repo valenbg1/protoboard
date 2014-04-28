@@ -35,7 +35,9 @@ public final class Constants {
 		public static final int max_screens = 51;
 		public static final int multi_screen_around = 2;
 		public static final String save_extension = "png";
-		public static final float screen_factor = 1.4f;
+		public static final float screen_factor = 1.3f;
+		public static final int initial_size_factor = 2;
+		public static final int minimum_size_px = 40;
 		
 		public static final int erase_color[] = background_rgb;
 		public static final int erase_square_border_color[] = background_rgb_1;
