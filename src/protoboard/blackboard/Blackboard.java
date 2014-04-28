@@ -1,9 +1,11 @@
 package protoboard.blackboard;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -11,6 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -46,12 +49,13 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	private AtomicBoolean multiScreenMode;
 	
 	private ScreensIterator screens_iter;
-	private AtomicBoolean frame_setup;
 	
 	private float draw_line_weight;
 	
 	private ArrowsCircleSquare draw_line_square;
 	private String save_path;
+	
+	private JFrame jframe;
 	
 	public Blackboard() {
 		super();
@@ -77,11 +81,20 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		this.multiScreenMode = new AtomicBoolean(false);
 		this.screens_iter = null;
 		
-		this.frame_setup = new AtomicBoolean(false);
-		
 		this.draw_line_weight = 0;
 		
 		this.save_path = "";
+		
+		configureJFrame();
+		
+	    init();
+	    
+	    EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				jframe.setVisible(true);
+			}
+		});
 	}
 	
 	private synchronized void _changeScreenBack() {
@@ -114,7 +127,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		screen_curr = s_curr_aux;
 		resetCurrScreenToCenter();
 	}
-
+	
 	private PVector boundScreenfrom(PVector pos) {
 		if (screen_curr != null) {
 			PVector pos_aux = new PVector(pos.x, pos.y);
@@ -129,7 +142,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		} else
 			return new PVector(0, 0);
 	}
-	
+
 	public void changeDrawColorBack() {
 		draw_color = draw_color.prev();
 		color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
@@ -141,7 +154,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
 		updateDrawLineSquare();
 	}
-
+	
 	public synchronized void changeDrawLineWeightBack() {
 		draw_line_weight = Math.max(draw_line_weight
 				- sizes.draw_line_weight_sum,
@@ -164,7 +177,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			screens_iter = new ScreensIterator(this, screens, screen_pos, BlackboardC.multi_screen_around);
 		}
 	}
-	
+
 	public synchronized void changeMultiScreenForth() {
 		if (multiScreenMode.get()) {
 			if ((screen_pos+1) < screens.size())
@@ -173,7 +186,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			screens_iter = new ScreensIterator(this, screens, screen_pos, BlackboardC.multi_screen_around);
 		}
 	}
-
+	
 	private void changeScreen() {
 		if (screen_change[0].get())
 			_changeScreenBack();
@@ -181,7 +194,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			_changeScreenForth();
 		}
 	}
-	
+
 	public void changeScreenBack() {
 		screen_change[0].compareAndSet(false, true);
 	}
@@ -197,15 +210,46 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		addAndSetNewScreen();
 	}
 	
+	private void configureJFrame() {
+		jframe = new JFrame(BlackboardC.frame_name);
+		jframe.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		jframe.setLayout(new BorderLayout());
+        jframe.add(this, BorderLayout.CENTER);
+	    jframe.setSize(600, 510);  // TODO
+	    jframe.setResizable(true);
+	    jframe.setMinimumSize(new Dimension(BlackboardC.minimum_size_px, BlackboardC.minimum_size_px));
+	    jframe.addWindowListener(new WindowAdapter() {
+	        public void windowClosing(WindowEvent ev) {
+	        	Main.quitBlackboardMode();
+	        	
+	        	EventQueue.invokeLater(new Runnable() {
+	    			@Override
+	    			public void run() {
+	    				jframe.setVisible(false);
+	    				jframe.dispose();
+	    			}
+	    		});
+	        	
+	        	stop();
+	        	exit();
+	        }
+	        
+	        @Override
+			public void windowGainedFocus(WindowEvent e) {
+				Main.stopInputMode();
+				registerAsObserver();
+			}
+			
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				unregisterAsObserver();
+			}
+	    });
+	}
+	
 	@Override
 	public void draw() {
 		updateDrawablesSizes();
-		
-		if ((frame != null) && !frame_setup.compareAndSet(false, true)) {
-			frame.addWindowFocusListener(window_f_l());
-			frame.setResizable(true);
-			frame.setMinimumSize(new Dimension(BlackboardC.minimum_size_px, BlackboardC.minimum_size_px));
-		}
 		
 		setLocation(0, 0);
 
@@ -308,7 +352,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	}
 	
 	public boolean isFocused() {
-		return (frame != null) && (frame.isFocused());
+		return jframe.isFocused();
 	}
 
 	@Override
@@ -352,9 +396,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 
 	public void minimize() {
 		unregisterAsObserver();
-		
-		if (frame != null)
-			frame.setExtendedState(JFrame.ICONIFIED);  // Minimize window
+		jframe.setExtendedState(JFrame.ICONIFIED);  // Minimize window
 	}
 	
 	@Override
@@ -627,7 +669,6 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		
 		updateDrawablesSizes();
 		registerAsObserver();
-		Main.setBlackBoardMode(this);
 		
 		File[] load_files = Main.getAndNullLoadFiles_blckbrdMode();
 		
@@ -641,10 +682,8 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public void toFront() {
 		registerAsObserver();
 		
-		if (frame != null) {
-			frame.setExtendedState(JFrame.NORMAL);
-			frame.toFront();
-		}
+		jframe.setExtendedState(JFrame.NORMAL);
+		jframe.toFront();
 	}
 	
 	public void toFrontAndLoad(File[] files) {
@@ -689,24 +728,5 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		int[] raw_color = draw_color.isEraseColor() ? BlackboardC.background_rgb_1
 				: draw_color.getActual();
 		draw_line_square = ArrowsCircleSquare.drawLineWeightCircleSquare(this, draw_line_weight, color(raw_color));
-	}
-
-	/**
-	 * @return the WindowFocusListener for this Blackboard.
-	 * 
-	 */
-	private WindowFocusListener window_f_l() {	
-		return new WindowFocusListener() {
-			@Override
-			public void windowGainedFocus(WindowEvent e) {
-				Main.stopInputMode();
-				registerAsObserver();
-			}
-			
-			@Override
-			public void windowLostFocus(WindowEvent e) {
-				unregisterAsObserver();
-			}
-		};
 	}
 }

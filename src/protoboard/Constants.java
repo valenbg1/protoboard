@@ -29,6 +29,7 @@ public final class Constants {
 		public static final int[] info_blue_rgb = { 102, 178, 255 };
 		public static final int[] alert_red_rgb = { 255, 65, 65 };
 		
+		public static final String frame_name = "Protoboard's blackboard";
 		public static final int background_rgb[] = { 0, 0, 0 };
 		public static final int background_rgb_1[] = { 255 - background_rgb[0], 255 - background_rgb[1], 255 - background_rgb[2] };
 		public static final String save_name = "board";

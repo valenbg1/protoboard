@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.UIManager;
 
 import protoboard.blackboard.Blackboard;
-import protoboard.blackboard.MyPApplet;
 import protoboard.input.Input;
 import protoboard.leapmotion.LeapMotionListener;
 import protoboard.swing.MainIface;
@@ -55,13 +54,22 @@ public final class Main {
 		});
 	}
 	
+	public static void quitBlackboardMode() {
+		if (running_blackboard_mode.compareAndSet(true, false)) {
+			stopBlackboardMode();
+			blackboard_mode = null;
+		}
+		
+		main_iface.deselectBlackboardButton();
+	}
+	
 	public static void runBlackboardMode() {
 		stopInputMode();
 		
 		Blackboard blck = blackboard_mode;
 	
 		if (running_blackboard_mode.compareAndSet(false, true))
-			MyPApplet.main(Blackboard.class.getName());
+			blackboard_mode = new Blackboard();
 		else if (runningBlackboardMode() && (blck != null)) {
 			blck.toFrontAndLoad(getAndNullLoadFiles_blckbrdMode());
 			main_iface.clean_LoadSelectLabel();
@@ -98,11 +106,6 @@ public final class Main {
 			blck.saveAllScreens(path);
 	}
 	
-	public static synchronized void setBlackBoardMode(Blackboard blck) {
-		if (runningBlackboardMode())
-			blackboard_mode = blck;
-	}
-	
 	public static synchronized void setLoadFolder_blckbrdMode(File[] folder) {
 		load_files = folder;
 	}
@@ -122,6 +125,8 @@ public final class Main {
 			
 			if (inp != null)
 				inp.stop();
+			
+			input_mode = null;
 		}
 		
 		main_iface.deselectInputButton();
