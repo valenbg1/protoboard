@@ -1,5 +1,6 @@
 package protoboard;
 
+import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -9,6 +10,9 @@ import java.awt.event.KeyEvent;
  * 
  */
 public final class Constants {
+	public static final int AWTdisplayWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+	public static final int AWTdisplayHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+	
 	public static void printExceptionToErr(String message, Exception e) {
 		System.err.println("-------------------------------------------\n"
 				+ message + ":\n");

@@ -18,6 +18,7 @@ import javax.swing.WindowConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
+import protoboard.Constants;
 import protoboard.Constants.BlackboardC;
 import protoboard.Constants.LeapMotionListenerC;
 import protoboard.Main;
@@ -215,7 +216,9 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		jframe.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		jframe.setLayout(new BorderLayout());
         jframe.add(this, BorderLayout.CENTER);
-	    jframe.setSize(600, 510);  // TODO
+		jframe.setSize(Constants.AWTdisplayWidth
+				/ BlackboardC.initial_size_factor, Constants.AWTdisplayHeight
+				/ BlackboardC.initial_size_factor);
 	    jframe.setResizable(true);
 	    jframe.setMinimumSize(new Dimension(BlackboardC.minimum_size_px, BlackboardC.minimum_size_px));
 	    jframe.addWindowListener(new WindowAdapter() {
@@ -235,13 +238,13 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	        }
 	        
 	        @Override
-			public void windowGainedFocus(WindowEvent e) {
+			public void windowGainedFocus(WindowEvent ev) {
 				Main.stopInputMode();
 				registerAsObserver();
 			}
 			
 			@Override
-			public void windowLostFocus(WindowEvent e) {
+			public void windowLostFocus(WindowEvent ev) {
 				unregisterAsObserver();
 			}
 	    });
@@ -250,8 +253,6 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	@Override
 	public void draw() {
 		updateDrawablesSizes();
-		
-		setLocation(0, 0);
 
 		// Clean screen
 		int[] background = BlackboardC.background_rgb;
@@ -358,18 +359,20 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	@Override
 	public void keyPressed() {
 		if (key == CODED) {
+			float trans = multiScreenMode.get() ? -sizes.translation_arrows : sizes.translation_arrows;
+			
 			switch (keyCode) {
 				case KeyEvent.VK_LEFT:
-					onTranslation(-sizes.translation_arrows, 0);
+					onTranslation(-trans, 0);
 					break;
 				case KeyEvent.VK_RIGHT:
-					onTranslation(sizes.translation_arrows, 0);
+					onTranslation(trans, 0);
 					break;
 				case KeyEvent.VK_UP:
-					onTranslation(0, sizes.translation_arrows);
+					onTranslation(0, trans);
 					break;
 				case KeyEvent.VK_DOWN:
-					onTranslation(0, -sizes.translation_arrows);
+					onTranslation(0, -trans);
 					break;
 			}
 		}
@@ -522,7 +525,8 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	@Override
 	public void onTranslation(float d_x, float d_y) {
 		PVector trans = new PVector(0, 0);
-		float t_threshold = LeapMotionListenerC.translation_threshold, t_factor = sizes.translation_factor;
+		float t_threshold = LeapMotionListenerC.translation_threshold,
+				t_factor = multiScreenMode.get() ? -sizes.translation_factor : sizes.translation_factor;;
 		
 		if (Math.abs(d_x) > t_threshold)
 			trans.x = d_x/t_factor;
@@ -677,6 +681,8 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		
 		if (screens.size() == 0)
 			addAndSetNewScreen();
+		
+		setLocation(0, 0);
 	}
 	
 	public void toFront() {

@@ -8,9 +8,7 @@
 * Two hands moving gesture on Input mode:
 	+ Study problem with horizontal scrolling.
 	
-* Rewrite the Main code related to new JFrame in blackboard mode.
-	+ Code in Main class.
-	+ TO DO's in Blackboard class.
+* Add a dialog asking the user when closing blackboard window.
 
 * Improve the principal Swing interface to change between blackboard and input mode:
 	+ Option to set the background color.
@@ -25,7 +23,7 @@
 
 * Make a color wheel instead of the actual color square in blackboard mode.
 
-* Nice transitions in multiscreen mode.
+* ? Nice transitions in multiscreen mode.
 
 * ? Better borders for screens in multiscreen mode.
 
