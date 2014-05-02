@@ -81,13 +81,12 @@ public final class Constants {
 		public static final String err_interr = "Interrupted while running Input";
 		public static final int robot_delay = 15; // ms
 		
-		public static final int onDownSwipe = KeyEvent.VK_UP;
 		public static final int onLeftSwipe = KeyEvent.VK_RIGHT;
 		public static final int onRightSwipe = KeyEvent.VK_LEFT;
 		public static final int onScreenTap = InputEvent.BUTTON1_DOWN_MASK;
-		public static final int onUpSwipe = KeyEvent.VK_DOWN;
+		public static final int onUpSwipe = KeyEvent.VK_F11;
 		
-		public static final float wheel_notches_factor = 35.0f;
+		public static final float wheel_notches_factor = 16.5f;
 	}
 	
 	/**

@@ -38,7 +38,7 @@ public class Input implements LeapMotionObserver, Runnable {
 
 	@Override
 	public void onDownSwipe() {
-		simKey(InputC.onDownSwipe);
+		// NOTHING
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class Input implements LeapMotionObserver, Runnable {
 				d_y_abs = Math.abs(d_y);
 		
 		if (d_y_abs > t_threshold) {
-			int wheel_f = (int) Math.ceil(d_y_abs/w_factor);
+			int wheel_f = (int) Math.floor(d_y_abs/w_factor);
 			
 			robot.mouseWheel(d_y < 0 ? -wheel_f : wheel_f);
 		}

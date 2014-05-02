@@ -1,7 +1,7 @@
-* ! Check and make the possibility of using protoboard without Leap Motion lib installed:
+* Check and make the possibility of using protoboard without Leap Motion lib installed:
 	+ Windows: ok if the Leap Motion lib is correctly set.
 	
-* ! Fine adjustment of gestures:
+* Fine adjustment of gestures:
 	+ Send a swipe gesture event like a circle gesture event: every time the gesture progress reaches some point.
 	+ Study interaction between translating and other gestures.
 
@@ -11,8 +11,6 @@
 * Add a dialog asking the user when closing:
 	+ Main interface.
 	+ Blackboard window.
-	
-* Change up / down swipe in input mode to f11 / minimize.
 
 * Improve the principal Swing interface to change between blackboard and input mode:
 	+ Option to set the background color.
@@ -28,10 +26,12 @@
 
 * Make a color wheel instead of the actual color square in blackboard mode.
 
-* ? Nice transitions in multiscreen mode.
+* Try different OS.
 
-* ? Better borders for screens in multiscreen mode.
+* Nice transitions in multiscreen mode.
 
-* ? Option to delete screen in Blackboard mode (careful with threading).
+* Better borders for screens in multiscreen mode.
 
-* ? Feedback to user when reaches bounds of screen in blackboard mode.
+* Option to delete screen in Blackboard mode (careful with threading).
+
+* Feedback to user when reaches bounds of screen in blackboard mode.
