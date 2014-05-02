@@ -8,7 +8,11 @@
 * Two hands moving gesture on Input mode:
 	+ Study problem with horizontal scrolling.
 	
-* Add a dialog asking the user when closing blackboard window.
+* Add a dialog asking the user when closing:
+	+ Main interface.
+	+ Blackboard window.
+	
+* Change up / down swipe in input mode to f11 / minimize.
 
 * Improve the principal Swing interface to change between blackboard and input mode:
 	+ Option to set the background color.
@@ -18,6 +22,7 @@
 		- ? Make it persistent.
 	+ Option to set initial size of blackboard window.
 	+ Option to set the Blackboard mode windowed or full-screen.
+	+ Option to set thresholds for the Leap Motion device.
 
 * Try different options of Leap Motion internal configuration.
 

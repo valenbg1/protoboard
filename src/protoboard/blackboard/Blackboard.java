@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -215,39 +216,41 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		jframe = new JFrame(BlackboardC.frame_name);
 		jframe.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		jframe.setLayout(new BorderLayout());
-        jframe.add(this, BorderLayout.CENTER);
+		jframe.add(this, BorderLayout.CENTER);
 		jframe.setSize(Constants.AWTdisplayWidth
 				/ BlackboardC.initial_size_factor, Constants.AWTdisplayHeight
 				/ BlackboardC.initial_size_factor);
-	    jframe.setResizable(true);
-	    jframe.setMinimumSize(new Dimension(BlackboardC.minimum_size_px, BlackboardC.minimum_size_px));
-	    jframe.addWindowListener(new WindowAdapter() {
-	        public void windowClosing(WindowEvent ev) {
-	        	Main.quitBlackboardMode();
-	        	
-	        	EventQueue.invokeLater(new Runnable() {
-	    			@Override
-	    			public void run() {
-	    				jframe.setVisible(false);
-	    				jframe.dispose();
-	    			}
-	    		});
-	        	
-	        	stop();
-	        	exit();
-	        }
-	        
-	        @Override
+		jframe.setResizable(true);
+		jframe.setMinimumSize(new Dimension(BlackboardC.minimum_size_px,
+				BlackboardC.minimum_size_px));
+		jframe.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent ev) {
+				Main.quitBlackboardMode();
+
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						jframe.setVisible(false);
+						jframe.dispose();
+					}
+				});
+
+				stop();
+				exit();
+			}
+		});
+		jframe.addWindowFocusListener(new WindowFocusListener() {
+			@Override
 			public void windowGainedFocus(WindowEvent ev) {
 				Main.stopInputMode();
 				registerAsObserver();
 			}
-			
+
 			@Override
 			public void windowLostFocus(WindowEvent ev) {
 				unregisterAsObserver();
 			}
-	    });
+		});
 	}
 	
 	@Override
