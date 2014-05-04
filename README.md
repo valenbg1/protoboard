@@ -10,7 +10,6 @@ Minimum requirements
 * [Java 7u55](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
 * [Processing 2.1.2 core library](http://processing.org/download/)
-	+ [Ani 2.5 library](http://www.looksgood.de/libraries/Ani/)
 
 * [Leap Motion SDK Java library 1.0.9+8391](http://developer.leapmotion.com/)
 	+ Leap Motion native libraries for your

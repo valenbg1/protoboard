@@ -362,7 +362,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	@Override
 	public void keyPressed() {
 		if (key == CODED) {
-			float trans = multiScreenMode.get() ? -sizes.translation_arrows : sizes.translation_arrows;
+			float trans = sizes.translation_arrows;
 			
 			switch (keyCode) {
 				case KeyEvent.VK_LEFT:

@@ -26,6 +26,6 @@ Input mode
 
 * Screen / key tap presses mouse button one.
 
-* Up / down swipe presses down / up arrows.
+* Up swipe presses F11.
 
 * Two hands moving together up / down move the mouse wheel down / up.
