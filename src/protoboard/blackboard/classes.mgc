@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="protoboard.blackboard.ArrowsSquare" x="601" y="303">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="protoboard.blackboard.ArrowsDrawable"/>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsDrawable"/>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard"/>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet"/>
+    </Class>
+    <Class name="protoboard.blackboard.Sizes" x="1228" y="515">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="protoboard.blackboard.ArrowsDrawable" x="646" y="39">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="protoboard.blackboard.Blackboard"
+            endpointName="context" kind="Simple">
+            <Point x="964" y="284"/>
+        </Association>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard"/>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet"/>
+    </Class>
+    <Class name="protoboard.blackboard.Colors" x="1242" y="301">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="protoboard.blackboard.ArrowsCircleSquare" x="597" y="473">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="protoboard.blackboard.ArrowsSquare"/>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard"/>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet"/>
+    </Class>
+    <Class name="protoboard.blackboard.ScreensIterator" x="444" y="667">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="protoboard.blackboard.ArrowsSquare"
+            endpointName="sq_prevs" kind="Simple">
+            <Point x="595" y="464"/>
+        </Association>
+        <Association
+            destinationClassName="protoboard.blackboard.ArrowsSquare"
+            endpointName="sq_curr" kind="Simple">
+            <Point x="542" y="353"/>
+        </Association>
+        <Association
+            destinationClassName="protoboard.blackboard.Blackboard"
+            endpointName="context" kind="Simple">
+            <Point x="761" y="778"/>
+        </Association>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsSquare"/>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsDrawable"/>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard"/>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet"/>
+    </Class>
+    <Class name="protoboard.blackboard.Blackboard" x="868" y="295">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="protoboard.blackboard.MyPApplet"/>
+        <Association destinationClassName="protoboard.blackboard.Sizes"
+            endpointName="sizes" kind="Simple"/>
+        <Association destinationClassName="protoboard.blackboard.Colors"
+            endpointName="draw_color" kind="Simple"/>
+        <Association
+            destinationClassName="protoboard.blackboard.ArrowsSquare"
+            endpointName="number_square" kind="Simple">
+            <Point x="868" y="336"/>
+        </Association>
+        <Association
+            destinationClassName="protoboard.blackboard.ArrowsCircleSquare"
+            endpointName="draw_line_square" kind="Simple"/>
+        <Association
+            destinationClassName="protoboard.blackboard.ArrowsSquare"
+            endpointName="color_square" kind="Simple">
+            <Point x="866" y="447"/>
+        </Association>
+        <Association
+            destinationClassName="protoboard.blackboard.ScreensIterator"
+            endpointName="screens_iter" kind="Simple">
+            <Point x="871" y="699"/>
+        </Association>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsSquare"/>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsDrawable"/>
+        <Communication destinationClassName="protoboard.blackboard.Colors"/>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsCircleSquare"/>
+        <Communication destinationClassName="protoboard.blackboard.ScreensIterator"/>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet"/>
+    </Class>
+    <Class name="protoboard.blackboard.MyPApplet" x="868" y="31">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+</ClassDiagram>
