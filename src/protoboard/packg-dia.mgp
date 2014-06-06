@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PackageAnalysis>
+    <Package name="protoboard" x="413" y="147">
+        <DependencyLink destination="protoboard.swing">
+            <Point x="344" y="133"/>
+        </DependencyLink>
+        <DependencyLink destination="protoboard.input"/>
+        <DependencyLink destination="protoboard.leapmotion">
+            <Point x="525" y="256"/>
+        </DependencyLink>
+        <DependencyLink destination="protoboard.blackboard">
+            <Point x="639" y="264"/>
+        </DependencyLink>
+    </Package>
+    <Package name="protoboard.blackboard" x="702" y="332">
+        <DependencyLink destination="protoboard.leapmotion"/>
+        <DependencyLink destination="protoboard">
+            <Point x="543" y="136"/>
+        </DependencyLink>
+    </Package>
+    <Package name="protoboard.input" x="101" y="331">
+        <DependencyLink destination="protoboard.leapmotion"/>
+    </Package>
+    <Package name="protoboard.leapmotion" x="377" y="333">
+        <DependencyLink destination="protoboard">
+            <Point x="440" y="258"/>
+        </DependencyLink>
+    </Package>
+    <Package name="protoboard.swing" x="112" y="147">
+        <DependencyLink destination="protoboard">
+            <Point x="346" y="190"/>
+        </DependencyLink>
+    </Package>
+</PackageAnalysis>
