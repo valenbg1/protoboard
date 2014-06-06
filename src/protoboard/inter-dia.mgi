@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass name="protoboard.input.Input" x="519" y="36">
+        <Association
+            destinationClassName="protoboard.leapmotion.LeapMotionListener"
+            endpointName="lmlistener" kind="Simple"/>
+        <Communication destinationClassName="protoboard.leapmotion.LeapMotionListener"/>
+    </CommunicationClass>
+    <CommunicationClass name="protoboard.Main" x="42" y="35">
+        <Association
+            destinationClassName="protoboard.leapmotion.LeapMotionListener"
+            endpointName="lm_listener" kind="Simple"/>
+        <Association
+            destinationClassName="protoboard.blackboard.Blackboard"
+            endpointName="blackboard_mode" kind="Simple"/>
+        <Association destinationClassName="protoboard.input.Input"
+            endpointName="input_mode" kind="Simple"/>
+        <Communication destinationClassName="protoboard.input.Input"/>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard">
+            <Point x="39" y="251"/>
+        </Communication>
+    </CommunicationClass>
+    <CommunicationClass name="protoboard.leapmotion.LeapMotionListener"
+        x="464" y="411"/>
+    <CommunicationClass name="protoboard.blackboard.Blackboard" x="23" y="408">
+        <Communication destinationClassName="protoboard.Main">
+            <Point x="132" y="252"/>
+        </Communication>
+        <Communication destinationClassName="protoboard.leapmotion.LeapMotionListener"/>
+    </CommunicationClass>
+</ClassDiagram>
