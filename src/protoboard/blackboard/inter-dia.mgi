@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass name="protoboard.blackboard.ArrowsDrawable"
+        x="60" y="219">
+        <Association
+            destinationClassName="protoboard.blackboard.Blackboard"
+            endpointName="context" kind="Simple"/>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard">
+            <Point x="202" y="387"/>
+        </Communication>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet"/>
+    </CommunicationClass>
+    <CommunicationClass name="protoboard.blackboard.Colors" x="194" y="536"/>
+    <CommunicationClass name="protoboard.leapmotion.LeapMotionListener"
+        x="-65" y="537"/>
+    <CommunicationClass name="protoboard.blackboard.ScreensIterator"
+        x="-75" y="329">
+        <Association
+            destinationClassName="protoboard.blackboard.Blackboard"
+            endpointName="context" kind="Simple"/>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsDrawable"/>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard">
+            <Point x="47" y="411"/>
+        </Communication>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet">
+            <Point x="-6" y="108"/>
+        </Communication>
+    </CommunicationClass>
+    <CommunicationClass name="protoboard.blackboard.Blackboard" x="176" y="392">
+        <Extension destinationClassName="protoboard.blackboard.MyPApplet"/>
+        <Association destinationClassName="protoboard.blackboard.Colors"
+            endpointName="draw_color" kind="Simple"/>
+        <Association
+            destinationClassName="protoboard.blackboard.ScreensIterator"
+            endpointName="screens_iter" kind="Simple"/>
+        <Communication destinationClassName="protoboard.blackboard.ArrowsDrawable">
+            <Point x="301" y="407"/>
+            <Point x="330" y="236"/>
+        </Communication>
+        <Communication destinationClassName="protoboard.blackboard.Colors"/>
+        <Communication destinationClassName="protoboard.leapmotion.LeapMotionListener"/>
+        <Communication destinationClassName="protoboard.blackboard.ScreensIterator">
+            <Point x="108" y="342"/>
+        </Communication>
+        <Communication destinationClassName="protoboard.blackboard.MyPApplet">
+            <Point x="381" y="415"/>
+            <Point x="384" y="103"/>
+        </Communication>
+    </CommunicationClass>
+    <CommunicationClass name="protoboard.blackboard.MyPApplet" x="98" y="85"/>
+</ClassDiagram>
