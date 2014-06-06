@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="protoboard.input.Input" x="242" y="10">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="protoboard.Main" x="35" y="33">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="protoboard.blackboard.Blackboard"
+            endpointName="blackboard_mode" kind="Simple">
+            <Point x="136" y="118"/>
+        </Association>
+        <Association destinationClassName="protoboard.input.Input"
+            endpointName="input_mode" kind="Simple">
+            <Point x="78" y="38"/>
+        </Association>
+        <Communication destinationClassName="protoboard.input.Input"/>
+        <Communication destinationClassName="protoboard.blackboard.Blackboard"/>
+    </Class>
+    <Class name="protoboard.blackboard.Blackboard" x="-57" y="156">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="protoboard.Main"/>
+    </Class>
+</ClassDiagram>
