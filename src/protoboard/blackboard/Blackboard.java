@@ -58,6 +58,8 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	private String save_path;
 	
 	private JFrame jframe;
+	private AtomicBoolean mouse_clean;
+	
 	
 	public Blackboard() {
 		super();
@@ -71,7 +73,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		this.screen_draw_p = new PVector(0, 0);
 		
 		this.sizes = null;
-
+		this.mouse_clean = new AtomicBoolean(false);
 		this.draw_color = new Colors();
 		
 		this.color_square = null;
@@ -406,7 +408,30 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	}
 	
 	@Override
+	public void mouseReleased() {
+		System.out.println("Mouse Released!!");
+		mouse_clean.set(false);
+		super.mouseReleased();
+	}
+	
+	@Override
+	public void mousePressed() {
+		System.out.println("Mouse Pressed!!");
+		
+		pmouseX = mouseX;
+		pmouseY = mouseY;
+		
+		System.out.println("Pulsación: "+ pmouseX + " " + pmouseY+ "->"+mouseX + " " + mouseY );
+		
+		mouse_clean.set(true);
+		super.mousePressed();
+	}
+	
+	@Override
 	public void mouseClicked() {
+
+		
+		System.out.println("Mouse Clicked!!");
 		if (multiScreenMode.get())
 			// Process multiscreen mode clicks
 			mouseClickedMultiscreenMode();
@@ -544,7 +569,6 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public void onUpSwipe() {
 		enterMultiScreenMode();
 	}
-	
 	private void processCursor() {
 		if (multiScreenMode.get())
 			processCursorMultiScreenMode();
@@ -571,9 +595,15 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 					rect(mouseX - rect_weight/2, mouseY - rect_weight/2, rect_weight, rect_weight);
 				}
 
+				if(mouse_clean.get()){
+					pmouseX = mouseX;
+					pmouseY = mouseY;
+					mouse_clean.set(false);
+				}
+				
 				if (mousePressed) {
 					screen_curr.beginDraw();
-					
+					System.out.println("Pulsación: "+ pmouseX + " " + pmouseY+ "->"+mouseX + " " + mouseY );
 					screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
 					
 					if (!draw_color.isEraseColor())
