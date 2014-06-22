@@ -5,7 +5,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 /**
- * Custom PApplet class with some handy methods.
+ * Custom PApplet class with some handy methods
  * 
  */
 public class MyPApplet extends PApplet {

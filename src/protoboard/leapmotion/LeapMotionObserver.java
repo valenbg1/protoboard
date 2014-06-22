@@ -2,7 +2,7 @@ package protoboard.leapmotion;
 
 /**
  * Interface that a class must implement to receive cooked actions captured from
- * the Leap Motion hardware.
+ * the Leap Motion hardware
  * 
  */
 public interface LeapMotionObserver {

@@ -21,7 +21,7 @@ import protoboard.Constants.MainIfaceC;
 import protoboard.Main;
 
 /**
- * Implements the principal Swing interface.
+ * Implements the principal Swing interface
  *
  */
 public class MainIface extends JFrame {

@@ -10,7 +10,7 @@ import protoboard.Constants.BlackboardC;
 /**
  * Implements an iterator over the screens of the blackboard. Used
  * for showing multiple screens at a time (when up swipe is detected).
- * It's an immutable object.
+ * It's an immutable object
  *
  */
 class ScreensIterator {
@@ -94,6 +94,11 @@ class ScreensIterator {
 				context.height * factor.y), 0);
 	}
 	
+	/**
+	 * 
+	 * @return if the mouse pointer (mouseX, mouseY) is on any side of this ScreensIterator
+	 * 
+	 */
 	public int isOnAny(int mouseX, int mouseY) {
 		int ret = Integer.MIN_VALUE;
 		

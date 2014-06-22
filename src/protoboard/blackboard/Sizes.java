@@ -4,7 +4,7 @@ import processing.core.PVector;
 import protoboard.Constants.BlackboardC;
 
 /**
- * Externalized relative sizes within blackboard mode scope. It's an immutable object.
+ * Externalized relative sizes within blackboard mode scope. It's an immutable object
  *
  */
 class Sizes {

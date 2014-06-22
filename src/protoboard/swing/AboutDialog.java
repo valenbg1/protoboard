@@ -18,7 +18,7 @@ import javax.swing.event.HyperlinkListener;
 import protoboard.Constants.MainIfaceC.AboutDialogC;
 
 /**
- * Implements the about Swing window.
+ * Implements the about Swing window
  *
  */
 class AboutDialog extends JDialog {

@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 
 
 /**
- * Class externalizing all the constants within the application.
+ * Class externalizing all the constants within the application
  * 
  */
 public final class Constants {
@@ -26,7 +26,7 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constants within blackboard mode scope.
+	 * Externalized constants within blackboard mode scope
 	 *
 	 */
 	public static final class BlackboardC {
@@ -73,7 +73,7 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constants within Input mode scope.
+	 * Externalized constants within Input mode scope
 	 *
 	 */
 	public static final class InputC {
@@ -90,7 +90,7 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constants within Leap Motion controller scope.
+	 * Externalized constants within Leap Motion controller scope
 	 *
 	 */
 	public static final class LeapMotionListenerC {
@@ -136,7 +136,7 @@ public final class Constants {
 	}
 	
 	/**
-	 * Externalized constants within the main Swing interface.
+	 * Externalized constants within the main Swing interface
 	 *
 	 */
 	public static final class MainIfaceC {

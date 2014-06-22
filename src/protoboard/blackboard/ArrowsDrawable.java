@@ -4,7 +4,7 @@ import processing.core.PVector;
 
 /**
  * Represents a 2D abstract square (for selection) with 4 optional selection arrows:
- * left, right, up, down.
+ * left, right, up, down
  * 
  */
 abstract class ArrowsDrawable {
@@ -90,6 +90,11 @@ abstract class ArrowsDrawable {
 		}
 	}
 
+	/**
+	 * 
+	 * @return if the mouse pointer (mouseX, mouseY) is on any side of the ArrowsDrawable
+	 * 
+	 */
 	public boolean isOnAnySide(int mouseX, int mouseY) {
 		if (show_ud_triangles)
 			return isOnLeft(mouseX, mouseY) || isOnRight(mouseX, mouseY)
@@ -98,6 +103,11 @@ abstract class ArrowsDrawable {
 			return isOnLeft(mouseX, mouseY) || isOnRight(mouseX, mouseY);
 	}
 
+	/**
+	 * 
+	 * @return if the mouse pointer (mouseX, mouseY) is on the down arrow
+	 * 
+	 */
 	public boolean isOnDown(int mouseX, int mouseY) {
 		float extension = square_triangle_det;
 		
@@ -108,6 +118,11 @@ abstract class ArrowsDrawable {
 				&& (mouseY >= (pos.y + diag.y));
 	}
 
+	/**
+	 * 
+	 * @return if the mouse pointer (mouseX, mouseY) is on the left arrow
+	 * 
+	 */
 	public boolean isOnLeft(int mouseX, int mouseY) {
 		float extension = show_lr_triangles ? square_triangle_det : 0;
 		
@@ -118,6 +133,11 @@ abstract class ArrowsDrawable {
 				&& (mouseY <= (pos.y + diag.y));
 	}
 	
+	/**
+	 * 
+	 * @return if the mouse pointer (mouseX, mouseY) is on the right arrow
+	 * 
+	 */
 	public boolean isOnRight(int mouseX, int mouseY) {
 		float extension = show_lr_triangles ? square_triangle_det : 0;
 		
@@ -128,6 +148,11 @@ abstract class ArrowsDrawable {
 				&& (mouseY <= (pos.y + diag.y));
 	}
 
+	/**
+	 * 
+	 * @return if the mouse pointer (mouseX, mouseY) is on the up arrow
+	 * 
+	 */
 	public boolean isOnUp(int mouseX, int mouseY) {
 		float extension = square_triangle_det;
 		

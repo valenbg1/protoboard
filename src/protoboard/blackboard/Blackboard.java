@@ -27,7 +27,7 @@ import protoboard.Main;
 import protoboard.leapmotion.LeapMotionObserver;
 
 /**
- * Implements the blackboard mode of the application.
+ * Implements the blackboard mode of the application
  *
  */
 public class Blackboard extends MyPApplet implements LeapMotionObserver {
@@ -148,18 +148,30 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			return new PVector(0, 0);
 	}
 
+	/**
+	 * Changes the draw color back in the array
+	 * 
+	 */
 	public void changeDrawColorBack() {
 		draw_color = draw_color.prev();
 		color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
 		updateDrawLineSquare();
 	}
 	
+	/**
+	 * Changes the draw color forth in the array
+	 * 
+	 */
 	public void changeDrawColorForth() {
 		draw_color = draw_color.next();
 		color_square = ArrowsSquare.colorSquare(this, color(draw_color.getActual()));
 		updateDrawLineSquare();
 	}
 	
+	/**
+	 * Changes the draw line weight to a little one
+	 * 
+	 */
 	public synchronized void changeDrawLineWeightBack() {
 		draw_line_weight = Math.max(draw_line_weight
 				- sizes.draw_line_weight_sum,
@@ -167,6 +179,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		updateDrawLineSquare();
 	}
 
+	/**
+	 * Changes the draw line weight to a bigger one
+	 * 
+	 */
 	public synchronized void changeDrawLineWeightForth() {
 		draw_line_weight = Math.min(draw_line_weight
 				+ sizes.draw_line_weight_sum,
@@ -174,6 +190,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		updateDrawLineSquare();
 	}
 
+	/**
+	 * Moves the actual multiscreen selection back (in multiscreen mode)
+	 * 
+	 */
 	public synchronized void changeMultiScreenBack() {
 		if (multiScreenMode.get()) {
 			if (screen_pos > 0)
@@ -183,6 +203,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		}
 	}
 
+	/**
+	 * Moves the actual multiscreen selection forth (in multiscreen mode)
+	 * 
+	 */
 	public synchronized void changeMultiScreenForth() {
 		if (multiScreenMode.get()) {
 			if ((screen_pos+1) < screens.size())
@@ -671,6 +695,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		graph.resize((int) width_r, (int) height_r);
 	}
 	
+	/**
+	 * Save all current screens to the path
+	 * 
+	 */
 	public void saveAllScreens(File path) {
 		if (path.isDirectory()) {
 			String p = path.getPath() + File.separator;
@@ -682,6 +710,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		}
 	}
 	
+	/**
+	 * Save current screen to the path that this object holds
+	 * 
+	 */
 	public synchronized void saveCurrentScreen() {
 		saveScreen(screen_curr, screen_pos, save_path);
 		setSaveText();
@@ -729,6 +761,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		jframe.toFront();
 	}
 	
+	/**
+	 * Moves the JFrame to front and load all the .png files in 'files'
+	 * 
+	 */
 	public void toFrontAndLoad(File[] files) {
 		if (files != null)
 			loadAndAddScreens(files);
@@ -736,6 +772,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		toFront();
 	}
 	
+	/**
+	 * Translate the current screen based on d_x and d_y
+	 * 
+	 */
 	public void translateScreen(float d_x, float d_y) {
 		PVector draw_p_aux = new PVector(screen_draw_p.x, screen_draw_p.y);
 		

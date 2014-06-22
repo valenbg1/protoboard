@@ -3,7 +3,7 @@ package protoboard.blackboard;
 import protoboard.Constants.BlackboardC;
 
 /**
- * Simple class that maintain the position in a color array. It's an immutable object.
+ * Simple class that maintain the position in a color array. It's an immutable object
  * 
  * @see Constants.BlackboardC.draw_colors
  * 

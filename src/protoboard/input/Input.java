@@ -10,7 +10,7 @@ import protoboard.leapmotion.LeapMotionListener;
 import protoboard.leapmotion.LeapMotionObserver;
 
 /**
- * Implements the input mode of the application.
+ * Implements the input mode of the application
  *
  */
 public class Input implements LeapMotionObserver, Runnable {
@@ -120,6 +120,10 @@ public class Input implements LeapMotionObserver, Runnable {
 		}).start();
 	}
 
+	/**
+	 * Stops this input mode. Unregisters the Input object with the LeapMotionListener.
+	 * 
+	 */
 	public void stop() {
 		if (running.compareAndSet(true, false))
 			lmlistener.unregister(this);

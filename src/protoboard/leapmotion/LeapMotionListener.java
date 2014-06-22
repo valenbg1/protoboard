@@ -21,7 +21,7 @@ import com.leapmotion.leap.SwipeGesture;
 import com.leapmotion.leap.Vector;
 
 /**
- * Processes the info received from the Leap Motion controller.
+ * Processes the info received from the Leap Motion controller
  * 
  */
 public class LeapMotionListener extends Listener {
@@ -146,6 +146,10 @@ public class LeapMotionListener extends Listener {
 		System.out.println(LeapMotionListenerC.onExit);
 	}
 
+	/**
+	 * Process every frame the Leap Motion sends
+	 * 
+	 */
 	@Override
 	public void onFrame(Controller controller) {
 		// "Weak" thread protection

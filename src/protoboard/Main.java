@@ -15,7 +15,7 @@ import protoboard.swing.MainIface;
 import com.leapmotion.leap.Controller;
 
 /**
- * Singleton starting point of protoboard.
+ * Singleton starting point of protoboard
  * 
  */
 public final class Main {
@@ -31,12 +31,21 @@ public final class Main {
 	private static File[] load_files = null;
 	private static AtomicBoolean running_blackboard_mode = new AtomicBoolean(false);
 	
+	/**
+	 * 
+	 * @return the array of files saved in Main, and then clean the Main pointer to this files
+	 * 
+	 */
 	public static synchronized File[] getAndNullLoadFiles_blckbrdMode() {
 		File[] ret = load_files;
 		load_files = null;
 		return ret;
 	}
 	
+	/**
+	 * Ini the main interface
+	 * 
+	 */
 	public static void main(String[] args) {
 		lm_controller.addListener(lm_listener);
 		
@@ -99,6 +108,10 @@ public final class Main {
 		return running_input_mode.get();
 	}
 	
+	/**
+	 * Save current screens of blackboard mode in 'path'
+	 * 
+	 */
 	public static void saveImagesBlackboard(File path) {
 		Blackboard blck = blackboard_mode;
 		
@@ -106,6 +119,10 @@ public final class Main {
 			blck.saveAllScreens(path);
 	}
 	
+	/**
+	 * Sets the array of File that Main holds
+	 *
+	 */
 	public static synchronized void setLoadFolder_blckbrdMode(File[] folder) {
 		load_files = folder;
 	}

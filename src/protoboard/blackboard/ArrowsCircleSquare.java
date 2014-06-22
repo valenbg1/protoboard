@@ -5,7 +5,7 @@ import protoboard.Constants.BlackboardC;
 
 /**
  * Represents a 2D square with 4 optional selection arrow and a circle inside. It's an
- * immutable object.
+ * immutable object
  * 
  */
 class ArrowsCircleSquare extends ArrowsSquare {
@@ -19,7 +19,7 @@ class ArrowsCircleSquare extends ArrowsSquare {
 				context.color(BlackboardC.number_square_fill_color), diam,
 				ball_color);
 	}
-
+	
 	public final PVector center;
 	public final float diam;
 

@@ -5,7 +5,7 @@ import protoboard.Constants.BlackboardC;
 
 /**
  * Represents a 2D square with 4 optional selection arrow: left, right, up, down.
- * It's an immutable object.
+ * It's an immutable object
  * 
  */
 class ArrowsSquare extends ArrowsDrawable {
