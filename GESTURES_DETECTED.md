@@ -1,6 +1,8 @@
 Gestures detected
 ==================
 
+More info avaliable in spanish in our [wiki](https://github.com/valenbg1/protoboard/wiki/Manual-de-uso-de-la-aplicaci%C3%B3n).
+
 Blackboard mode
 ------------------
 
