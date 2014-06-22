@@ -3,6 +3,7 @@ package protoboard.blackboard;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -60,7 +61,6 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	private JFrame jframe;
 	private AtomicBoolean mouse_clean;
 	
-	
 	public Blackboard() {
 		super();
 		
@@ -73,7 +73,6 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		this.screen_draw_p = new PVector(0, 0);
 		
 		this.sizes = null;
-		this.mouse_clean = new AtomicBoolean(false);
 		this.draw_color = new Colors();
 		
 		this.color_square = null;
@@ -88,6 +87,8 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		this.draw_line_weight = 0;
 		
 		this.save_path = "";
+		
+		this.mouse_clean = new AtomicBoolean(false);
 		
 		configureJFrame();
 		
@@ -226,6 +227,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 		jframe.setMinimumSize(new Dimension(BlackboardC.minimum_size_px,
 				BlackboardC.minimum_size_px));
 		jframe.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent ev) {
 				Main.quitBlackboardMode();
 
@@ -404,34 +406,13 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 
 	public void minimize() {
 		unregisterAsObserver();
-		jframe.setExtendedState(JFrame.ICONIFIED);  // Minimize window
-	}
-	
-	@Override
-	public void mouseReleased() {
-		System.out.println("Mouse Released!!");
-		mouse_clean.set(false);
-		super.mouseReleased();
-	}
-	
-	@Override
-	public void mousePressed() {
-		System.out.println("Mouse Pressed!!");
-		
-		pmouseX = mouseX;
-		pmouseY = mouseY;
-		
-		System.out.println("Pulsación: "+ pmouseX + " " + pmouseY+ "->"+mouseX + " " + mouseY );
-		
-		mouse_clean.set(true);
-		super.mousePressed();
+		jframe.setExtendedState(Frame.ICONIFIED);  // Minimize window
 	}
 	
 	@Override
 	public void mouseClicked() {
-
-		
 		System.out.println("Mouse Clicked!!");
+		
 		if (multiScreenMode.get())
 			// Process multiscreen mode clicks
 			mouseClickedMultiscreenMode();
@@ -465,7 +446,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			}
 		}
 	}
-
+	
 	private void mouseClickedMultiscreenMode() {
 		int pos;
 		
@@ -486,6 +467,26 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 			else if (number_square.isOnDown(mouseX, mouseY))
 				quitMultiScreenMode();
 		}
+	}
+	
+	@Override
+	public void mousePressed() {
+		System.out.println("Mouse Pressed!!");
+		
+		pmouseX = mouseX;
+		pmouseY = mouseY;
+		
+		System.out.println("Pulsación: "+ pmouseX + " " + pmouseY+ "->"+mouseX + " " + mouseY );
+		
+		mouse_clean.set(true);
+		super.mousePressed();
+	}
+
+	@Override
+	public void mouseReleased() {
+		System.out.println("Mouse Released!!");
+		mouse_clean.set(false);
+		super.mouseReleased();
 	}
 	
 	private PGraphics newScreen(int width, int height) {
@@ -569,6 +570,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public void onUpSwipe() {
 		enterMultiScreenMode();
 	}
+	
 	private void processCursor() {
 		if (multiScreenMode.get())
 			processCursorMultiScreenMode();
@@ -595,15 +597,17 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 					rect(mouseX - rect_weight/2, mouseY - rect_weight/2, rect_weight, rect_weight);
 				}
 
-				if(mouse_clean.get()){
+				if (mouse_clean.get()) {
 					pmouseX = mouseX;
 					pmouseY = mouseY;
 					mouse_clean.set(false);
 				}
 				
 				if (mousePressed) {
-					screen_curr.beginDraw();
 					System.out.println("Pulsación: "+ pmouseX + " " + pmouseY+ "->"+mouseX + " " + mouseY );
+					
+					screen_curr.beginDraw();
+					
 					screen_curr.stroke(draw_col[0], draw_col[1], draw_col[2]);
 					
 					if (!draw_color.isEraseColor())
@@ -721,7 +725,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public void toFront() {
 		registerAsObserver();
 		
-		jframe.setExtendedState(JFrame.NORMAL);
+		jframe.setExtendedState(Frame.NORMAL);
 		jframe.toFront();
 	}
 	
