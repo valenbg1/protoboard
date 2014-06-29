@@ -126,7 +126,7 @@ public final class Constants {
 		public static final float circle_resolution = 0.5f; // (0, 1]: % circle to send an event of detected circle gesture
 		
 		public static final float wait_between_gestures = 0.85f; // s
-		public static final float wait_between_swipe_gestures = 1f; // s
+		public static final float wait_between_swipe_gestures = 1.5f; // s
 		public static final float wait_between_changing_circle_id = 5f; // s
 		
 		public static final float interval_frame_translation = 0.1f;

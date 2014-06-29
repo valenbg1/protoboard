@@ -426,6 +426,10 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 				screen_curr.endDraw();
 			}
 		}
+		
+		while (screen_pos > 0) {
+			_changeScreenBack();
+		}
 	}
 
 	public void minimize() {
@@ -670,9 +674,13 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	private void resetCurrScreenToCenter() {
 		if (screen_curr != null) {
 			PVector pos_aux = new PVector();
-			
+			/*
 			pos_aux.x = -((screen_curr.width-width) / 2.0f);
 			pos_aux.y = -((screen_curr.height-height) / 2.0f);
+			*/
+			pos_aux.x = 0;
+			pos_aux.y = 0;
+			
 			
 			screen_draw_p = boundScreenfrom(pos_aux);
 		} else
@@ -721,8 +729,8 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	}
 	
 	private void saveScreen(PGraphics screen, int pos, String path) {
-		screen_curr.save(path + BlackboardC.save_name + "[" + pos + "]_"
-				+ new Date().getTime() + "." + BlackboardC.save_extension);
+//		screen_curr.save(path + BlackboardC.save_name + "[" + pos + "]_"
+//				+ new Date().getTime() + "." + BlackboardC.save_extension);
 	}
 	
 	public void setSavePath(File path) {

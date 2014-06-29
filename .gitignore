@@ -6,5 +6,5 @@
 *.ear
 
 # PNGs
-*.png
+#*.png
 /bin
