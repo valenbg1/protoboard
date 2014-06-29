@@ -43,12 +43,12 @@ public class Input implements LeapMotionObserver, Runnable {
 
 	@Override
 	public void onKeyTap() {
-		onScreenTap();
+//		onScreenTap();
 	}
 
 	@Override
 	public void onLeftCircle() {
-		onRightSwipe();
+		simKey(InputC.onRightSwipe);
 	}
 	
 	@Override
@@ -63,29 +63,29 @@ public class Input implements LeapMotionObserver, Runnable {
 
 	@Override
 	public void onRightSwipe() {
-		simKey(InputC.onRightSwipe);
+//		simKey(InputC.onRightSwipe);
 	}
 
 	@Override
 	public void onScreenTap() {
-		simMouse(InputC.onScreenTap);
+//		simMouse(InputC.onScreenTap);
 	}
 
 	@Override
 	public void onTranslation(float d_x, float d_y) {
-		float t_threshold = LeapMotionListenerC.translation_threshold, w_factor = InputC.wheel_notches_factor,
-				d_y_abs = Math.abs(d_y);
-		
-		if (d_y_abs > t_threshold) {
-			int wheel_f = (int) Math.floor(d_y_abs/w_factor);
-			
-			robot.mouseWheel(d_y < 0 ? -wheel_f : wheel_f);
-		}
+//		float t_threshold = LeapMotionListenerC.translation_threshold, w_factor = InputC.wheel_notches_factor,
+//				d_y_abs = Math.abs(d_y);
+//		
+//		if (d_y_abs > t_threshold) {
+//			int wheel_f = (int) Math.floor(d_y_abs/w_factor);
+//			
+//			robot.mouseWheel(d_y < 0 ? -wheel_f : wheel_f);
+//		}
 	}
 
 	@Override
 	public void onUpSwipe() {
-		simKey(InputC.onUpSwipe);
+//		simKey(InputC.onUpSwipe);
 	}
 
 	/**

@@ -510,6 +510,7 @@ public class Blackboard extends MyPApplet implements LeapMotionObserver {
 	public void mouseReleased() {
 		System.out.println("Mouse Released!!");
 		mouse_clean.set(false);
+		mouseClicked();
 		super.mouseReleased();
 	}
 	
